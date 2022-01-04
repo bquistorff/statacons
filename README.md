@@ -9,7 +9,7 @@ net install statacons, from(https://raw.github.com/bquistorff/statacons/main/)
 ## Template
 To install the project template, in Stata
 ```
-<change to project root>
+// Change to project root
 net set other .
 net get statacons, from(https://raw.github.com/bquistorff/statacons/main/)
 unzipfile project_files
