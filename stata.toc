@@ -1,0 +1,4 @@
+v 3
+d scons-directory
+
+p statacons Enables using SCons with Stata. 
