@@ -1,5 +1,9 @@
 # statacons
-`statacons` is a set of build tools (using [scons](https://scons.org/)) for Stata that doesn't require project changes, is correct, and git-friendly. For more information, see our working paper: [statacons: An SCons-based build tool for Stata](https://cenrep.ncsu.edu/cenrep/wp-content/uploads/2022/01/statacons-An-SCons-based-Build-Tool-for-Stata.pdf).
+`statacons` is a set of build tools (using [scons](https://scons.org/)) for Stata that doesn't require project changes, is correct, and git-friendly. For more information, see our working paper:
+
+Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CENReP Working Paper 22-001, January 2022, https://go.ncsu.edu/cenrep-wp-22-001. Under review at the Stata Journal.
+
+[PDF](https://go.ncsu.edu/cenrep-wp-22-001.pdf)
 
 ## Installation
 Requirements: Python 3.5+ and the package [scons](https://scons.org/). Stata 16+.
