@@ -34,7 +34,7 @@ if "`meta'"!="nometa" {
         file write meta_handle "`: value label `v''" _newline
     }
     
-    if "`vv_labels_only'"=="vv_labels_only" {
+    if "`vv_labels_only'"=="" {
         //don't use describe as that prints timestamp
         file write meta_handle "`: data label'" _newline
 
