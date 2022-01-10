@@ -30,10 +30,9 @@ def _reset_sig_handler2(self):
 
 
 def rm_SCons_mods():
-	to_del = [mod for mod in sys.modules.keys() if mod.startswith('SCons.')]
+	to_del = [mod for mod in sys.modules.keys() if mod.startswith('SCons.') or mod in ['SCons', 'pystatacons', 'pystatacons.sconstruct_aux']]
+
 	for t in to_del:
 		del(sys.modules[t])
-	if 'SCons' in sys.modules.keys():
-		del sys.modules['SCons']
 
 
