@@ -36,17 +36,7 @@ pip install pystatacons
 ```
 
 #### Project Files
-To install the project template, in Stata:
-```
-// Change to project's root directory
-cd path/to/your/project
-// set other to the current directory, i.e. project's root directory
-net set other .
-// get project files
-net get statacons, from(https://raw.github.com/bquistorff/statacons/main/)
-unzipfile project_files
-rm project_files.zip
-```
+See here for a zip of the project files: [src/project_files.zip](src/project_files.zip). You can extract those into the root of a project that you're working on.
 
 ### Other installation notes  
 
