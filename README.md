@@ -65,7 +65,7 @@ do analysis.do   /* uses input-cleaned.dta to generate results.dta */
 
 You can re-write this as an `SConstruct` file:
 ```Python
-from pystatacons.sconstruct_aux import env
+from pystatacons import env
 
 StataBuild(do_file="dataprep.do", target=["input-cleaned.dta"], depends="input.dta")
 StataBuild(do_file="analysis.do", target=["results.dta"], depends="input-cleaned.dta")
