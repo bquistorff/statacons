@@ -63,7 +63,7 @@ Example(s)
         . stataconsign
 
     use human-readable timestamps
-        . stataconsign -h
+        . stataconsign -r
 
     examine a database named .sconsignParallel.dblite in a sub-directory dbs
         . stataconsign dbs/.sconsignParallel.dblite
