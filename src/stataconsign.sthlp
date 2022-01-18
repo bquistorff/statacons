@@ -50,7 +50,7 @@ By default, {bf:stataconsign} will look in the current directory for an file {bf
         . stataconsign
 
     use human-readable timestamps
-        . stataconsign -h
+        . stataconsign -r
 
     examine a database named .sconsignParallel.dblite in a sub-directory dbs
         . stataconsign dbs/.sconsignParallel.dblite
