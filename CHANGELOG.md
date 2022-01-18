@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-## 0.0.2
+## 2.0.0
 ### Changed
 - Switched format for importing Python functions into `SConstruct` file to now use a separate package (`pystatacons`) rather than `exec`ing a local `sconstruct_aux` file.
 - Split off `assume-done` from `assume-built`

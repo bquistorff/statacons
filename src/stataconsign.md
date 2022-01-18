@@ -1,23 +1,3 @@
-*! version 1.0.0  January 2022  statacons team
-* Copyright 2022. This work is licensed under a CC BY 4.0 license.
-
-* Anaconda env's script dir is added to path when you switch environments, but not added to PYTHONPATH/sys.path,
-* so in Stata setting the env doesn't bring that path in.
-* We could try to find the Scripts folder given the executable path, but this might differ across Python distributions,
-* so instead just "vendor" sconsign-script.py (include it in our pkg), given it's so small and unlikely to change.
-
-program stataconsign
-	qui findfile sconsign-script.py
-	python script "`r(fn)'", args(`0')
-end
-
-// stataconsign.sthlp markdown code follows
-// converted to .sthlp by markdoc
-// markdoc stataconsign.ado, export(sthlp) replace mini
-// see buildHelpFiles.do
-
-/***
-
 _version 1.0.0_
 
 stataconsign
@@ -103,5 +83,3 @@ SCons Development Team (2021b), [SCons 4.3.0 User Guide, https://scons.org/doc/4
 
 This help file was dynamically produced by
 [MarkDoc Literate Programming package](http://www.haghish.com/markdoc/)
-
-***/

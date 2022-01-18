@@ -44,16 +44,22 @@ By default, {bf:stataconsign} will look in the current directory for an file {bf
 {bf:stataconsign} is useful for obtaining information on what SCons considers to be the most recent build, i.e., the last time the project was built {it:by SCons}.
 
 
-{title:Example(s)}
+{title:Examples}
 
-    basic use
-        . stataconsign
+{p 4 4 2}
+basic use
 
-    use human-readable timestamps
-        . stataconsign -r
+    . stataconsign
 
-    examine a database named .sconsignParallel.dblite in a sub-directory dbs
-        . stataconsign dbs/.sconsignParallel.dblite
+{p 4 4 2}
+use human-readable timestamps
+
+    . stataconsign -r
+
+{p 4 4 2}
+examine a database named .sconsignParallel.dblite in a sub-directory dbs
+
+    . stataconsign dbs/.sconsignParallel.dblite
 
 
 
@@ -94,6 +100,3 @@ SCons Development Team (2021b),  {browse "https://scons.org/doc/4.3.0/PDF/scons-
 {p 4 4 2}
 This help file was dynamically produced by
 {browse "http://www.haghish.com/markdoc/":MarkDoc Literate Programming package}
-
-
-

@@ -4,18 +4,30 @@
 # If you want to run this from within Stata's Python interpreter, you can actually copy and paste these lines.
 # or can be from CLI (though no reason): python runScons.py --warn=all
 
-#import sys
-#in_stata = 'sfi' in sys.modules #not currently needed
-
-# Do better arg splitting (see note in statacons.ado).
 import sys
 import sfi
 
-#print(sys.argv)
+
+#in_stata = 'sfi' in sys.modules #not currently needed
+
+# Do better arg splitting (see note in statacons.ado).
 if len(sys.argv)>1:
     import shlex
-    sys.argv = [sys.argv[0]] + shlex.split(sys.argv[1])
-#print(sys.argv)
+    args = shlex.split(sys.argv[1])
+
+    jobs_msg = "Parallel jobs not supported from inside Stata (can use scons from terminal). Setting --jobs=1."
+    #Make sure we disable parallel builds in Stata until we solve that problem
+    for i, arg in enumerate(args.copy()):
+        if arg=="-j" and len(args)>i+1: 
+            args[i+1] = "1"
+            print(jobs_msg)
+            break
+        elif arg.startswith("--jobs"):
+            args[i]="--jobs=1"
+            print(jobs_msg)
+            break
+    
+    sys.argv = [sys.argv[0]] + args
 
 ### Clear Scons if already loaded
 # SCons has some package-level variables that need to be reset from main() to be able to be run multiple times
@@ -28,8 +40,17 @@ if 'SCons' in globals(): del SCons
 import platform
 if platform.system()=="Windows":
     import os
-    python_exe_dir = os.environ['PATH'].split(os.pathsep)[0][:-12] #Stata prepends "<python dir>\Library/bin"
-    os.environ['PATH'] = python_exe_dir + os.pathsep + os.environ['PATH']
+    #Stata prepends "<python dir>\Library/bin" on Windows when loading Python.
+    first_dir = os.environ['PATH'].split(os.pathsep)[0]
+    if first_dir[-11:]=="Library/bin":
+        python_exe_dir = first_dir[:-12]     
+        if python_exe_dir not in os.environ['PATH'].split(os.pathsep):
+            os.environ['PATH'] = python_exe_dir + os.pathsep + os.environ['PATH']
+            relpath_subdirs = ["Scripts"] # If on Anaconda then also try to add the scripts path. Add more here for other distributions.
+            for relsubdir in relpath_subdirs:
+                sub_dir = python_exe_dir + os.sep + relsubdir
+                if os.path.isdir(sub_dir) and sub_dir not in os.environ['PATH'].split(os.pathsep):
+                        os.environ['PATH'] = sub_dir + os.pathsep + os.environ['PATH']
 
 ### Load SCons
 import SCons

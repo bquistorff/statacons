@@ -1,22 +1,25 @@
-* Allows checking additionally the meta-data and allows writing to file.
-* fast = faster algo, and machine depedent.
-* nometa = no meta-data (just normal datasig)
-* vv_labels_only = for meta-data, just use variable and value labels
+*! version 1.0.0  January 2022  statacons team
+* Copyright 2022. This work is licensed under a CC BY 4.0 license.
+version 16.1
+
+// markdown source for help file is embedded below code
+// .sthlp compiled using markdown
+
 program complete_datasignature, rclass
 syntax, [dta_file(string) fname(string) nometa fast vv_labels_only]
 if "`dta_file'"!="" qui use "`dta_file'"
 //datasignature set, saving("`fname'", replace) //sig file has weird format with other stuff
 //datasignature
-qui _datasignature, `fast' 
+qui _datasignature, `fast'
 loc datasig =  r(datasignature)
 if "`meta'"!="nometa" {
     //can't use log because that has timestamp, so write out to file
     tempfile meta_fname
     qui file open meta_handle using "`meta_fname'", write text replace
-    
+
     //value labels. Do seprately from vars as some might not be attached to variables and some might be attached to multiple
     qui label dir
-    loc val_labels `r(names)' 
+    loc val_labels `r(names)'
     foreach vl_name in `val_labels' {
         file write meta_handle "`vl_name'" _newline
         loc vl_len : label `vl_name' maxlength
@@ -33,7 +36,7 @@ if "`meta'"!="nometa" {
         file write meta_handle "`: variable label `v''" _newline
         file write meta_handle "`: value label `v''" _newline
     }
-    
+
     if "`vv_labels_only'"=="" {
         //don't use describe as that prints timestamp
         file write meta_handle "`: data label'" _newline
@@ -50,7 +53,7 @@ if "`meta'"!="nometa" {
             }
         }
     }
-    
+
     file close meta_handle
     qui checksum "`meta_fname'"
     loc meta_sig ":`r(checksum)'"
@@ -64,3 +67,86 @@ if "`fname'"!="" {
 di "`datasig'`meta_sig'"
 return local signature "`datasig'`meta_sig'"
 end
+
+
+// complete_datasignature.sthlp markdown code follows
+// converted to .sthlp by markdoc
+// markdoc complete_datasignature.ado, export(sthlp) replace mini
+// see buildHelpFiles.do
+
+
+/***
+
+_version 1.0.0_
+
+complete_datasignature
+======
+
+__complete_datasignature__ creates a signature for a Stata .dta-file that does __not__ depend on the embedded timestamp but __does__ depend on the data and, optionally, no other metadata, variable and value labels only, or all metadata.
+
+__complete_datasignature__ extends Stata's __datasignature__ by allowing the inclusion of different sets of metadata.
+
+
+Syntax
+------
+
+> complete_datasignature [, dta_file("file.dta") fname("sigfile.ext") nometa fast vv_labels_only]
+
+
+By default, __complete_datasignature__ will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp.
+
+### Options
+
+| Option                     | Description                                        |
+|----------------------------|----------------------------------------------------|
+| dta_file("file.dta")           | Use  "file.dta"  instead of dta-file in memory       |
+| fname("sigfile.ext")           | write signature to "sigfile.ext"     |
+| nometa                     | Do not include any metadata <br>  equivalent of Stata's __datasignature__          |
+| vv_labels_only             | Include variable labels and value labels               |
+| fast          | use __\_datasignature__'s _fast_ mode <br> faster but not machine-independent                       |
+
+
+
+Example(s)
+----------
+
+
+        . sysuse auto
+    (1978 automobile data)
+        . datasignature
+    74:12(71728):3831085005:1395876116
+        . complete_datasignature, nometa
+    74:12(71728):3831085005:1395876116
+        . complete_datasignature, vv_labels_only
+    74:12(71728):3831085005:1395876116:17340132
+        . complete_datasignature
+    74:12(71728):3831085005:1395876116:3994262184
+        . ret li
+    macros:
+         r(signature) : "74:12(71728):3831085005:1395876116:17340132"
+         . _datasignature, fast
+       74:12(71728):3831085005:186045760
+         . complete_datasignature, nometa fast
+    74:12(71728):3831085005:186045760
+
+
+
+
+Stored results
+----------------
+
+__r(signature)__    signature calculated by __complete_datasignature__
+
+Author
+------
+
+__statacons__ team
+[https://github.com/bquistorff/statacons](https://github.com/bquistorff/statacons)
+
+
+- - -
+
+This help file was dynamically produced by
+[MarkDoc Literate Programming package](http://www.haghish.com/markdoc/)
+
+***/

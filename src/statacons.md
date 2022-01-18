@@ -1,30 +1,3 @@
-*! version 1.1.0  January 2022  statacons team
-* Copyright 2022. This work is licensed under a CC BY 4.0 license. 
-
-program statacons, rclass
-	qui findfile runscons.py
-	//Stata doesn't parse args through to the script the way a shell normally would
-	// so --assume-built="code/analysis code.do" -> ['../pkg/runscons.py', '--assume-built=', 'code/analysis code.do'] which scons doesn't like
-	// so actually pass it as a quote-string `"...."' and then parse in Python
-	cap noi python script "`r(fn)'", args(`"`0'"')
-	local py_rc = _rc
-	return scalar py_rc = `py_rc'
-	
-    if "`py_rc'"!="0"{
-		di as error "Error from Python: `py_rc'"
-		error 7103
-	}
-    
-end
-
-// statacons.sthlp markdown code follows
-// converted to .sthlp by markdoc
-// markdoc statacons.ado, export(sthlp) replace mini
-// see buildHelpFiles.do
-
-/***
-
-
 _version 1.1.0_
 
 statacons
@@ -91,11 +64,11 @@ The __pystatacons__ Python package provides tools for __scons__ to run Stata cod
     import pystatacons
     env = pystatacons.init_env()
     task_name = env.StataBuild(
-          target = ['path/to/target1.ext', 'path/to/target2.ext'],
-          source = 'path/to/dofile.do'
+              target = ['path/to/target1.ext', 'path/to/target2.ext'],
+              source = 'path/to/dofile.do'
     )
     Depends(task_name, ['path/to/dependency1.ext',
-                        'path/to/dependency2.ext']
+                            'path/to/dependency2.ext']
     )
 
 This defines a __task__ _task_name_ from the _StataBuild_ method with __targets__ _path/to/target1.ext_ and _path/to/target2.ext_, __source__  _path/to/dofile.do_ and __dependencies__ _path/to/dependency1.ext_ and _path/to/dependency2.ext_.
@@ -105,11 +78,11 @@ __statacons__ will call Stata's batch mode to _do path/to/dofile.do_.
 ### Additional Options for SConstruct Recipe
 
     task_name = env.StataBuild(
-          target = ['path/to/target1.ext', 'path/to/target2.ext'],
-          source = 'path/to/source.ext',
-          file_cmd = "command",
-          params = 'arguments or options',
-          depends = ['path/to/dependency1.ext', 'path/to/dependency2.ext']
+              target = ['path/to/target1.ext', 'path/to/target2.ext'],
+              source = 'path/to/source.ext',
+              file_cmd = "command",
+              params = 'arguments or options',
+              depends = ['path/to/dependency1.ext', 'path/to/dependency2.ext']
     )
 
 The additional options to __StataBuild__ are
@@ -127,10 +100,10 @@ The additional options to __StataBuild__ are
 As an example,
 
     helpFile = env.StataBuild(
-        target = ['statacons.sthlp'],
-        do_file = 'statacons.ado',
-        file_cmd = "markdoc",
-        params = ', export\(statacons.sthlp\) mini replace'
+            target = ['statacons.sthlp'],
+            do_file = 'statacons.ado',
+            file_cmd = "markdoc",
+            params = ', export\(statacons.sthlp\) mini replace'
     )
 
 defines a __task__ _helpFile_ from the _StataBuild_ method with __target__ _statacons.sthlp_, __source__  _statacons.ado_ and __params__ _', export\(statacons.sthlp\) mini replace'_.
@@ -206,4 +179,3 @@ This help file was dynamically produced by
 [MarkDoc Literate Programming package](http://www.haghish.com/markdoc/)
 
 
-***/

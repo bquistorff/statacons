@@ -2,7 +2,7 @@
 
 
 {p 4 4 2}
-{it:version 1.0.0}
+{it:version 1.1.0}
 
 
 {title:statacons}
@@ -29,46 +29,52 @@ By default, {bf:statacons} will look in the current directory for an {bf:SConstr
 
 {p 4 4 2}{bf:Specifying targets}
 
-{p 8 8 2} By default, {bf:statacons} will build all targets described in the {bf:SConstruct}. The user can specify a target or a subset of targets using the {it:target} option on the command line:
+{p 4 4 2}
+By default, {bf:statacons} will build all targets described in the {bf:SConstruct}. The user can specify a target or a subset of targets using the {it:target} option on the command line:
 
 {p 8 8 2} . statacons outputs/auto-modified.dta
 
 {p 4 4 2}
-Default targets can also be specified in the SConstruct with the Default() function, although targets specified at the command line override defaults specified in the SConstruct.
+Default targets can also be specified in the SConstruct with the {bf:Default()} function, although targets specified at the command line override defaults specified in the SConstruct.
 
 {p 4 4 2}{bf:Standard SCons Options}
 
-{break}    	-c, --clean, --remove       Remove specified targets and dependencies.
-{break}    	--debug=TYPE                Print various types of debugging information:
-	                              count, duplicate, explain, findlibs, includes,
-	                              memoizer, memory, objects, pdb, prepare,
-	                              presub, stacktrace, time, action-timestamps.
-{break}    	-f FILE, --file=FILE, --makefile=FILE, --sconstruct=FILE
-	                              Read FILE as the top-level SConstruct file.
-{break}    	-h, --help                  Print defined help message
-{break}    	-k, --keep-going            Keep going when a target can{c 39}t be made.
-{break}    	-n, --no-exec, --just-print, --dry-run, --recon
-	                              Don{c 39}t build; just print commands.
-{break}    	-Q                          Suppress "Reading/Building" progress messages.
-{break}    	-s, --silent, --quiet       Don{c 39}t print commands.
-{break}    	--tree=OPTIONS              Print a dependency tree in various formats: all,
-	                              derived, prune, status, linedraw.
-{break}    	-v, --version               Print the SCons version number and exit.
-
+{col 5}Option{col 33}Description
+{space 4}{hline}
+{col 5}-c, --clean, --remove{col 33}Remove specified targets and dependencies.
+{col 5}--debug=TYPE{col 33}Print various types of debugging information: count, duplicate, explain, findlibs, includes, memoizer, memory, objects, pdb, prepare, presub, stacktrace, time, action-timestamps.
+{col 5}-f FILE, --file=FILE, --makefile=FILE, --sconstruct=FILE{col 33}Read FILE as the top-level SConstruct file.
+{col 5}-h, --help{col 33}Print defined help message
+{col 5}-k, --keep-going{col 33}Keep going when a target can{c 39}t be made.
+{col 5}-n, --no-exec, --just-print, --dry-run, --recon{col 33}Don{c 39}t build; just print commands.
+{col 5}-Q{col 33}Suppress "Reading/Building" progress messages.
+{col 5}-s, --silent, --quiet{col 33}Don{c 39}t print commands.
+{col 5}--tree=OPTIONS{col 33}Print a dependency tree in various formats: all, derived, prune, status, linedraw.
+{col 5}-v, --version{col 33}Print the SCons version number and exit.
+{space 4}{hline}
 
 {p 4 4 2}{bf:Custom statacons options}
 
-{break}    {space 2}--config-user=CONFIG_USER   specify user configuration file
-{break}    {space 2}--show-config               show configuration
-{break}    {space 2}--assume-built="dofile.do"  instruct Stata builder to skip dofile.do but mark targets as built
+{col 5}Option{col 33}Description
+{space 4}{hline}
+{col 5}--config-user=CONFIG_USER{col 33}specify user configuration file
+{col 5}--show-config{col 33}show configuration
+{col 5}--assume-done="dofile.do"{col 33}instruct Stata builder to skip dofile.do but mark targets as built. Can be a colon-seprated list of file patterns.
+{col 5}--assume-built="target"{col 33}if all targets for a task are listed then Stata builder will skip the task but mark all targets as build. Can be a colon-seprated list of file patterns.
+{space 4}{hline}
+{p 4 4 2}{bf:Return values}
+
+{p 4 4 2}
+{bf:statacons} will return the Python return code in {it:r(py_rc)}. If non-zero, {bf:statacons} will issue error 7103 "error occurs when running a Python script file or importing a Python module".
 
 
 
 {title:SConstruct Syntax}
-
+The {bf:pystatacons} Python package provides tools for {bf:scons} to run Stata code.
 
 {p 4 4 2}{bf:Basic SConstruct Recipe}
-
+    import pystatacons
+    env = pystatacons.init_env()
     task_name = env.StataBuild(
           target = ['path/to/target1.ext', 'path/to/target2.ext'],
           source = 'path/to/dofile.do'
@@ -78,7 +84,8 @@ Default targets can also be specified in the SConstruct with the Default() funct
     )
 
 {p 4 4 2}
-This defines a {bf:task} {it:task_name} for the {it:StataBuild} {bf:environment} with {bf:targets} {it:path/to/target1.ext} and {it:path/to/target2.ext}, {bf:source}  {it:path/to/dofile.do} and {bf:dependencies} {it:path/to/dependency1.ext} and {it:path/to/dependency2.ext}. {bf:statacons} will call Stata{c 39}s batch mode to {it:do path/to/dofile.do}.
+This defines a {bf:task} {it:task_name} from the {it:StataBuild} method with {bf:targets} {it:path/to/target1.ext} and {it:path/to/target2.ext}, {bf:source}  {it:path/to/dofile.do} and {bf:dependencies} {it:path/to/dependency1.ext} and {it:path/to/dependency2.ext}.
+{bf:statacons} will call Stata{c 39}s batch mode to {it:do path/to/dofile.do}.
 
 
 {p 4 4 2}{bf:Additional Options for SConstruct Recipe}
@@ -92,17 +99,17 @@ This defines a {bf:task} {it:task_name} for the {it:StataBuild} {bf:environment}
     )
 
 {p 4 4 2}
-The additional options are
+The additional options to {bf:StataBuild} are
 
 {break}    - file_cmd : the command SCons should pass to Stata{c 39}s batch mode. The default is {it:do}, but the user can specify anything that Stata can accept as a command, e.g., {it:dyndoc}, {it:markdown}, {it:net}, etc.
 
-{break}    - params : arguments or options that should follow the source in the call to Stata batch mode. For example, a task with file_cmd of  {it:markdown} might specify
+{break}    - params : arguments or options that should follow the source in the call to Stata batch mode. For example, a task with {it:file_cmd} of {bf:markdown} might specify
 
 {p 8 8 2} params = {c 39}, saving\(myfile.html\) replace{c 39}
 
-{break}    - depends : an alternative to using the Depends() function
+{break}    - depends : an alternative to using the {bf:Depends()} function
 
-{break}    - full_cmd : Alternatively, one can specify the full command explicitly (including any file and parameters). This will ignore the {it:file_cmd} and {it:params}.
+{break}    - full_cmd : Alternatively, one can specify the full command explicitly (including any file and parameters). This will ignore the {it:file_cmd}, {it:source}, and {it:params}.
 
 {p 4 4 2}
 As an example,
@@ -115,9 +122,18 @@ As an example,
     )
 
 {p 4 4 2}
-defines a {bf:task} {it:helpFile} for the {it:StataBuild} {bf:environment} with {bf:target} {it:statacons.sthlp}, {bf:source}  {it:statacons.ado} and {bf:params} {it:{c 39}, export\(statacons.sthlp\) mini replace{c 39}}. {bf:statacons} will call Stata in batch mode with command {bf:markdoc statacons.ado, export(sthlp) replace mini}.
+defines a {bf:task} {it:helpFile} from the {it:StataBuild} method with {bf:target} {it:statacons.sthlp}, {bf:source}  {it:statacons.ado} and {bf:params} {it:{c 39}, export\(statacons.sthlp\) mini replace{c 39}}.
+{bf:statacons} will call Stata in batch mode with command {bf:markdoc statacons.ado, export(sthlp) replace mini}.
 
+{p 4 4 2}
+SCons uses {bf:Decider} functions to determine when to run a task. 
+The default {bf:Decider} rebuilds a task if the content of any task{c 39}s dependencies has changed since the last time SCons was run. 
+If your workflow involves running some Stata scripts outside of SCons, then SCons may not know what is actually up-to-date and unnecessarily rebuild some tasks.
+The {bf:pystatacons} package, therefore defines a new {bf:Decider} called {c 39}content-timestamp-newer{c 39}, which only rebuilds a task if 
+"a task{c 39}s dependency has changed content since the last time SCons was run" AND "a task{c 39}s dependency has been modified after all of the task{c 39}s targets".
+To use this new {bf:Decider},  include this line later in the {bf:SConstruct} file.
 
+    Decider(pystatacons.decider_str_lookup['content-timestamp-newer'])
 
 {p 4 4 2}{bf:SConstruct Functions}
 
@@ -142,20 +158,30 @@ Run {bf:utils/debugging-checklist.do} to obtain useful information for debugging
 
 {title:Example(s)}
 
-    basic use
-        . statacons
+{p 4 4 2}
+basic use
 
-    print debugging info and build tree
-        . statacons --debug=explain --tree=status,prune
+    . statacons
 
-    show current configuration
-        . statacons --show-config
+{p 4 4 2}
+print debugging info and build tree
 
-    build target called 'dl_original_data'
-        . statacons dl_original_data
+    . statacons --debug=explain --tree=status,prune
 
-    mark all targets as built
-        . statacons --assume=built=*
+{p 4 4 2}
+show current configuration
+
+    . statacons --show-config
+
+{p 4 4 2}
+build target called {c 39}dl_original_data{c 39}
+
+    . statacons dl_original_data
+
+{p 4 4 2}
+mark all targets as built
+
+    . statacons --assume-built=*
 
 
 
