@@ -1,4 +1,4 @@
-_version 1.0.0_
+_version 2.0.0_
 
 stataconsign
 ======
@@ -83,3 +83,4 @@ SCons Development Team (2021b), [SCons 4.3.0 User Guide, https://scons.org/doc/4
 
 This help file was dynamically produced by
 [MarkDoc Literate Programming package](http://www.haghish.com/markdoc/)
+

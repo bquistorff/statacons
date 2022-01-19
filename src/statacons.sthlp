@@ -2,7 +2,7 @@
 
 
 {p 4 4 2}
-{it:version 1.1.0}
+{it:version 2.0.0}
 
 
 {title:statacons}

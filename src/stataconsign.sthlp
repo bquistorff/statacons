@@ -1,7 +1,7 @@
 {smcl}
 
 {p 4 4 2}
-{it:version 1.0.0}
+{it:version 2.0.0}
 
 
 {title:stataconsign}
@@ -100,3 +100,6 @@ SCons Development Team (2021b),  {browse "https://scons.org/doc/4.3.0/PDF/scons-
 {p 4 4 2}
 This help file was dynamically produced by
 {browse "http://www.haghish.com/markdoc/":MarkDoc Literate Programming package}
+
+
+
