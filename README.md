@@ -1,10 +1,10 @@
 # statacons
 `statacons` is a set of tools for the [SCons](https://scons.org/) build-system to allow running [Stata](https://stata.com) projects. It does not require changes to existing code, is [correct](https://doi.ieeecomputersociety.org/10.1109/MS.2018.111095025) (no unnecessary rebuilds), extensible via Python, and git-friendly.
 
-With data analysis projects it can be difficult to know what needs to be rebuilt (either because it's large or involves multiple contributors) and some tasks take a long time making full-rebuilds costly. "Build-systems" solve this by allowing the user to define how task inputs generate specific ouputs (For SCons using `SConstruct` files) and tracking file changes to know what must be rebuilt. Thinks of this as a more robust way to specify a project's "master" run script.
+With data analysis projects it can be difficult to know what needs to be rebuilt when code changes (either because the there are many dependencies to track or it involves multiple contributors) and some tasks take a long time, making full-rebuilds costly. "Build-systems" solve this by allowing the user to define how task inputs generate ouputs (for SCons, using `SConstruct` files) and tracking file changes to know what must be rebuilt. Thinks of this as a more robust way to specify a project's "master" run script. The `SConstruct` provides an easy view for what happens in a projects.
 
 Project components:
-- A Stata `statacons` command to run `scons` from inside of Stata so that one does not have to use the system terminal. 
+- A Stata `statacons` command to run `scons` (a Python package/script) from inside of Stata so that one does not have to use the system terminal. 
 - A Python `pystatacons` package to aid in writing SCons build scripts, called `SConstruct` files. It provides (a) an SCons build environment that can automatically find most Stata installations, (b) a `StataBuilder()` method that takes care of running Stata in batch-mode, and checking the output for errors, (c) smart checking of Stata `.dta` files to know when their content atually changes (and not just their internal timestamp), and (d) a simple configuration system to over-ride package defaults
 - Optional ancillary files: sample `SConstruct` file to get started, sample configuration files to override package defaults (a git-versionable `config_project.ini` and a not-to-version `config_user.ini`), and some worked-examples with more functionality. 
 
@@ -55,13 +55,14 @@ do analysis.do   /* uses input-cleaned.dta to generate results.dta */
 
 You can re-write this as an `SConstruct` file:
 ```Python
-from pystatacons import env
+import pystatacons
+env = pystatacons.init_env()
 
 StataBuild(do_file="dataprep.do", target=["input-cleaned.dta"], depends="input.dta")
 StataBuild(do_file="analysis.do", target=["results.dta"], depends="input-cleaned.dta")
 ```
 
-You can build your project from the terminal using `scons` or from Stata using `statacons`. 
+You can build your project from the terminal using `scons` or from Stata using `statacons`. If you modify `dataprep.do`, running `scons` will re-execute that file, then check if `input-cleaned.dta` actually changed to decide if `analysis.do` needs to be run also (see the section below for details). If a `git pull` updates lots of scripts, then a simple `scons` command will only rebuild what is necessary. If you execute scripts directly in Stata (i.e., not using `statacons`) then we provide helpful tools to ensure that running `scons` won't re-run scripts you've already ran (see our 'content-timestamp-newer' `Decider`).
 
 For more details about general SCons usage and `SConstruct` files, see the [SCons help](https://scons.org/documentation.html). For more details about our specific additions to SCons, see [our WP](https://go.ncsu.edu/cenrep-wp-22-001).
 
