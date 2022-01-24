@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Added
+- On Windows, if `pywin32` is installed, Stata batch-mode processes will be launched in a hidden desktop to prevent them from briefly stealing the UI focus. This can be disabled by setting the `win_stata_hidden` key's value to `False` in the section `Programs`.
 
 ## 2.0.0
 ### Changed
