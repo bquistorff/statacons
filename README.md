@@ -58,11 +58,34 @@ You can re-write this as an `SConstruct` file:
 import pystatacons
 env = pystatacons.init_env()
 
-StataBuild(do_file="dataprep.do", target=["input-cleaned.dta"], depends="input.dta")
-StataBuild(do_file="analysis.do", target=["results.dta"], depends="input-cleaned.dta")
+env.StataBuild(do_file="dataprep.do", target=["input-cleaned.dta"], depends=["input.dta"])
+env.StataBuild(do_file="analysis.do", target=["results.dta"], depends=["input-cleaned.dta"])
 ```
 
-You can build your project from the terminal using `scons` or from Stata using `statacons`. If you modify `dataprep.do`, running `scons` will re-execute that file, then check if `input-cleaned.dta` actually changed to decide if `analysis.do` needs to be run also (see the section below for details). If a `git pull` updates lots of scripts, then a simple `scons` command will only rebuild what is necessary. If you execute scripts directly in Stata (i.e., not using `statacons`) then we provide helpful tools to ensure that running `scons` won't re-run scripts you've already ran (see our 'content-timestamp-newer' `Decider`).
+You can build your project from the terminal using `scons` or from Stata using `statacons`. Output from the latter would be
+
+```Stata
+. statacons
+scons: Reading SConscript files ...
+Using 'Strict' custom_datasignature.
+Calculates timestamp-independent checksum of dataset, including all metadata.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are DataOnly, VVLabelsOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+Computed dta-signature: <path>\input.dta
+stata_run(["input-cleaned.dta"], ["dataprep.do"])
+Running: StataMP-64.exe /e do "dataprep.do"
+Computed dta-signature: <path>\input-cleaned.dta
+stata_run(["results.dta"], ["analysis.do"])
+Running: StataMP-64.exe /e do "analysis.do"
+Computed dta-signature: <path>\results.dta
+scons: done building targets.
+
+```
+
+
+If you modify `dataprep.do`, running `scons` will re-execute that file, then check if `input-cleaned.dta` actually changed to decide if `analysis.do` needs to be run also (see the section below for details). If a `git pull` updates lots of scripts, then a simple `scons` command will only rebuild what is necessary. If you execute scripts directly in Stata (i.e., not using `statacons`) then we provide helpful tools to ensure that running `scons` won't re-run scripts you've already ran (see our 'content-timestamp-newer' `Decider`).
 
 For more details about general SCons usage and `SConstruct` files, see the [SCons help](https://scons.org/documentation.html). For more details about our specific additions to SCons, see [our WP](https://go.ncsu.edu/cenrep-wp-22-001).
 
