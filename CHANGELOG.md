@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Added
 - On Windows, if `pywin32` is installed, Stata batch-mode processes will be launched in a hidden desktop to prevent them from briefly stealing the UI focus. This can be disabled by setting the `win_stata_hidden` key's value to `False` in the section `Programs`.
+### Changed
+- We changed `config_user.ini` to `config_local.ini` and changed the CLI option to `config-local` which now accepts a colon-delimited list of files that can be used instead of the default sources.
 
 ## 2.0.0
 ### Changed
