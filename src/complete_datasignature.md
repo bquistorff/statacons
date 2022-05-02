@@ -14,7 +14,7 @@ Syntax
 > complete_datasignature [, dta_file("file.dta") fname("sigfile.ext") nometa fast vv_labels_only]
 
 
-By default, __complete_datasignature__ will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp.
+By default, __complete_datasignature__ will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp. For reference, if there is no meta-data, the hash value is 4294967295.
 
 ### Options
 
@@ -41,10 +41,10 @@ Example(s)
             . complete_datasignature, vv_labels_only
     74:12(71728):3831085005:1395876116:17340132
             . complete_datasignature
-    74:12(71728):3831085005:1395876116:3994262184
+    74:12(71728):3831085005:1395876116:711253444
             . ret li
     macros:
-             r(signature) : "74:12(71728):3831085005:1395876116:17340132"
+             r(signature) : "74:12(71728):3831085005:1395876116:711253444"
              . _datasignature, fast
            74:12(71728):3831085005:186045760
              . complete_datasignature, nometa fast

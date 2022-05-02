@@ -13,6 +13,7 @@ d
 f src/runscons.py
 f src/sconsign-script.py
 f src/complete_datasignature.ado
+f src/complete_datasignature.sthlp
 f src/statacons.ado
 f src/statacons.sthlp
 f src/stataconsign.ado
