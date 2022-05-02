@@ -6,7 +6,7 @@ With data analysis projects it can be difficult to know what needs to be rebuilt
 Project components:
 - A Stata `statacons` command to run `scons` (a Python package/script) from inside of Stata so that one does not have to use the system terminal. 
 - A Python `pystatacons` package to aid in writing SCons build scripts, called `SConstruct` files. It provides (a) an SCons build environment that can automatically find most Stata installations, (b) a `StataBuilder()` method that takes care of running Stata in batch-mode, and checking the output for errors, (c) smart checking of Stata `.dta` files to know when their content atually changes (and not just their internal timestamp), and (d) a simple configuration system to over-ride package defaults
-- Optional ancillary files: sample `SConstruct` file to get started, sample configuration files to override package defaults (a git-versionable `config_project.ini` and a not-to-version `config_user.ini`), and some worked-examples with more functionality. 
+- Optional ancillary files: sample `SConstruct` file to get started, sample configuration files to override package defaults (a git-versionable `config_project.ini` and a not-to-version `config_local.ini`), and some worked-examples with more functionality. 
 
 For more information, see our working paper:
 
@@ -40,8 +40,8 @@ See here for a zip of the project files: [src/project_files.zip](src/project_fil
 
 ### Other installation notes  
 
-* If you have Stata installed in a non-default location, you'll then need to edit `config_user.ini` to provide the path to your Stata executable. Examples are provided in `config_user_template.ini`.  
-* If this project is git-versioned, then you'll want to add `config_user.ini` and a few other files (e.g., `.sconsign.dblite`) to your `.gitignore`. 
+* If you have Stata installed in a non-default location, you'll then need to edit `config_local.ini` to provide the path to your Stata executable. Examples are provided in `config_local_template.ini`.  
+* If this project is git-versioned, then you'll want to add `config_local.ini` and a few other files (e.g., `.sconsign.dblite`) to your `.gitignore`. 
 * If you are updating the package, be sure to restart Stata. The Python environment caches imports, so updates will not take effect until Stata restarts.
 * The included project file `debugging-checklist.do` will provide some useful information as you install `statacons` and set up your build files.
 
