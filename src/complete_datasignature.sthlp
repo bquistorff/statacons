@@ -20,7 +20,7 @@
 
 
 {p 4 4 2}
-By default, {bf:complete_datasignature} will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp. For reference, if there is no meta-data, the hash value is 4294967295.
+By default, {bf:complete_datasignature} will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp.
 
 {p 4 4 2}{bf:Options}
 

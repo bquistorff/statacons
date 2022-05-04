@@ -15,6 +15,7 @@ loc datasig =  r(datasignature)
 if "`meta'"!="nometa" {
     //can't use log because that has timestamp, so write out to file
     tempfile meta_fname
+	*loc meta_fname meta_fname
     qui file open meta_handle using "`meta_fname'", write text replace
 
     //value labels. Do seprately from vars as some might not be attached to variables and some might be attached to multiple
@@ -93,7 +94,7 @@ Syntax
 > complete_datasignature [, dta_file("file.dta") fname("sigfile.ext") nometa fast vv_labels_only]
 
 
-By default, __complete_datasignature__ will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp. For reference, if there is no meta-data, the hash value is 4294967295.
+By default, __complete_datasignature__ will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp.
 
 ### Options
 
