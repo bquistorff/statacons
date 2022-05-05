@@ -2,9 +2,9 @@ d 'statacons': statacons
 d
 d   Enables using SCons with Stata
 d
-d Version 2.0.0
+d Version 2.0.2
 d
-d Distribution-Date: 20220119
+d Distribution-Date: 20220504
 d Requires: Python and SCons package
 d
 d KW: build system, dependency
@@ -13,6 +13,7 @@ d
 f runscons.py
 f sconsign-script.py
 f complete_datasignature.ado
+f complete_datasignature.sthlp
 f statacons.ado
 f statacons.sthlp
 f stataconsign.ado

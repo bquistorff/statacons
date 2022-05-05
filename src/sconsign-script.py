@@ -1,4 +1,4 @@
-# Copyright 2022. This work is licensed under a CC BY 4.0 license. 
+# Copyright 2022. This work is licensed under a CC BY 4.0 license.
 import re
 import sys
 

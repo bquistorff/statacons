@@ -11,7 +11,7 @@ __complete_datasignature__ extends Stata's __datasignature__ by allowing the inc
 Syntax
 ------
 
-> complete_datasignature [, dta_file("file.dta") fname("sigfile.ext") nometa fast vv_labels_only]
+> complete_datasignature [, dta_file("file.dta") fname("sigfile.ext") nometa fast labels_formats_only]
 
 
 By default, __complete_datasignature__ will use the dta-file in memory to create create a signature that depends on the data and all metadata, but not the embedded timestamp.
@@ -23,7 +23,7 @@ By default, __complete_datasignature__ will use the dta-file in memory to create
 | dta_file("file.dta")           | Use  "file.dta"  instead of dta-file in memory       |
 | fname("sigfile.ext")           | write signature to "sigfile.ext"     |
 | nometa                     | Do not include any metadata <br>  equivalent of Stata's __datasignature__          |
-| vv_labels_only             | Include variable labels and value labels               |
+| labels_formats_only             | Include variable labels and value labels               |
 | fast          | use __\_datasignature__'s _fast_ mode <br> faster but not machine-independent                       |
 
 
@@ -38,7 +38,7 @@ Example(s)
     74:12(71728):3831085005:1395876116
             . complete_datasignature, nometa
     74:12(71728):3831085005:1395876116
-            . complete_datasignature, vv_labels_only
+            . complete_datasignature, labels_formats_only
     74:12(71728):3831085005:1395876116:17340132
             . complete_datasignature
     74:12(71728):3831085005:1395876116:711253444
