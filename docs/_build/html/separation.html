@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Separation of Concerns Part 1: Separating Analysis from Presentation &#8212; pystatacons 2.1.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setup" href="setup.html" />
+    <link rel="prev" title="Solution for “Exercise: Parameters”" href="parameters-Solution.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <head>
+  <link rel="stylesheet" type="text/css" href="stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+</head>
+<div class="section" id="separation-of-concerns-part-1-separating-analysis-from-presentation">
+<h1>Separation of Concerns Part 1: Separating Analysis from Presentation<a class="headerlink" href="#separation-of-concerns-part-1-separating-analysis-from-presentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="review-of-introductory-example">
+<h2>Review of Introductory Example<a class="headerlink" href="#review-of-introductory-example" title="Permalink to this headline">¶</a></h2>
+<p>In the first part of this two-part lesson, we revisit the <em>Introductory Example</em> of the main paper to implement the principle of <em>separation of concerns</em>. That example proceeded in two steps. First, in <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code>, we prepared our dataset <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> for analysis. Then, in <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>, we ran our regressions and produced tables and figures. We reproduce the do-files, SConstruct, and workflow below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
+<span class="n">version</span> <span class="mf">16.1</span>
+
+<span class="n">use</span> <span class="s2">&quot;inputs/auto-original.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="n">generate</span> <span class="n">mpg_sqd</span> <span class="o">=</span> <span class="n">mpg</span><span class="o">^</span><span class="mi">2</span>
+<span class="n">label</span> <span class="n">variable</span> <span class="n">mpg_sqd</span> <span class="s2">&quot;Mileage (mpg) squared&quot;</span>
+
+<span class="n">save</span> <span class="s2">&quot;outputs/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">replace</span>
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">analysis</span><span class="o">.</span><span class="n">do</span>
+<span class="n">version</span> <span class="mf">16.1</span>
+
+<span class="n">use</span> <span class="s2">&quot;outputs/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="n">twoway</span> <span class="n">scatter</span> <span class="n">price</span> <span class="n">mpg</span><span class="p">,</span> <span class="n">title</span><span class="p">(</span><span class="s2">&quot;Price vs. MPG&quot;</span><span class="p">)</span>
+<span class="n">graph</span> <span class="n">export</span> <span class="s2">&quot;outputs/scatterplot.pdf&quot;</span><span class="p">,</span> <span class="n">replace</span>
+
+<span class="n">regress</span> <span class="n">price</span> <span class="n">mpg</span>
+<span class="n">eststo</span> <span class="n">linear</span>
+
+<span class="n">regress</span> <span class="n">price</span> <span class="n">mpg</span> <span class="n">mpg_sqd</span>
+<span class="n">eststo</span> <span class="n">quadratic</span>
+
+<span class="n">esttab</span> <span class="n">linear</span> <span class="n">quadratic</span> <span class="n">using</span> <span class="s2">&quot;outputs/regressionTable.tex&quot;</span><span class="p">,</span> <span class="o">///</span>
+  <span class="n">se</span> <span class="n">r2</span> <span class="n">replace</span>
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># SConstruct-introExample</span>
+<span class="c1"># **** Setup from pystatacons package *****</span>
+<span class="kn">import</span> <span class="nn">pystatacons</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pystatacons</span><span class="o">.</span><span class="n">init_env</span><span class="p">()</span>
+
+<span class="c1"># use sconsign specific to this exercise</span>
+<span class="n">SConsignFile</span><span class="p">(</span><span class="s2">&quot;.sconsignSeparation&quot;</span><span class="p">)</span>
+
+<span class="c1"># **** Substance begins        *****</span>
+
+<span class="c1"># analysis</span>
+<span class="n">cmd_analysis</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/scatterplot.pdf&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;outputs/regressionTable.tex&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/analysis.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">])</span>
+
+<span class="c1"># dataprep</span>
+<span class="n">cmd_dataprep</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/dataprep.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;inputs/auto-original.dta&#39;</span><span class="p">])</span>
+
+</pre></div>
+</div>
+<p><img alt="Introductory Example Workflow" src="_images/introExample.svg" /></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>. statacons --sconstruct=SConstruct-introExample ///
+&gt;         --debug=explain
+scons: Reading SConscript files ...
+Using &#39;LabelsFormatsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, 
+  including variable formats, variable labels and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: building `outputs\auto-modified.dta&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\auto-modified.dta&quot;], [&quot;code\dataprep.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\dataprep.do&quot;.
+  Starting in hidden desktop (pid=13696).
+scons: building `outputs\scatterplot.pdf&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\scatterplot.pdf&quot;, &quot;outputs\regressionTable.tex&quot;], [&quot;code\an
+&gt; alysis.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\analysis.do&quot;.
+  Starting in hidden desktop (pid=13404).
+scons: done building targets.
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="separation-of-concerns-the-problem">
+<h2>Separation of Concerns: The Problem<a class="headerlink" href="#separation-of-concerns-the-problem" title="Permalink to this headline">¶</a></h2>
+<p>The issue with this workflow can be seen in the following example. Let’s suppose that the regressions in <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code> take a very long time to run. Furthermore, let’s suppose that we wanted to improve the formatting of our graph, <code class="docutils literal notranslate"><span class="pre">scatterplot.pdf</span></code>, so that the y-axis labels are horizontal. We edit <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code> to add <code class="docutils literal notranslate"><span class="pre">ylabels(,</span> <span class="pre">angle(horizontal))</span></code> to the command creating <code class="docutils literal notranslate"><span class="pre">scatterplot.gph</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">analysis</span><span class="o">.</span><span class="n">do</span>
+<span class="n">version</span> <span class="mf">16.1</span>
+
+<span class="n">use</span> <span class="s2">&quot;outputs/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="n">twoway</span> <span class="n">scatter</span> <span class="n">price</span> <span class="n">mpg</span><span class="p">,</span> <span class="n">title</span><span class="p">(</span><span class="s2">&quot;Price vs. MPG&quot;</span><span class="p">)</span> <span class="o">///</span>
+  <span class="n">ylabels</span><span class="p">(,</span> <span class="n">angle</span><span class="p">(</span><span class="n">horizontal</span><span class="p">))</span>  
+<span class="n">graph</span> <span class="n">export</span> <span class="s2">&quot;outputs/scatterplot.pdf&quot;</span><span class="p">,</span> <span class="n">replace</span>
+
+<span class="n">regress</span> <span class="n">price</span> <span class="n">mpg</span>
+<span class="n">eststo</span> <span class="n">linear</span>
+
+<span class="n">regress</span> <span class="n">price</span> <span class="n">mpg</span> <span class="n">mpg_sqd</span>
+<span class="n">eststo</span> <span class="n">quadratic</span>
+
+<span class="n">esttab</span> <span class="n">linear</span> <span class="n">quadratic</span> <span class="n">using</span> <span class="s2">&quot;outputs/regressionTable.tex&quot;</span><span class="p">,</span> <span class="o">///</span>
+  <span class="n">se</span> <span class="n">r2</span> <span class="n">replace</span>
+
+</pre></div>
+</div>
+<p>The problem will now become apparent if we ask <code class="docutils literal notranslate"><span class="pre">statacons</span></code> for the status of the project:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>. statacons --sconstruct=SConstruct-introExample -n --debug=explain
+scons: Reading SConscript files ...
+Using &#39;LabelsFormatsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, 
+  including variable formats, variable labels and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: rebuilding `outputs\scatterplot.pdf&#39; because `code\analysis.do&#39; changed
+stata_run([&quot;outputs\scatterplot.pdf&quot;, &quot;outputs\regressionTable.tex&quot;], [&quot;code\an
+&gt; alysis.do&quot;])
+scons: done building targets.
+
+</pre></div>
+</div>
+<p>As expected, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> tells us that it will need to re-run <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>. This is wasteful – we should not re-run all these regressions just to change the formatting of tables or figures.</p>
+</div>
+<div class="section" id="separating-analysis-from-presentation">
+<h2>Separating Analysis from Presentation<a class="headerlink" href="#separating-analysis-from-presentation" title="Permalink to this headline">¶</a></h2>
+<p>The principle of <em>separation of concerns</em> suggests that we should split <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>: <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> should handle regressions; <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> should take the regression results and produce tables and figures. To implement this, we need <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> to save regression results in <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code>, which <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> can then use as an input.</p>
+<p>Here are the new do-files, <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> and <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">regressions</span><span class="o">.</span><span class="n">do</span>
+<span class="n">version</span> <span class="mf">16.1</span>
+
+<span class="n">use</span> <span class="s2">&quot;outputs/data/dta/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="o">//</span> <span class="n">Linear</span> <span class="n">regression</span>
+<span class="n">regress</span> <span class="n">price</span> <span class="n">mpg</span>
+<span class="n">eststo</span> <span class="n">linear</span>
+
+<span class="o">//</span> <span class="n">Quadratic</span> <span class="n">regression</span>
+<span class="n">regress</span> <span class="n">price</span> <span class="n">mpg</span> <span class="n">mpg_sqd</span>
+<span class="n">eststo</span> <span class="n">quadratic</span>
+
+<span class="o">//</span> <span class="n">save</span> <span class="n">linear</span> <span class="ow">and</span> <span class="n">quadratic</span> <span class="n">regression</span> <span class="n">results</span> <span class="ow">in</span> <span class="o">.</span><span class="n">sters</span> <span class="n">file</span>
+<span class="n">estwrite</span> <span class="n">linear</span> <span class="n">quadratic</span> <span class="n">using</span> <span class="n">outputs</span><span class="o">/</span><span class="n">regressions</span><span class="o">.</span><span class="n">sters</span><span class="p">,</span> <span class="o">///</span>
+  <span class="n">reproducible</span> <span class="n">replace</span>
+<span class="n">exit</span>
+
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">tabfig</span><span class="o">.</span><span class="n">do</span>
+
+<span class="n">use</span> <span class="s2">&quot;outputs/data/dta/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+<span class="o">//</span> <span class="n">read</span> <span class="n">previous</span> <span class="n">regression</span> <span class="n">results</span> <span class="kn">from</span> <span class="nn">saved</span> <span class="o">.</span><span class="n">sters</span> <span class="n">file</span><span class="o">.</span>
+<span class="n">estimates</span> <span class="n">clear</span>
+<span class="n">estread</span> <span class="n">using</span> <span class="s2">&quot;outputs/regressions.sters&quot;</span>
+
+<span class="o">//</span> <span class="n">create</span> <span class="n">scatter</span> <span class="n">plot</span>
+<span class="n">twoway</span> <span class="n">scatter</span> <span class="n">price</span> <span class="n">mpg</span><span class="p">,</span> <span class="n">title</span><span class="p">(</span><span class="s2">&quot;Price vs. MPG&quot;</span><span class="p">)</span> <span class="o">///</span>
+  <span class="n">ylabels</span><span class="p">(,</span> <span class="n">angle</span><span class="p">(</span><span class="n">horizontal</span><span class="p">))</span>
+<span class="n">graph</span> <span class="n">export</span> <span class="s2">&quot;outputs/scatterplot.pdf&quot;</span><span class="p">,</span> <span class="n">replace</span>
+
+<span class="o">//</span> <span class="n">create</span> <span class="o">*.</span><span class="n">tex</span> <span class="n">file</span>
+<span class="n">esttab</span> <span class="n">linear</span> <span class="n">quadratic</span> <span class="n">using</span> <span class="s2">&quot;outputs/regressionTable.tex&quot;</span><span class="p">,</span> <span class="o">///</span>
+  <span class="n">se</span> <span class="n">r2</span> <span class="n">label</span> <span class="n">replace</span>
+
+</pre></div>
+</div>
+<p>We create a new SConstruct, <code class="docutils literal notranslate"><span class="pre">SConstruct-separation</span></code>, with this new workflow.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># SConstruct-separation</span>
+
+<span class="c1"># **** Setup from pystatacons package *****</span>
+<span class="kn">import</span> <span class="nn">pystatacons</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pystatacons</span><span class="o">.</span><span class="n">init_env</span><span class="p">()</span>
+
+<span class="c1"># use sconsign specific to this exercise</span>
+<span class="n">SConsignFile</span><span class="p">(</span><span class="s2">&quot;.sconsignSeparation&quot;</span><span class="p">)</span>
+
+<span class="c1"># separate analysis from tables and figures</span>
+
+<span class="c1"># **** Substance begins        *****</span>
+
+<span class="c1"># tables and figures</span>
+<span class="n">cmd_tabfig</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/scatterplot.pdf&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;outputs/regressionTable.tex&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/tabfig.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;outputs/regressions.sters&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># regressions</span>
+<span class="n">cmd_regressions</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/regressions.sters&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/regressions.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># dataprep</span>
+<span class="n">cmd_dataprep</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/dataprep.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;inputs/auto-original.dta&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+</pre></div>
+</div>
+<p>This workflow is illustrated in the following figure:</p>
+<p><img alt="Separating regressions from presentation" src="_images/separation.svg" /></p>
+<p>We build the project from scratch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+. statacons --sconstruct=SConstruct-separation -c
+scons: Reading SConscript files ...
+scons: done reading SConscript files.
+scons: Cleaning targets ...
+Removed outputs\auto-modified.dta
+Removed outputs\scatterplot.pdf
+Removed outputs\regressionTable.tex
+scons: done cleaning targets.
+
+. statacons --sconstruct=SConstruct-separation ///
+&gt;         --debug=explain
+scons: Reading SConscript files ...
+Using &#39;LabelsFormatsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, 
+  including variable formats, variable labels and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: building `outputs\auto-modified.dta&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\auto-modified.dta&quot;], [&quot;code\dataprep.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\dataprep.do&quot;.
+  Starting in hidden desktop (pid=21636).
+scons: building `outputs\regressions.sters&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\regressions.sters&quot;], [&quot;code\regressions.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\regressions.do&quot;.
+  Starting in hidden desktop (pid=8796).
+scons: building `outputs\scatterplot.pdf&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\scatterplot.pdf&quot;, &quot;outputs\regressionTable.tex&quot;], [&quot;code\ta
+&gt; bfig.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\tabfig.do&quot;.
+  Starting in hidden desktop (pid=4784).
+scons: done building targets.
+
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing-separation">
+<h2>Testing separation<a class="headerlink" href="#testing-separation" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s test whether our separation of concerns has been successful. Let’s change the number of significant digits in our regression table from the default to 2.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">//</span> <span class="n">tabfig</span><span class="o">.</span><span class="n">do</span>
+
+<span class="n">use</span> <span class="s2">&quot;outputs/data/dta/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+<span class="o">//</span> <span class="n">read</span> <span class="n">previous</span> <span class="n">regression</span> <span class="n">results</span> <span class="kn">from</span> <span class="nn">saved</span> <span class="o">.</span><span class="n">sters</span> <span class="n">file</span><span class="o">.</span>
+<span class="n">estimates</span> <span class="n">clear</span>
+<span class="n">estread</span> <span class="n">using</span> <span class="s2">&quot;outputs/regressions.sters&quot;</span>
+
+<span class="o">//</span> <span class="n">create</span> <span class="n">scatter</span> <span class="n">plot</span>
+<span class="n">twoway</span> <span class="n">scatter</span> <span class="n">price</span> <span class="n">mpg</span><span class="p">,</span> <span class="n">title</span><span class="p">(</span><span class="s2">&quot;Price vs. MPG&quot;</span><span class="p">)</span> <span class="o">///</span>
+  <span class="n">ylabels</span><span class="p">(,</span> <span class="n">angle</span><span class="p">(</span><span class="n">horizontal</span><span class="p">))</span>
+<span class="n">graph</span> <span class="n">export</span> <span class="s2">&quot;outputs/scatterplot.pdf&quot;</span><span class="p">,</span> <span class="n">replace</span>
+
+<span class="o">//</span> <span class="n">create</span> <span class="o">*.</span><span class="n">tex</span> <span class="n">file</span>
+<span class="n">esttab</span> <span class="n">linear</span> <span class="n">quadratic</span> <span class="n">using</span> <span class="s2">&quot;outputs/regressionTable.tex&quot;</span><span class="p">,</span> <span class="o">///</span>
+  <span class="n">se</span> <span class="n">r2</span> <span class="n">label</span> <span class="n">b</span><span class="p">(</span><span class="n">a2</span><span class="p">)</span> <span class="n">replace</span>
+
+</pre></div>
+</div>
+<p>Let’s see what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> does and does not rebuild.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+. statacons --sconstruct=SConstruct-separation ///
+&gt;         --debug=explain
+scons: Reading SConscript files ...
+Using &#39;LabelsFormatsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, 
+  including variable formats, variable labels and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: rebuilding `outputs\scatterplot.pdf&#39; because `code\tabfig.do&#39; changed
+stata_run([&quot;outputs\scatterplot.pdf&quot;, &quot;outputs\regressionTable.tex&quot;], [&quot;code\ta
+&gt; bfig.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\tabfig.do&quot;.
+  Starting in hidden desktop (pid=24400).
+scons: done building targets.
+
+
+</pre></div>
+</div>
+<p>Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> does rebuild the outputs of <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> because <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> has changed, but does not re-run any regressions.</p>
+</div>
+<div class="section" id="metadata-variable-labels">
+<h2>Metadata (variable labels)<a class="headerlink" href="#metadata-variable-labels" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s suppose that we want to edit the labels of our variables, for example to change the label of <strong>price</strong> from “Price” to “Price (USD)”.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
+<span class="n">version</span> <span class="mf">16.1</span> 
+
+<span class="n">use</span> <span class="s2">&quot;inputs/auto-original.dta&quot;</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="n">generate</span> <span class="n">mpg_sqd</span> <span class="o">=</span> <span class="n">mpg</span><span class="o">^</span><span class="mi">2</span>
+<span class="n">label</span> <span class="n">variable</span> <span class="n">mpg_sqd</span> <span class="s2">&quot;Mileage (mpg) squared&quot;</span>
+
+<span class="n">label</span> <span class="n">variable</span> <span class="n">price</span> <span class="s2">&quot;Price (USD)&quot;</span>
+
+<span class="n">save</span> <span class="s2">&quot;outputs/auto-modified.dta&quot;</span><span class="p">,</span> <span class="n">replace</span>
+
+</pre></div>
+</div>
+<p>Through <code class="docutils literal notranslate"><span class="pre">statacons</span></code>, we can see the issue this will create: because we are changing <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code> and its target <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code>, we need to rebuild <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code>, which depends on <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>. statacons --sconstruct=SConstruct-separation ///
+&gt;         --debug=explain
+scons: Reading SConscript files ...
+Using &#39;LabelsFormatsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, 
+  including variable formats, variable labels and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: rebuilding `outputs\auto-modified.dta&#39; because `code\dataprep.do&#39; change
+&gt; d
+stata_run([&quot;outputs\auto-modified.dta&quot;], [&quot;code\dataprep.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\dataprep.do&quot;.
+  Starting in hidden desktop (pid=18800).
+scons: rebuilding `outputs\regressions.sters&#39; because `outputs\auto-modified.dt
+&gt; a&#39; changed
+stata_run([&quot;outputs\regressions.sters&quot;], [&quot;code\regressions.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\regressions.do&quot;.
+  Starting in hidden desktop (pid=25404).
+scons: rebuilding `outputs\scatterplot.pdf&#39; because `outputs\auto-modified.dta&#39;
+&gt;  changed
+stata_run([&quot;outputs\scatterplot.pdf&quot;, &quot;outputs\regressionTable.tex&quot;], [&quot;code\ta
+&gt; bfig.do&quot;])
+Running: StataMP-64.exe /e do &quot;code\tabfig.do&quot;.
+  Starting in hidden desktop (pid=5116).
+scons: done building targets.
+
+
+</pre></div>
+</div>
+<p>To avoid re-running <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code>, we could manually adjust the label of <strong>price</strong> in <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code>. However, this could lead to inconsistency across analyses and contradicts the goal of an automatic workflow. We will take up this problem in the next lesson.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pystatacons</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python Package API documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Stata package command documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SWC:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters-Solution.html">Solution for “Exercise: Parameters”</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Separation of Concerns Part 1: Separating Analysis from Presentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simpleSConstruct.html">A Simple SConstruct file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="solution_2newrules.html">Solution for “Exercise: Write Two New Rules”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variables.html">Variables</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="parameters-Solution.html" title="previous chapter">Solution for “Exercise: Parameters”</a></li>
+      <li>Next: <a href="setup.html" title="next chapter">Setup</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Brian Quistorff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/separation.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

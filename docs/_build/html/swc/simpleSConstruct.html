@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Simple SConstruct file &#8212; pystatacons 2.1.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <head>
+  <link rel="stylesheet" type="text/css" href="stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+</head>
+<div class="section" id="a-simple-sconstruct-file">
+<h1>A Simple SConstruct file<a class="headerlink" href="#a-simple-sconstruct-file" title="Permalink to this headline">¶</a></h1>
+<p>We concluded the previous module with</p>
+<blockquote>
+<div><p>What we really want is an executable description of our pipeline that allows software to do the tricky part for us: figuring out what steps need to be rerun.</p>
+</div></blockquote>
+<p>This is where SCons comes in – we write an <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> file that codifies our workflow: what are the outputs, what are the inputs (including data and code), and what must be done to create the outputs from the inputs. Furthermore, SCons can tell which steps need to be re-run as the inputs change.</p>
+<div class="section" id="a-first-example">
+<h2>A first example<a class="headerlink" href="#a-first-example" title="Permalink to this headline">¶</a></h2>
+<p>In your text editor, open the file called <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> (no extension).</p>
+<p>Skip the section at the top marked</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **** Setup from pystatacons package ***</span>
+</pre></div>
+</div>
+<p>and start reading at the section marked</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **** Substance begins        *****</span>
+</pre></div>
+</div>
+<p>You will see the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmd_isles_data</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;outputs/data/dta/isles.dta&#39;</span><span class="p">,</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/count_isles.do&#39;</span>
+<span class="p">)</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">cmd_isles_data</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;inputs/txt/isles.txt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;code/ado/plus/w/wordcloud.ado&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;code/ado/personal/countWords.ado&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Let’s walk through this one piece at a time.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code> is the name we are giving to this task. It will allow us to refer to this task elsewhere in the SConstruct if we need to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">env.StataBuild</span></code> tells SCons that this task will be performed according to <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code>. Essentially, <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> tells Stata “Do the do-file <code class="docutils literal notranslate"><span class="pre">source</span></code> in batch mode.”</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> is the file to be created or built, so this task will be building <code class="docutils literal notranslate"><span class="pre">outputs/data/isles.dta</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source</span></code> is the do-file we will use to build our target. In general, source can include other dependencies. However, we have set up <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> to <code class="docutils literal notranslate"><span class="pre">do</span></code> the first thing it finds in <code class="docutils literal notranslate"><span class="pre">source</span></code>, so we list only the do-file we want to run.</p></li>
+<li><p>in <code class="docutils literal notranslate"><span class="pre">Depends</span></code>, we list the remaining inputs (or “dependencies”) for our task <code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code>. In this case, we have three additional dependencies. It is clear why the input file <code class="docutils literal notranslate"><span class="pre">inputs/txt/isles.txt</span></code> is a dependency – if the input data change, the output may change, so we will need to re-run our analysis. The next two are the two ado-files: <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, which is called by <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code>, and <code class="docutils literal notranslate"><span class="pre">wordCount.ado</span></code>, which is called by <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>. Our target <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> also depends on these, since, just like the input data, if either of them change, then the output potentially could change,</p></li>
+</ul>
+<p>So, in words, the code above reads</p>
+<blockquote>
+<div><p>“The the task named <code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code> is to create <code class="docutils literal notranslate"><span class="pre">output/data/isles.dta</span></code>. <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> tells us that we do that by running the <code class="docutils literal notranslate"><span class="pre">source</span></code> do-file  <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code> in batch mode.  The files this task depends on are <code class="docutils literal notranslate"><span class="pre">isles.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, and <code class="docutils literal notranslate"><span class="pre">wordcount.ado</span></code>. Check whether the source or any of the dependencies have changed since the last time we build this target. If any have changed, we must re-build the target. If none have changed, we do not need to re-build this target.”</p>
+</div></blockquote>
+</div>
+<div class="section" id="putting-our-first-example-to-work">
+<h2>Putting our first example to work<a class="headerlink" href="#putting-our-first-example-to-work" title="Permalink to this headline">¶</a></h2>
+<p>Let’s see how our script works.</p>
+<p>First, let’s start fresh by erasing our target <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> (if it already exists) using the <code class="docutils literal notranslate"><span class="pre">-c</span></code> option (shorthand for <code class="docutils literal notranslate"><span class="pre">--clean</span></code>)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">statacons</span> <span class="o">-</span><span class="n">c</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">reading</span> <span class="n">SConscript</span> <span class="n">files</span><span class="o">.</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Cleaning</span> <span class="n">targets</span> <span class="o">...</span>
+<span class="n">Removed</span> <span class="n">outputs</span>\<span class="n">data</span>\<span class="n">dta</span>\<span class="n">isles</span><span class="o">.</span><span class="n">dta</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">cleaning</span> <span class="n">targets</span><span class="o">.</span>
+
+
+</pre></div>
+</div>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">-n</span></code> option (shorthand for <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code>) to <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to get a preview of what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> will do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">statacons</span> <span class="o">-</span><span class="n">n</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
+<span class="n">Using</span> <span class="s1">&#39;VVLabelsOnly&#39;</span> <span class="n">custom_datasignature</span><span class="o">.</span>
+<span class="n">Calculates</span> <span class="n">timestamp</span><span class="o">-</span><span class="n">independent</span> <span class="n">checksum</span> <span class="n">of</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">including</span> <span class="n">variable</span> <span class="ow">and</span> <span class="n">value</span> <span class="n">labels</span><span class="o">.</span>
+<span class="n">Edit</span> <span class="n">use_custom_datasignature</span> <span class="ow">in</span> <span class="n">config_project</span><span class="o">.</span><span class="n">ini</span> <span class="n">to</span> <span class="n">change</span><span class="o">.</span>
+  <span class="p">(</span><span class="n">other</span> <span class="n">options</span> <span class="n">are</span> <span class="n">Strict</span><span class="p">,</span> <span class="n">DataOnly</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">reading</span> <span class="n">SConscript</span> <span class="n">files</span><span class="o">.</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Building</span> <span class="n">targets</span> <span class="o">...</span>
+<span class="n">stata_run</span><span class="p">([</span><span class="s2">&quot;outputs\data\dta\isles.dta&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;code\count_isles.do&quot;</span><span class="p">])</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">building</span> <span class="n">targets</span><span class="o">.</span>
+
+
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">statacons</span></code> is telling us that it will do the action <code class="docutils literal notranslate"><span class="pre">stata_run([&quot;outputs\data\dta\isles.dta&quot;],</span> <span class="pre">[&quot;code\count_isles.do&quot;])</span></code>, but we can get even more information about why it will do this by adding the option  <code class="docutils literal notranslate"><span class="pre">--debug=explain</span></code> (we still include <code class="docutils literal notranslate"><span class="pre">--dry-run</span> </code> as <code class="docutils literal notranslate"><span class="pre">-n</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+. statacons -n --debug=explain
+scons: Reading SConscript files ...
+Using &#39;VVLabelsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, including variable and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: building `outputs\data\dta\isles.dta&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\data\dta\isles.dta&quot;], [&quot;code\count_isles.do&quot;])
+scons: done building targets.
+
+
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">statacons</span></code> tells us that it needs to rebuild <code class="docutils literal notranslate"><span class="pre">outputs\data\dta\isles.dta</span></code> because it does not exist.</p>
+<p>As one last check before rebuilding, we will get <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to tell us about the status of each file it is considering by using the option <code class="docutils literal notranslate"><span class="pre">--tree=status</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+. statacons -n --debug=explain --tree=status,prune
+scons: Reading SConscript files ...
+Using &#39;VVLabelsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, including variable and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: building `outputs\data\dta\isles.dta&#39; because it doesn&#39;t exist
+stata_run([&quot;outputs\data\dta\isles.dta&quot;], [&quot;code\count_isles.do&quot;])
+ E         = exists
+  R        = exists in repository only
+   b       = implicit builder
+   B       = explicit builder
+    S      = side effect
+     P     = precious
+      A    = always build
+       C   = current
+        N  = no clean
+         H = no cache
+
+[E b      ]+-.
+[E b   C  ]  +-code
+[E b   C  ]  | +-code\ado
+[E b   C  ]  | | +-code\ado\personal
+[E     C  ]  | | | +-code\ado\personal\countWords.ado
+[E b   C  ]  | | +-code\ado\plus
+[E b   C  ]  | |   +-code\ado\plus\w
+[E     C  ]  | |     +-code\ado\plus\w\wordfreq.ado
+[E     C  ]  | +-code\count_isles.do
+[E b   C  ]  +-inputs
+[E b   C  ]  | +-inputs\txt
+[E     C  ]  |   +-inputs\txt\isles.txt
+[E b      ]  +-outputs
+[E b      ]  | +-outputs\data
+[E b      ]  |   +-outputs\data\dta
+[  B P    ]  |     +-outputs\data\dta\isles.dta
+[E     C  ]  |       +-code\count_isles.do
+[E     C  ]  |       +-inputs\txt\isles.txt
+[E     C  ]  |       +-code\ado\personal\countWords.ado
+[E     C  ]  |       +-code\ado\plus\w\wordfreq.ado
+[E     C  ]  +-SConstruct
+scons: done building targets.
+
+
+</pre></div>
+</div>
+<p>Notice the entry in the tree for <code class="docutils literal notranslate"><span class="pre">outputs\data\dta\isles.dta</span></code>: <code class="docutils literal notranslate"><span class="pre">statacons</span></code> knows to look for it, since it is a target in our <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>, but does not find it (no <code class="docutils literal notranslate"><span class="pre">E</span></code>) in the leftmost column and that it has to build it (<code class="docutils literal notranslate"><span class="pre">B</span></code> in the second column). Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> has checked all the dependencies for this target, and has found them all to be current (capital <code class="docutils literal notranslate"><span class="pre">C</span></code> in the third column). The <code class="docutils literal notranslate"><span class="pre">prune</span></code> option makes the tree easier to read by not repeating dependencies – if a file’s dependencies have already been listed, that file will be enclosed in brackets.</p>
+<p>Now that we have had a detailed look at what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> is planning to do, let’s see what it actually does:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">statacons</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
+<span class="n">Using</span> <span class="s1">&#39;VVLabelsOnly&#39;</span> <span class="n">custom_datasignature</span><span class="o">.</span>
+<span class="n">Calculates</span> <span class="n">timestamp</span><span class="o">-</span><span class="n">independent</span> <span class="n">checksum</span> <span class="n">of</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">including</span> <span class="n">variable</span> <span class="ow">and</span> <span class="n">value</span> <span class="n">labels</span><span class="o">.</span>
+<span class="n">Edit</span> <span class="n">use_custom_datasignature</span> <span class="ow">in</span> <span class="n">config_project</span><span class="o">.</span><span class="n">ini</span> <span class="n">to</span> <span class="n">change</span><span class="o">.</span>
+  <span class="p">(</span><span class="n">other</span> <span class="n">options</span> <span class="n">are</span> <span class="n">Strict</span><span class="p">,</span> <span class="n">DataOnly</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">reading</span> <span class="n">SConscript</span> <span class="n">files</span><span class="o">.</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Building</span> <span class="n">targets</span> <span class="o">...</span>
+<span class="n">stata_run</span><span class="p">([</span><span class="s2">&quot;outputs\data\dta\isles.dta&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;code\count_isles.do&quot;</span><span class="p">])</span>
+<span class="n">Running</span><span class="p">:</span> <span class="s2">&quot;C:\Program Files\Stata16\StataMP-64.exe&quot;</span> <span class="o">/</span><span class="n">e</span> <span class="n">do</span> <span class="s2">&quot;code\count_isles.do&quot;</span><span class="o">.</span> <span class="n">Starting</span> <span class="ow">in</span> <span class="n">hidde</span>
+<span class="o">&gt;</span> <span class="n">n</span> <span class="n">desktop</span> <span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="mi">10660</span><span class="p">)</span><span class="o">.</span>
+<span class="n">Computed</span> <span class="n">dta</span><span class="o">-</span><span class="n">signature</span><span class="p">:</span> <span class="n">W</span><span class="p">:</span>\<span class="n">sj_statascons</span>\<span class="n">softwareCarpentry</span>\<span class="n">outputs</span>\<span class="n">data</span>\<span class="n">dta</span>\<span class="n">isles</span><span class="o">.</span><span class="n">dta</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">building</span> <span class="n">targets</span><span class="o">.</span>
+
+
+</pre></div>
+</div>
+<p>As expected, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> has done the action  <code class="docutils literal notranslate"><span class="pre">stata_run([&quot;outputs\data\dta\isles.dta&quot;],</span> <span class="pre">[&quot;code\count_isles.do&quot;])</span></code> by sending the <code class="docutils literal notranslate"><span class="pre">source</span></code> (<code class="docutils literal notranslate"><span class="pre">code\count_isles.do</span></code>) to stata by batch mode.</p>
+<p>We see that our target has been created and is the same as before:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">use</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">isles</span><span class="o">.</span><span class="n">dta</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="o">.</span> <span class="n">desc</span><span class="p">,</span> <span class="n">s</span>
+
+<span class="n">Contains</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">isles</span><span class="o">.</span><span class="n">dta</span>
+ <span class="n">Observations</span><span class="p">:</span>         <span class="mi">9</span><span class="p">,</span><span class="mi">215</span>                  
+    <span class="n">Variables</span><span class="p">:</span>             <span class="mi">3</span>                  <span class="mi">13</span> <span class="n">Apr</span> <span class="mi">2022</span> <span class="mi">10</span><span class="p">:</span><span class="mi">14</span>
+<span class="n">Sorted</span> <span class="n">by</span><span class="p">:</span> 
+
+<span class="o">.</span> <span class="n">li</span> <span class="ow">in</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+
+     <span class="o">+------------------------+</span>
+     <span class="o">|</span> <span class="n">word</span>   <span class="n">freq</span>      <span class="n">share</span> <span class="o">|</span>
+     <span class="o">|------------------------|</span>
+  <span class="mf">1.</span> <span class="o">|</span>  <span class="n">the</span>   <span class="mi">3315</span>   <span class="mf">.0625483</span> <span class="o">|</span>
+  <span class="mf">2.</span> <span class="o">|</span>   <span class="n">of</span>   <span class="mi">2185</span>   <span class="mf">.0412272</span> <span class="o">|</span>
+  <span class="mf">3.</span> <span class="o">|</span>  <span class="ow">and</span>   <span class="mi">1530</span>   <span class="mf">.0288685</span> <span class="o">|</span>
+  <span class="mf">4.</span> <span class="o">|</span>   <span class="n">to</span>   <span class="mi">1323</span>   <span class="mf">.0249627</span> <span class="o">|</span>
+  <span class="mf">5.</span> <span class="o">|</span>    <span class="n">a</span>   <span class="mi">1132</span>   <span class="mf">.0213589</span> <span class="o">|</span>
+     <span class="o">+------------------------+</span>
+
+<span class="o">.</span> <span class="n">clear</span>
+
+
+</pre></div>
+</div>
+<p>If we ask <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to rebuild our project now, it will tell us that no rebuilding is necessary because all files are up to date:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+. statacons --debug=explain --tree=status,prune
+scons: Reading SConscript files ...
+Using &#39;VVLabelsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, including variable and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: `.&#39; is up to date.
+ E         = exists
+  R        = exists in repository only
+   b       = implicit builder
+   B       = explicit builder
+    S      = side effect
+     P     = precious
+      A    = always build
+       C   = current
+        N  = no clean
+         H = no cache
+
+[E b   C  ]+-.
+[E b   C  ]  +-code
+[E b   C  ]  | +-code\ado
+[E b   C  ]  | | +-code\ado\personal
+[E     C  ]  | | | +-code\ado\personal\countWords.ado
+[E b   C  ]  | | +-code\ado\plus
+[E b   C  ]  | |   +-code\ado\plus\w
+[E     C  ]  | |     +-code\ado\plus\w\wordfreq.ado
+[E     C  ]  | +-code\count_isles.do
+[E b   C  ]  +-inputs
+[E b   C  ]  | +-inputs\txt
+[E     C  ]  |   +-inputs\txt\isles.txt
+[E b   C  ]  +-outputs
+[E b   C  ]  | +-outputs\data
+[E b   C  ]  |   +-outputs\data\dta
+[E B P C  ]  |     +-outputs\data\dta\isles.dta
+[E     C  ]  |       +-code\count_isles.do
+[E     C  ]  |       +-inputs\txt\isles.txt
+[E     C  ]  |       +-code\ado\personal\countWords.ado
+[E     C  ]  |       +-code\ado\plus\w\wordfreq.ado
+[E     C  ]  +-SConstruct
+scons: done building targets.
+
+
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-a-second-target">
+<h2>Adding a second target<a class="headerlink" href="#adding-a-second-target" title="Permalink to this headline">¶</a></h2>
+<p>We have successfully built <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> using <code class="docutils literal notranslate"><span class="pre">statacons</span></code>, but now we would like to add <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> to the same build process.</p>
+<p>We copy <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> to a new file <code class="docutils literal notranslate"><span class="pre">SConstruct-addAbyss</span></code> and add a second task:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">cmd_abyss_data</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;outputs/data/dta/abyss.dta&#39;</span><span class="p">,</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/count_abyss.do&#39;</span>
+<span class="p">)</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">cmd_abyss_data</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;inputs/txt/abyss.txt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;code/ado/personal/countWords.ado&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;code/ado/plus/w/wordfreq.ado&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+</pre></div>
+</div>
+<p>This is essentially the same as our previous task, and a useful exercise is to try to translate it into words as we did in the first subsection above (“A first example”).</p>
+<p>Let’s see what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> thinks about this task. We use the option <code class="docutils literal notranslate"><span class="pre">--sconstruct=SConstruct-addAbyss</span></code> to tell <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to examine our new SConstruct file instead of the default (which is just to use the file called <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+. statacons --sconstruct=SConstruct-addAbyss -n --debug=explain --tree=status,prune
+scons: Reading SConscript files ...
+Using &#39;VVLabelsOnly&#39; custom_datasignature.
+Calculates timestamp-independent checksum of dataset, including variable and value labels.
+Edit use_custom_datasignature in config_project.ini to change.
+  (other options are Strict, DataOnly, False)
+scons: done reading SConscript files.
+scons: Building targets ...
+scons: Cannot explain why `outputs\data\dta\abyss.dta&#39; is being rebuilt: No previous build inform
+&gt; ation found
+stata_run([&quot;outputs\data\dta\abyss.dta&quot;], [&quot;code\count_abyss.do&quot;])
+Computed dta-signature: W:\sj_statascons\softwareCarpentry\outputs\data\dta\abyss.dta
+ E         = exists
+  R        = exists in repository only
+   b       = implicit builder
+   B       = explicit builder
+    S      = side effect
+     P     = precious
+      A    = always build
+       C   = current
+        N  = no clean
+         H = no cache
+
+[E b      ]+-.
+[E b   C  ]  +-code
+[E b   C  ]  | +-code\ado
+[E b   C  ]  | | +-code\ado\personal
+[E     C  ]  | | | +-code\ado\personal\countWords.ado
+[E b   C  ]  | | +-code\ado\plus
+[E b   C  ]  | |   +-code\ado\plus\w
+[E     C  ]  | |     +-code\ado\plus\w\wordfreq.ado
+[E     C  ]  | +-code\count_abyss.do
+[E     C  ]  | +-code\count_isles.do
+[E b   C  ]  +-inputs
+[E b   C  ]  | +-inputs\txt
+[E     C  ]  |   +-inputs\txt\abyss.txt
+[E     C  ]  |   +-inputs\txt\isles.txt
+[E b      ]  +-outputs
+[E b      ]  | +-outputs\data
+[E b      ]  |   +-outputs\data\dta
+[E B P    ]  |     +-outputs\data\dta\abyss.dta
+[E     C  ]  |     | +-code\count_abyss.do
+[E     C  ]  |     | +-inputs\txt\abyss.txt
+[E     C  ]  |     | +-code\ado\personal\countWords.ado
+[E     C  ]  |     | +-code\ado\plus\w\wordfreq.ado
+[E B P C  ]  |     +-outputs\data\dta\isles.dta
+[E     C  ]  |       +-code\count_isles.do
+[E     C  ]  |       +-inputs\txt\isles.txt
+[E     C  ]  |       +-code\ado\personal\countWords.ado
+[E     C  ]  |       +-code\ado\plus\w\wordfreq.ado
+[E     C  ]  +-SConstruct-addAbyss
+scons: done building targets.
+
+
+</pre></div>
+</div>
+<p>There is an interesting line from the debug: <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">explain</span> <span class="pre">why</span> <span class="pre">outputs/data/dta/abyss.dta</span> <span class="pre">is</span> <span class="pre">being</span> <span class="pre">rebuilt:</span> <span class="pre">No</span> <span class="pre">previous</span> <span class="pre">build</span> <span class="pre">information</span> <span class="pre">found</span></code>. This is a reminder of how <code class="docutils literal notranslate"><span class="pre">scons</span></code> decides whether to rebuild a target: it checks whether the target’s dependencies have changed since the last time <code class="docutils literal notranslate"><span class="pre">scons</span></code> built the target. We created <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> in the previous module, and have not erased it, so <code class="docutils literal notranslate"><span class="pre">statacons</span></code> sees that it exists. However, since we have not built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> using <code class="docutils literal notranslate"><span class="pre">statacons</span></code> before, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> cannot answer the question “have the dependencies changed since the last time you built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code>?””, and will choose to rebuild it.</p>
+<p>Notice that there is no <code class="docutils literal notranslate"><span class="pre">C</span></code> in the status report for <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> from the tree, since its status is not known to be Current.</p>
+<p>Now we rebuild:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">statacons</span> <span class="o">--</span><span class="n">sconstruct</span><span class="o">=</span><span class="n">SConstruct</span><span class="o">-</span><span class="n">addAbyss</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
+<span class="n">Using</span> <span class="s1">&#39;VVLabelsOnly&#39;</span> <span class="n">custom_datasignature</span><span class="o">.</span>
+<span class="n">Calculates</span> <span class="n">timestamp</span><span class="o">-</span><span class="n">independent</span> <span class="n">checksum</span> <span class="n">of</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">including</span> <span class="n">variable</span> <span class="ow">and</span> <span class="n">value</span> <span class="n">labels</span><span class="o">.</span>
+<span class="n">Edit</span> <span class="n">use_custom_datasignature</span> <span class="ow">in</span> <span class="n">config_project</span><span class="o">.</span><span class="n">ini</span> <span class="n">to</span> <span class="n">change</span><span class="o">.</span>
+  <span class="p">(</span><span class="n">other</span> <span class="n">options</span> <span class="n">are</span> <span class="n">Strict</span><span class="p">,</span> <span class="n">DataOnly</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">reading</span> <span class="n">SConscript</span> <span class="n">files</span><span class="o">.</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Building</span> <span class="n">targets</span> <span class="o">...</span>
+<span class="n">stata_run</span><span class="p">([</span><span class="s2">&quot;outputs\data\dta</span><span class="se">\a</span><span class="s2">byss.dta&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;code\count_abyss.do&quot;</span><span class="p">])</span>
+<span class="n">Running</span><span class="p">:</span> <span class="s2">&quot;C:\Program Files\Stata16\StataMP-64.exe&quot;</span> <span class="o">/</span><span class="n">e</span> <span class="n">do</span> <span class="s2">&quot;code\count_abyss.do&quot;</span><span class="o">.</span> <span class="n">Starting</span> <span class="ow">in</span> <span class="n">hidde</span>
+<span class="o">&gt;</span> <span class="n">n</span> <span class="n">desktop</span> <span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="mi">28664</span><span class="p">)</span><span class="o">.</span>
+<span class="n">Computed</span> <span class="n">dta</span><span class="o">-</span><span class="n">signature</span><span class="p">:</span> <span class="n">W</span><span class="p">:</span>\<span class="n">sj_statascons</span>\<span class="n">softwareCarpentry</span>\<span class="n">outputs</span>\<span class="n">data</span>\<span class="n">dta</span>\<span class="n">abyss</span><span class="o">.</span><span class="n">dta</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">building</span> <span class="n">targets</span><span class="o">.</span>
+
+
+</pre></div>
+</div>
+<p>Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> has built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> but not <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code>. (Question for the user: why has <code class="docutils literal notranslate"><span class="pre">statacons</span></code> not rebuilt <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code>? Hint: check the <code class="docutils literal notranslate"><span class="pre">tree</span></code> above.)</p>
+</div>
+<div class="section" id="exercise-write-two-new-rules">
+<h2>Exercise: Write Two New Rules<a class="headerlink" href="#exercise-write-two-new-rules" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple" start="0">
+<li><p>Create a copy of <code class="docutils literal notranslate"><span class="pre">SConstruct-addAbyss</span></code> and rename it <code class="docutils literal notranslate"><span class="pre">SConstruct-2NewRules</span></code></p></li>
+<li><p>Write a new do-file <code class="docutils literal notranslate"><span class="pre">count_last.do</span></code> to create a frequency count dataset <code class="docutils literal notranslate"><span class="pre">last.dta</span></code> from the input text <code class="docutils literal notranslate"><span class="pre">last.txt</span></code>.</p></li>
+<li><p>Add a rule to our new SConstruct to build <code class="docutils literal notranslate"><span class="pre">last.dta</span></code>.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">testZipf.do</span></code> to incorporate <code class="docutils literal notranslate"><span class="pre">last.dta</span></code>, but do not re-create <code class="docutils literal notranslate"><span class="pre">testZipf.txt</span></code>.</p></li>
+<li><p>Add a rule in our new SConstruct to build  <code class="docutils literal notranslate"><span class="pre">testZipf.txt</span></code>.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">SConstruct-2NewRules</span></code> to see if any of the targets need to be rebuilt.</p></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pystatacons</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Python Package API documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Brian Quistorff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/swc/simpleSConstruct.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction &#8212; pystatacons 2.1.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <head>
+  <link rel="stylesheet" type="text/css" href="stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+</head>
+<div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Let’s imagine that we’re interested in testing Zipf’s Law in some of our favorite books.</p>
+<div class="section" id="zipf-s-law">
+<h2>Zipf’s Law<a class="headerlink" href="#zipf-s-law" title="Permalink to this headline">¶</a></h2>
+<p>The most frequently-occurring word occurs approximately twice as often as the second most frequent word. This is Zipf’s Law.</p>
+<p>The texts we want to analyze are in .txt format:</p>
+<!--- we have to fake the ls command and then run with nocommands -->
+<!--- because markdown is getting confused by the asterisk -->
+<!--- so when we send output we have to escape the asterisk -->
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">ls</span> <span class="n">inputs</span><span class="o">/</span><span class="n">txt</span><span class="o">/*.</span><span class="n">txt</span>
+ <span class="mf">347.1</span><span class="n">k</span>  <span class="mi">12</span><span class="o">/</span><span class="mi">28</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">48</span>  <span class="n">abyss</span><span class="o">.</span><span class="n">txt</span>         
+ <span class="mf">321.9</span><span class="n">k</span>  <span class="mi">12</span><span class="o">/</span><span class="mi">28</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">48</span>  <span class="n">isles</span><span class="o">.</span><span class="n">txt</span>         
+<span class="mf">1001.3</span><span class="n">k</span>  <span class="mi">12</span><span class="o">/</span><span class="mi">28</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">48</span>  <span class="n">last</span><span class="o">.</span><span class="n">txt</span>          
+ <span class="mf">343.5</span><span class="n">k</span>  <span class="mi">12</span><span class="o">/</span><span class="mi">28</span><span class="o">/</span><span class="mi">21</span> <span class="mi">10</span><span class="p">:</span><span class="mi">48</span>  <span class="n">sierra</span><span class="o">.</span><span class="n">txt</span>        
+
+
+</pre></div>
+</div>
+<p>With the help of the user-written command <code class="docutils literal notranslate"><span class="pre">wordfreq.ado</span></code> and a helper ado-file <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, we have written a do-file <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code> that takes the file <code class="docutils literal notranslate"><span class="pre">inputs/text/isles.txt</span></code> as an input and returns <code class="docutils literal notranslate"><span class="pre">outputs/data/dta/isles.dta</span></code>, a file with the frequency of each word in the input file. First, we count the frequency of words in the file <code class="docutils literal notranslate"><span class="pre">isles.txt</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_isles</span><span class="o">.</span><span class="n">do</span>
+
+<span class="o">.</span> <span class="n">version</span> <span class="mf">16.1</span>
+
+<span class="o">.</span> <span class="n">quietly</span> <span class="n">include</span> <span class="n">profile</span><span class="o">.</span><span class="n">do</span> 
+<span class="n">pandoc</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">Pandoc</span>\<span class="n">pandoc</span><span class="o">.</span><span class="n">exe</span>
+<span class="n">wkhtmltopdf</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">wkhtmltopdf</span>\<span class="nb">bin</span>\<span class="n">wkhtmltopdf</span><span class="o">.</span><span class="n">exe</span>
+
+<span class="o">.</span> 
+<span class="o">.</span> <span class="n">countWords</span><span class="p">,</span> <span class="n">inputFile</span><span class="p">(</span><span class="s2">&quot;isles.txt&quot;</span><span class="p">)</span> <span class="n">outputFile</span><span class="p">(</span><span class="s2">&quot;isles.dta&quot;</span><span class="p">)</span>  
+<span class="p">(</span><span class="n">file</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">isles</span><span class="o">.</span><span class="n">dta</span> <span class="ow">not</span> <span class="n">found</span><span class="p">)</span>
+<span class="n">file</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">isles</span><span class="o">.</span><span class="n">dta</span> <span class="n">saved</span>
+
+<span class="o">.</span> 
+<span class="o">.</span> <span class="n">exit</span> 
+
+<span class="n">end</span> <span class="n">of</span> <span class="n">do</span><span class="o">-</span><span class="n">file</span>
+
+
+</pre></div>
+</div>
+<p>(If you look at <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, you will notice that, to keep our do-files and this document tidy and simple, we have hard-coded some paths to our inputs and outputs. This is not good programming practice.)</p>
+<p>Let’s look at the top 5 lines in the output file <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">use</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">isles</span><span class="o">.</span><span class="n">dta</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="o">.</span> <span class="n">li</span> <span class="ow">in</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+
+     <span class="o">+------------------------+</span>
+     <span class="o">|</span> <span class="n">word</span>   <span class="n">freq</span>      <span class="n">share</span> <span class="o">|</span>
+     <span class="o">|------------------------|</span>
+  <span class="mf">1.</span> <span class="o">|</span>  <span class="n">the</span>   <span class="mi">3315</span>   <span class="mf">.0625483</span> <span class="o">|</span>
+  <span class="mf">2.</span> <span class="o">|</span>   <span class="n">of</span>   <span class="mi">2185</span>   <span class="mf">.0412272</span> <span class="o">|</span>
+  <span class="mf">3.</span> <span class="o">|</span>  <span class="ow">and</span>   <span class="mi">1530</span>   <span class="mf">.0288685</span> <span class="o">|</span>
+  <span class="mf">4.</span> <span class="o">|</span>   <span class="n">to</span>   <span class="mi">1323</span>   <span class="mf">.0249627</span> <span class="o">|</span>
+  <span class="mf">5.</span> <span class="o">|</span>    <span class="n">a</span>   <span class="mi">1132</span>   <span class="mf">.0213589</span> <span class="o">|</span>
+     <span class="o">+------------------------+</span>
+
+<span class="o">.</span> <span class="n">clear</span>
+
+
+</pre></div>
+</div>
+<p>We can do the same for another book, this time in the file <code class="docutils literal notranslate"><span class="pre">abyss.txt</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_abyss</span><span class="o">.</span><span class="n">do</span>
+
+<span class="o">.</span> <span class="n">version</span> <span class="mf">16.1</span>
+
+<span class="o">.</span> <span class="n">quietly</span> <span class="n">include</span> <span class="n">profile</span><span class="o">.</span><span class="n">do</span> 
+<span class="n">pandoc</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">Pandoc</span>\<span class="n">pandoc</span><span class="o">.</span><span class="n">exe</span>
+<span class="n">wkhtmltopdf</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Program</span> <span class="n">Files</span>\<span class="n">wkhtmltopdf</span>\<span class="nb">bin</span>\<span class="n">wkhtmltopdf</span><span class="o">.</span><span class="n">exe</span>
+
+<span class="o">.</span> 
+<span class="o">.</span> <span class="n">countWords</span><span class="p">,</span> <span class="n">inputFile</span><span class="p">(</span><span class="s2">&quot;abyss.txt&quot;</span><span class="p">)</span> <span class="n">outputFile</span><span class="p">(</span><span class="s2">&quot;abyss.dta&quot;</span><span class="p">)</span>  
+<span class="p">(</span><span class="n">file</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">abyss</span><span class="o">.</span><span class="n">dta</span> <span class="ow">not</span> <span class="n">found</span><span class="p">)</span>
+<span class="n">file</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">abyss</span><span class="o">.</span><span class="n">dta</span> <span class="n">saved</span>
+
+<span class="o">.</span> 
+<span class="o">.</span> <span class="n">exit</span> 
+
+<span class="n">end</span> <span class="n">of</span> <span class="n">do</span><span class="o">-</span><span class="n">file</span>
+
+<span class="o">.</span> <span class="n">use</span> <span class="n">outputs</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">dta</span><span class="o">/</span><span class="n">abyss</span><span class="o">.</span><span class="n">dta</span><span class="p">,</span> <span class="n">clear</span>
+
+<span class="o">.</span> <span class="n">li</span> <span class="ow">in</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10</span>
+
+     <span class="o">+------------------------+</span>
+     <span class="o">|</span> <span class="n">word</span>   <span class="n">freq</span>      <span class="n">share</span> <span class="o">|</span>
+     <span class="o">|------------------------|</span>
+  <span class="mf">1.</span> <span class="o">|</span>  <span class="n">the</span>   <span class="mi">3538</span>   <span class="mf">.0588284</span> <span class="o">|</span>
+  <span class="mf">2.</span> <span class="o">|</span>  <span class="ow">and</span>   <span class="mi">2524</span>    <span class="mf">.041968</span> <span class="o">|</span>
+  <span class="mf">3.</span> <span class="o">|</span>   <span class="n">of</span>   <span class="mi">1715</span>   <span class="mf">.0285163</span> <span class="o">|</span>
+  <span class="mf">4.</span> <span class="o">|</span>    <span class="n">a</span>   <span class="mi">1451</span>   <span class="mf">.0241266</span> <span class="o">|</span>
+  <span class="mf">5.</span> <span class="o">|</span>   <span class="n">to</span>   <span class="mi">1375</span>   <span class="mf">.0228629</span> <span class="o">|</span>
+     <span class="o">|------------------------|</span>
+  <span class="mf">6.</span> <span class="o">|</span>   <span class="ow">in</span>   <span class="mi">1119</span>   <span class="mf">.0186063</span> <span class="o">|</span>
+  <span class="mf">7.</span> <span class="o">|</span>    <span class="n">i</span>    <span class="mi">895</span>   <span class="mf">.0148817</span> <span class="o">|</span>
+  <span class="mf">8.</span> <span class="o">|</span>   <span class="n">it</span>    <span class="mi">627</span>   <span class="mf">.0104255</span> <span class="o">|</span>
+  <span class="mf">9.</span> <span class="o">|</span>  <span class="n">was</span>    <span class="mi">622</span>   <span class="mf">.0103424</span> <span class="o">|</span>
+ <span class="mf">10.</span> <span class="o">|</span>  <span class="k">for</span>    <span class="mi">601</span>   <span class="mf">.0099932</span> <span class="o">|</span>
+     <span class="o">+------------------------+</span>
+
+<span class="o">.</span> <span class="n">clear</span>
+
+
+</pre></div>
+</div>
+<p>Now we want to visualize the results. We have written a do-file <code class="docutils literal notranslate"><span class="pre">plot_isles.do</span></code> that reads in <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> file and, with a helper ado-file <code class="docutils literal notranslate"><span class="pre">plotCounts.ado</span></code>, plots the 10 most frequently-occuring words in a bar chart, which it saves in <code class="docutils literal notranslate"><span class="pre">isles.png</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">qui</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">plot_isles</span><span class="o">.</span><span class="n">do</span>
+
+
+</pre></div>
+</div>
+<img src="isles.svg" >
+<p>We can do the same for <code class="docutils literal notranslate"><span class="pre">abyss</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">qui</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">plot_abyss</span><span class="o">.</span><span class="n">do</span>
+
+
+</pre></div>
+</div>
+<img src="abyss.svg" >
+<p>Now we can test Zipf’s law for these books. We have written a do-file <code class="docutils literal notranslate"><span class="pre">testZipf.do</span></code> that uses the files of counts we have created to produce an output file with the ratio of the first to the second for each input file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">qui</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">testZipf</span><span class="o">.</span><span class="n">do</span>
+
+<span class="o">.</span> <span class="nb">type</span> <span class="n">outputs</span><span class="o">/</span><span class="n">tables</span><span class="o">/</span><span class="n">testZipf</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">Book</span>    <span class="n">First</span>   <span class="n">Second</span>  <span class="n">Ratio</span>
+<span class="n">isles</span>   <span class="mi">3315</span>    <span class="mi">2185</span>    <span class="mf">1.5171624</span>
+<span class="n">abyss</span>   <span class="mi">3538</span>    <span class="mi">2524</span>    <span class="mf">1.4017433</span>
+
+
+</pre></div>
+</div>
+<p>This is reasonably close to Zipf’s law.</p>
+<p>Our workflow is as follows:</p>
+<ol class="arabic simple">
+<li><p>Read in a data file (text in this case).</p></li>
+<li><p>Analyze this data file.</p></li>
+<li><p>Save the results of the analysis to a new file.</p></li>
+<li><p>Plot a graph of the results of the analysis</p></li>
+<li><p>Save the graph as an image for later inclusion in a paper or other document</p></li>
+<li><p>Repeat 1-5 for each of our input datasets</p></li>
+<li><p>Combine results across datasets into a summary table</p></li>
+</ol>
+<p>So far, we have been conducting steps 1-6 of this analysis one file at a time by running our do-files <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code>, <code class="docutils literal notranslate"><span class="pre">count_abyss.do</span></code>, <code class="docutils literal notranslate"><span class="pre">plot_isles.do</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_abyss.do</span></code> on the command line, then conducting step 7 by running <code class="docutils literal notranslate"><span class="pre">testZipf.do</span></code>, again from the command line. This is fine for just two input files, but could become unwieldy if the number of input files or the number of steps in the workflow increased.</p>
+<p>The standard solution in Stata is to write a “master” do-file to run this process. Here is an example, which we have named <code class="docutils literal notranslate"><span class="pre">master.do</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">version</span> <span class="mf">16.1</span>
+<span class="o">//</span> <span class="n">USAGE</span><span class="p">:</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">master</span><span class="o">.</span><span class="n">do</span>
+<span class="o">//</span> <span class="n">to</span> <span class="n">produce</span> <span class="n">plots</span> <span class="k">for</span> <span class="n">isles</span> <span class="ow">and</span> <span class="n">abyss</span>
+<span class="o">//</span> <span class="ow">and</span> <span class="n">summary</span> <span class="n">table</span> <span class="k">for</span> <span class="n">Zipf</span><span class="s1">&#39;s law tests</span>
+
+
+<span class="o">//</span> <span class="n">take</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">file</span> <span class="n">corresponding</span> <span class="n">to</span> <span class="n">each</span> <span class="n">book</span><span class="p">,</span> <span class="n">create</span> <span class="n">frequency</span> <span class="n">counts</span>
+<span class="n">quietly</span> <span class="p">{</span>
+	<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_isles</span><span class="o">.</span><span class="n">do</span>
+	<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_abyss</span><span class="o">.</span><span class="n">do</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="k">for</span> <span class="n">each</span> <span class="n">book</span><span class="p">,</span> <span class="n">plot</span> <span class="n">our</span> <span class="n">graph</span> <span class="ow">in</span> <span class="n">png</span> <span class="nb">format</span>
+<span class="n">quietly</span> <span class="p">{</span>
+	<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">plot_isles</span><span class="o">.</span><span class="n">do</span> 
+	<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">plot_abyss</span><span class="o">.</span><span class="n">do</span>
+<span class="p">}</span>
+
+<span class="o">//</span> <span class="n">combine</span> <span class="n">results</span> <span class="ow">and</span> <span class="n">summarize</span>
+<span class="n">quietly</span> <span class="p">{</span>
+	<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">testZipf</span><span class="o">.</span><span class="n">do</span> 
+<span class="p">}</span>
+
+<span class="nb">type</span> <span class="n">outputs</span><span class="o">/</span><span class="n">tables</span><span class="o">/</span><span class="n">testZipf</span><span class="o">.</span><span class="n">txt</span>
+
+
+</pre></div>
+</div>
+<p>We can run the script again and see that the output is unchanged:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">.</span> <span class="n">qui</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">master</span><span class="o">.</span><span class="n">do</span>
+
+<span class="o">.</span> <span class="nb">type</span> <span class="n">outputs</span><span class="o">/</span><span class="n">tables</span><span class="o">/</span><span class="n">testZipf</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">Book</span>    <span class="n">First</span>   <span class="n">Second</span>  <span class="n">Ratio</span>
+<span class="n">isles</span>   <span class="mi">3315</span>    <span class="mi">2185</span>    <span class="mf">1.5171624</span>
+<span class="n">abyss</span>   <span class="mi">3538</span>    <span class="mi">2524</span>    <span class="mf">1.4017433</span>
+
+
+</pre></div>
+</div>
+<p>Having a script (often called a master do-file) is a useful tool for reproducible results:</p>
+<ol class="arabic simple">
+<li><p>We have a record of our workflow</p></li>
+<li><p>We can reproduce the full analysis with one command, <code class="docutils literal notranslate"><span class="pre">master.do</span></code></p></li>
+</ol>
+<p>However, it has a few important shortcomings, which we will illustrate using an example.</p>
+<p>Suppose we wanted to narrow the bars in the graphs produced by <code class="docutils literal notranslate"><span class="pre">plotCounts.ado</span></code>. We edit the <code class="docutils literal notranslate"><span class="pre">twoway</span></code> command in <code class="docutils literal notranslate"><span class="pre">plotCounts.ado</span></code>, replacing <code class="docutils literal notranslate"><span class="pre">barwidth(0.8)</span></code> with, say, <code class="docutils literal notranslate"><span class="pre">barwidth(0.6)</span></code>.</p>
+<p>Now we want to recreate our figures. This is easily done by running <code class="docutils literal notranslate"><span class="pre">master.do</span></code> again.</p>
+<p>This will work, but what if the analysis steps took a very long time? Our do-files (and the ado-files they use) to produce our word counts have not changed, and our input files have not changed, so we know that our datasets of word counts (<code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> and <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code>) will not change if we re-run our analysis steps. We should not have to re-run our full analysis just to make some changes to our graphs.</p>
+<p>One common approach is to manipulate the <code class="docutils literal notranslate"><span class="pre">master.do</span></code> script. For example, if we knew that our input files and our word-counting program had not changed, we could comment out the relevant lines in <code class="docutils literal notranslate"><span class="pre">master.do</span></code>. That is, we could replace</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_isles</span><span class="o">.</span><span class="n">do</span>
+<span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_abyss</span><span class="o">.</span><span class="n">do</span>
+
+</pre></div>
+</div>
+<p>with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="o">//</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_isles</span><span class="o">.</span><span class="n">do</span>
+<span class="o">//</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">count_abyss</span><span class="o">.</span><span class="n">do</span>
+
+</pre></div>
+</div>
+<p>so that <code class="docutils literal notranslate"><span class="pre">master.do</span></code> will skip over these lines and not re-run the analysis.</p>
+<p>For a simple workflow, this is probably OK, but it can be a source of errors in more complicated workflows or in collaborative work. For example, in a complicated workflow, you might update an input file, but then forget that you had commented out the analysis lines in your script. Or, in a collaborative project, a co-author may have made a change to <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code> that you have not noticed.</p>
+<p>In order to avoid both types of error – re-running analyses that are not necessary or failing to update analyses when needed – what we really want is an executable description of our pipeline that allows software to do the tricky part for us: figuring out what steps need to be rerun.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pystatacons</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Python Package API documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Brian Quistorff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/swc/introduction.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
