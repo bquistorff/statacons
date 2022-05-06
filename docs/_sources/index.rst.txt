@@ -18,17 +18,11 @@ Welcome to pystatacons's documentation!
    stataconsign.md
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: SWC:
 
-   introduction.md
-   parameters.md
-   parameters-Solution.md
-   separation.md
-   setup.md
-   simpleSConstruct.md
-   solution_2newrules.md
-   variables.md
+   swc
+   
 
 Indices and tables
 ==================
