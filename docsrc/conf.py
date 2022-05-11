@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../src/'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'pystatacons'
+project = 'statacons'
 copyright = '2022, Brian Quistorff'
 author = 'Brian Quistorff'
 

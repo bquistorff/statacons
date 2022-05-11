@@ -40,11 +40,12 @@ And here is the result of running `count_last.do` in Stata:
 . version 16.1
 
 . quietly include profile.do 
-No resource locations have been stored with whereis
+pandoc C:\Program Files\Pandoc\pandoc.exe
+wkhtmltopdf C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe
 
 . 
 . countWords, inputFile("last.txt") outputFile("last.dta")  
-(file outputs/data/dta/last.dta not found)
+(note: file outputs/data/dta/last.dta not found)
 file outputs/data/dta/last.dta saved
 
 . 
@@ -128,11 +129,11 @@ Depends(cmd_results,
 
 *6.* Use SConstruct-2NewRules to see if any of the targets need to be rebuilt.
 
-Use option `--sconstruct=SConstruct-2NewRules` to assign specific `SConstruct` file and option `-n` to get a preview of what `statacons` will do.
+Use option `file(SConstruct-2NewRules)` to assign specific `SConstruct` file and option `dry_run` to get a preview of what `statacons` will do.
 
 ~~~~
 
-. statacons -n --debug=explain --sconstruct=SConstruct-2NewRules
+. statacons, dry_run debug(explain) file(SConstruct-2NewRules)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -156,7 +157,7 @@ Run `statacons`.
 
 ~~~~
 
-. statacons --sconstruct=SConstruct-2NewRules
+. statacons, file(SConstruct-2NewRules)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -166,11 +167,11 @@ Edit use_custom_datasignature in config_project.ini to change.
 scons: done reading SConscript files.
 scons: Building targets ...
 stata_run(["outputs\data\dta\last.dta"], ["code\count_last.do"])
-Running: StataMP-64.exe /e do "code\count_last.do".
-  Starting in hidden desktop (pid=9328).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\count_last.do".
+  Starting in hidden desktop (pid=16676).
 stata_run(["outputs\tables\testZipf.txt"], ["code\testZipf.do"])
-Running: StataMP-64.exe /e do "code\testZipf.do".
-  Starting in hidden desktop (pid=11316).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\testZipf.do".
+  Starting in hidden desktop (pid=34660).
 scons: done building targets.
 
 

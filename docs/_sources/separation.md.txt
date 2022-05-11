@@ -15,7 +15,7 @@ Separation of Concerns Part 1: Separating Analysis from Presentation
 
 ## Review of Introductory Example
 
-In the first part of this two-part lesson, we revisit the *Introductory Example* of the main paper to implement the principle of *separation of concerns*. That example proceeded in two steps. First, in `dataprep.do`, we prepared our dataset `auto-modified.dta` for analysis. Then, in `analysis.do`, we ran our regressions and produced tables and figures. We reproduce the do-files, SConstruct, and workflow below. 
+In the first part of this two-part lesson, we revisit the *Introductory Example* of the main paper to implement the principle of *separation of concerns*. That example proceeded in two steps. First, in `dataprep.do`, we prepared our dataset `auto-modified.dta` for analysis. Then, in `analysis.do`, we ran our regressions and produced tables and figures. We reproduce the do-files, SConstruct, and workflow below.
 
 
 ~~~~
@@ -81,8 +81,7 @@ cmd_dataprep = env.StataBuild(
 ![Introductory Example Workflow](introExample.svg)
 
 ~~~~
-. statacons --sconstruct=SConstruct-introExample ///
->         --debug=explain
+. statacons, file(SConstruct-introExample) debug(explain)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -93,13 +92,13 @@ scons: done reading SConscript files.
 scons: Building targets ...
 scons: building `outputs\auto-modified.dta' because it doesn't exist
 stata_run(["outputs\auto-modified.dta"], ["code\dataprep.do"])
-Running: StataMP-64.exe /e do "code\dataprep.do".
-  Starting in hidden desktop (pid=13696).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\dataprep.do".
+  Starting in hidden desktop (pid=26836).
 scons: building `outputs\scatterplot.pdf' because it doesn't exist
 stata_run(["outputs\scatterplot.pdf", "outputs\regressionTable.tex"], ["code\an
 > alysis.do"])
-Running: StataMP-64.exe /e do "code\analysis.do".
-  Starting in hidden desktop (pid=13404).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\analysis.do".
+  Starting in hidden desktop (pid=28676).
 scons: done building targets.
 
 ~~~~
@@ -134,7 +133,7 @@ esttab linear quadratic using "outputs/regressionTable.tex", ///
 The problem will now become apparent if we ask `statacons` for the status of the project:
 
 ~~~~
-. statacons --sconstruct=SConstruct-introExample -n --debug=explain
+. statacons, file(SConstruct-introExample) dry_run debug(explain)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -163,7 +162,7 @@ Here are the new do-files, `regressions.do` and `tabfig.do`:
 // regressions.do
 version 16.1
 
-use "outputs/data/dta/auto-modified.dta", clear
+use "outputs/auto-modified.dta", clear
 
 // Linear regression
 regress price mpg
@@ -174,7 +173,7 @@ regress price mpg mpg_sqd
 eststo quadratic
 
 // save linear and quadratic regression results in .sters file
-estwrite linear quadratic using outputs/regressions.sters, ///
+estwrite linear quadratic using "outputs/regressions.sters", ///
   reproducible replace
 exit
 
@@ -183,7 +182,8 @@ exit
 ~~~~
 // tabfig.do
 
-use "outputs/data/dta/auto-modified.dta", clear
+use "outputs/auto-modified.dta", clear
+
 // read previous regression results from saved .sters file.
 estimates clear
 estread using "outputs/regressions.sters"
@@ -249,17 +249,17 @@ We build the project from scratch:
 
 ~~~~
 
-. statacons --sconstruct=SConstruct-separation -c
+. statacons, file(SConstruct-separation) clean
 scons: Reading SConscript files ...
 scons: done reading SConscript files.
 scons: Cleaning targets ...
 Removed outputs\auto-modified.dta
+Removed outputs\regressions.sters
 Removed outputs\scatterplot.pdf
 Removed outputs\regressionTable.tex
 scons: done cleaning targets.
 
-. statacons --sconstruct=SConstruct-separation ///
->         --debug=explain
+. statacons, file(SConstruct-separation) debug(explain)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -270,17 +270,17 @@ scons: done reading SConscript files.
 scons: Building targets ...
 scons: building `outputs\auto-modified.dta' because it doesn't exist
 stata_run(["outputs\auto-modified.dta"], ["code\dataprep.do"])
-Running: StataMP-64.exe /e do "code\dataprep.do".
-  Starting in hidden desktop (pid=21636).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\dataprep.do".
+  Starting in hidden desktop (pid=26172).
 scons: building `outputs\regressions.sters' because it doesn't exist
 stata_run(["outputs\regressions.sters"], ["code\regressions.do"])
-Running: StataMP-64.exe /e do "code\regressions.do".
-  Starting in hidden desktop (pid=8796).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\regressions.do".
+  Starting in hidden desktop (pid=34468).
 scons: building `outputs\scatterplot.pdf' because it doesn't exist
 stata_run(["outputs\scatterplot.pdf", "outputs\regressionTable.tex"], ["code\ta
 > bfig.do"])
-Running: StataMP-64.exe /e do "code\tabfig.do".
-  Starting in hidden desktop (pid=4784).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\tabfig.do".
+  Starting in hidden desktop (pid=11144).
 scons: done building targets.
 
 
@@ -295,7 +295,8 @@ Now let's test whether our separation of concerns has been successful. Let's cha
 
 // tabfig.do
 
-use "outputs/data/dta/auto-modified.dta", clear
+use "outputs/auto-modified.dta", clear
+
 // read previous regression results from saved .sters file.
 estimates clear
 estread using "outputs/regressions.sters"
@@ -315,8 +316,7 @@ Let's see what `statacons` does and does not rebuild.
 
 ~~~~
 
-. statacons --sconstruct=SConstruct-separation ///
->         --debug=explain
+. statacons, file(SConstruct-separation) debug(explain)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -328,8 +328,8 @@ scons: Building targets ...
 scons: rebuilding `outputs\scatterplot.pdf' because `code\tabfig.do' changed
 stata_run(["outputs\scatterplot.pdf", "outputs\regressionTable.tex"], ["code\ta
 > bfig.do"])
-Running: StataMP-64.exe /e do "code\tabfig.do".
-  Starting in hidden desktop (pid=24400).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\tabfig.do".
+  Starting in hidden desktop (pid=33404).
 scons: done building targets.
 
 
@@ -346,7 +346,7 @@ Now let's suppose that we want to edit the labels of our variables, for example 
 
 ~~~~
 // dataprep.do
-version 16.1 
+version 16.1
 
 use "inputs/auto-original.dta", clear
 
@@ -362,8 +362,7 @@ save "outputs/auto-modified.dta", replace
 Through `statacons`, we can see the issue this will create: because we are changing `dataprep.do` and its target `auto-modified.dta`, we need to rebuild `regTable.tex`, which depends on `auto-modified.dta`:
 
 ~~~~
-. statacons --sconstruct=SConstruct-separation ///
->         --debug=explain
+. statacons, file(SConstruct-separation) debug(explain)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -375,21 +374,22 @@ scons: Building targets ...
 scons: rebuilding `outputs\auto-modified.dta' because `code\dataprep.do' change
 > d
 stata_run(["outputs\auto-modified.dta"], ["code\dataprep.do"])
-Running: StataMP-64.exe /e do "code\dataprep.do".
-  Starting in hidden desktop (pid=18800).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\dataprep.do".
+  Starting in hidden desktop (pid=33692).
 scons: rebuilding `outputs\regressions.sters' because `outputs\auto-modified.dt
 > a' changed
 stata_run(["outputs\regressions.sters"], ["code\regressions.do"])
-Running: StataMP-64.exe /e do "code\regressions.do".
-  Starting in hidden desktop (pid=25404).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\regressions.do".
+  Starting in hidden desktop (pid=31340).
 scons: rebuilding `outputs\scatterplot.pdf' because `outputs\auto-modified.dta'
 >  changed
 stata_run(["outputs\scatterplot.pdf", "outputs\regressionTable.tex"], ["code\ta
 > bfig.do"])
-Running: StataMP-64.exe /e do "code\tabfig.do".
-  Starting in hidden desktop (pid=5116).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\tabfig.do".
+  Starting in hidden desktop (pid=14344).
 scons: done building targets.
 
+. 
 
 ~~~~
 

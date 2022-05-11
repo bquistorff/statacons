@@ -136,12 +136,12 @@ Depends(cmd_results,
 
 *4.* Use `SConstruct-parameters-isles` to see if any of the targets need to be rebuilt.
 
-Use option `--sconstruct=SConstruct-parameters-isles` to assign the specific `SConstruct` file, and
-use `-n` to get a preview of what `statacons` will do.
+Use option `file(SConstruct-parameters-isles)` to assign the specific `SConstruct` file, and
+use `dry_run` to get a preview of what `statacons` will do.
 
 ~~~~
 
-. statacons -n --debug=explain --sconstruct=SConstruct-parameters-isles
+. statacons, dry_run debug(explain) file(SConstruct-parameters-isles)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -150,17 +150,21 @@ Edit use_custom_datasignature in config_project.ini to change.
   (other options are Strict, DataOnly, False)
 scons: done reading SConscript files.
 scons: Building targets ...
-scons: Cannot explain why `outputs\data\dta\abyss.dta' is being rebuilt: No pre
-> vious build information found
+scons: rebuilding `outputs\data\dta\abyss.dta' because:
+           `code\countWords.do' is no longer a dependency
+           `code\count_abyss.do' is a new dependency
+           `code\ado\personal\countWords.ado' is a new dependency
+           `code\ado\plus\w\wordfreq.ado' is a new dependency
 stata_run(["outputs\data\dta\abyss.dta"], ["code\count_abyss.do"])
-scons: Cannot explain why `outputs\data\dta\isles.dta' is being rebuilt: No pre
-> vious build information found
-stata_run(["outputs\data\dta\isles.dta"], ["code\countWords.do"])
-scons: Cannot explain why `outputs\data\dta\last.dta' is being rebuilt: No prev
-> ious build information found
+scons: rebuilding `outputs\data\dta\last.dta' because:
+           `code\countWords.do' is no longer a dependency
+           `code\count_last.do' is a new dependency
+           `code\ado\personal\countWords.ado' is a new dependency
+           `code\ado\plus\w\wordfreq.ado' is a new dependency
 stata_run(["outputs\data\dta\last.dta"], ["code\count_last.do"])
-scons: Cannot explain why `outputs\tables\testZipf.txt' is being rebuilt: No pr
-> evious build information found
+scons: rebuilding `outputs\tables\testZipf.txt' because:
+           `code\testZipfArgs.do' is no longer a dependency
+           `code\testZipf.do' is a new dependency
 stata_run(["outputs\tables\testZipf.txt"], ["code\testZipf.do"])
 scons: done building targets.
 
@@ -171,7 +175,7 @@ Run `statacons`. `statacons` will rebuild `isles.dta` and `textZipf.txt` only.
 
 ~~~~
 
-. statacons --sconstruct=SConstruct-parameters-isles
+. statacons, file(SConstruct-parameters-isles)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -181,18 +185,14 @@ Edit use_custom_datasignature in config_project.ini to change.
 scons: done reading SConscript files.
 scons: Building targets ...
 stata_run(["outputs\data\dta\abyss.dta"], ["code\count_abyss.do"])
-Running: StataMP-64.exe /e do "code\count_abyss.do".
-  Starting in hidden desktop (pid=19232).
-stata_run(["outputs\data\dta\isles.dta"], ["code\countWords.do"])
-Running: StataMP-64.exe /e do "code\countWords.do" "isles". log=countWords-fad1
-> dc5c.log.
-  Starting in hidden desktop (pid=3788).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\count_abyss.do".
+  Starting in hidden desktop (pid=35876).
 stata_run(["outputs\data\dta\last.dta"], ["code\count_last.do"])
-Running: StataMP-64.exe /e do "code\count_last.do".
-  Starting in hidden desktop (pid=11544).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\count_last.do".
+  Starting in hidden desktop (pid=1248).
 stata_run(["outputs\tables\testZipf.txt"], ["code\testZipf.do"])
-Running: StataMP-64.exe /e do "code\testZipf.do".
-  Starting in hidden desktop (pid=15768).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\testZipf.do".
+  Starting in hidden desktop (pid=30452).
 scons: done building targets.
 
 
@@ -205,9 +205,6 @@ Check if `statacons` re-creates `textZipf.txt`.
 
 .  type outputs/tables/testZipf.txt
 Book    First   Second  Ratio
-isles   3315    2185    1.5171624
-abyss   3538    2524    1.4017433
-last    10684   4904    2.1786296
 
 
 ~~~

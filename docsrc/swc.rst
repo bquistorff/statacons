@@ -1,17 +1,18 @@
 
-pystatacons SWC documentation
+statacons Web Tutorial
 =============================
 
 .. toctree::
    :maxdepth: 1
-   :caption: SWC:
+   :caption: Based on Software Carpentry's make lesson:
 
-   introduction.md
-   parameters.md
-   parameters-Solution.md
-   separation.md
    setup.md
+   introduction.md
    simpleSConstruct.md
    solution_2newrules.md
    variables.md
+   parameters.md
+   parameters-Solution.md
+   separation.md
+   metadata.md
 

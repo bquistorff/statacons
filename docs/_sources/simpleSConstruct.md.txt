@@ -64,11 +64,11 @@ So, in words, the code above reads
 
 Let's see how our script works.
 
-First, let's start fresh by erasing our target `isles.dta` (if it already exists) using the `-c` option (shorthand for `--clean`)
+First, let's start fresh by erasing our target `isles.dta` (if it already exists) using the `clean` option.
 
 ~~~~
 
-. statacons -c
+. statacons, clean
 scons: Reading SConscript files ...
 scons: done reading SConscript files.
 scons: Cleaning targets ...
@@ -78,11 +78,11 @@ scons: done cleaning targets.
 
 ~~~~
 
-We can use the `-n` option (shorthand for `--dry-run`) to `statacons` to get a preview of what `statacons` will do:
+We can use the `dry_run` option to `statacons` to get a preview of what `statacons` will do:
 
 ~~~~
 
-. statacons -n
+. statacons, dry_run
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -97,11 +97,11 @@ scons: done building targets.
 
 ~~~~
 
-`statacons` is telling us that it will do the action `stata_run(["outputs\data\dta\isles.dta"], ["code\count_isles.do"])`, but we can get even more information about why it will do this by adding the option  `--debug=explain` (we still include `--dry-run ` as `-n`):
+`statacons` is telling us that it will do the action `stata_run(["outputs\data\dta\isles.dta"], ["code\count_isles.do"])`, but we can get even more information about why it will do this by adding the option  `debug(explain)` (we still include `dry_run `):
 
 ~~~~
 
-. statacons -n --debug=explain
+. statacons, dry_run debug(explain)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -119,11 +119,11 @@ scons: done building targets.
 
 `statacons` tells us that it needs to rebuild `outputs\data\dta\isles.dta` because it does not exist.
 
-As one last check before rebuilding, we will get `statacons` to tell us about the status of each file it is considering by using the option `--tree=status`:
+As one last check before rebuilding, we will get `statacons` to tell us about the status of each file it is considering by using the option `tree(status, prune)`:
 
 ~~~~
 
-. statacons -n --debug=explain --tree=status,prune
+. statacons, dry_run debug(explain) tree(status,prune)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -187,8 +187,8 @@ Edit use_custom_datasignature in config_project.ini to change.
 scons: done reading SConscript files.
 scons: Building targets ...
 stata_run(["outputs\data\dta\isles.dta"], ["code\count_isles.do"])
-Running: StataMP-64.exe /e do "code\count_isles.do".
-  Starting in hidden desktop (pid=22608).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\count_isles.do".
+  Starting in hidden desktop (pid=23840).
 scons: done building targets.
 
 
@@ -205,8 +205,8 @@ We see that our target has been created and is the same as before:
 . desc, s
 
 Contains data from outputs/data/dta/isles.dta
- Observations:         9,215                  
-    Variables:             3                  6 May 2022 09:23
+  obs:         9,215                          
+ vars:             3                          10 May 2022 12:59
 Sorted by: 
 
 . li in 1/5
@@ -230,7 +230,7 @@ If we ask `statacons` to rebuild our project now, it will tell us that no rebuil
 
 ~~~~
 
-. statacons --debug=explain --tree=status,prune
+. statacons, debug(explain) tree(status,prune)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -300,13 +300,13 @@ Depends(cmd_abyss_data,
 
 This is essentially the same as our previous task, and a useful exercise is to try to translate it into words as we did in the first subsection above ("A first example").
 
-Let's see what `statacons` thinks about this task. We use the option `--sconstruct=SConstruct-addAbyss` to tell `statacons` to examine our new SConstruct file instead of the default (which is just to use the file called `SConstruct`):
+Let's see what `statacons` thinks about this task. We use the option `file(SConstruct-addAbyss)` to tell `statacons` to examine our new SConstruct file instead of the default (which is just to use the file called `SConstruct`):
 
 
 ~~~~
 
-. statacons --sconstruct=SConstruct-addAbyss -n --debug=explain --tree=status,p
-> rune
+. statacons, file(SConstruct-addAbyss) dry_run debug(explain) tree(status,prune
+> )
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -370,7 +370,7 @@ Now we rebuild:
 
 ~~~~
 
-. statacons --sconstruct=SConstruct-addAbyss
+. statacons, file(SConstruct-addAbyss)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -380,8 +380,8 @@ Edit use_custom_datasignature in config_project.ini to change.
 scons: done reading SConscript files.
 scons: Building targets ...
 stata_run(["outputs\data\dta\abyss.dta"], ["code\count_abyss.do"])
-Running: StataMP-64.exe /e do "code\count_abyss.do".
-  Starting in hidden desktop (pid=17184).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\count_abyss.do".
+  Starting in hidden desktop (pid=1816).
 scons: done building targets.
 
 

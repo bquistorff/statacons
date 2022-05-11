@@ -1,8 +1,27 @@
-.. pystatacons documentation master file.
+.. statacons documentation master file.
    It should at least contain the root `toctree` directive.
 
-Welcome to pystatacons's documentation!
+Welcome to the statacons home page
 =======================================
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Installation instructions:
+
+   installation.md
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Stata package documentation:
+
+   statacons.md
+   stataconsign.md
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Web tutorial based on Software Carpentry's make lesson:
+
+   swc
 
 .. toctree::
    :maxdepth: 1
@@ -10,18 +29,6 @@ Welcome to pystatacons's documentation!
 
    api
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Stata package command documentation:
-
-   statacons.md
-   stataconsign.md
-
-.. toctree::
-   :maxdepth: 2
-   :caption: SWC:
-
-   swc
    
 
 Indices and tables

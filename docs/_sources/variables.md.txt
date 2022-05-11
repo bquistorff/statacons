@@ -44,7 +44,7 @@ for opt in ["isles","abyss","last"]:
 *2.* Use `SConstruct-variables` to see if any of the targets need to be rebuilt.
 
 ~~~~
-. statacons -c --sconstruct=SConstruct-variables
+. statacons, clean file(SConstruct-variables)
 scons: Reading SConscript files ...
 scons: done reading SConscript files.
 scons: Cleaning targets ...
@@ -54,7 +54,7 @@ Removed outputs\data\dta\last.dta
 Removed outputs\tables\testZipf.txt
 scons: done cleaning targets.
 
-. statacons -n --debug=explain --sconstruct=SConstruct-variables
+. statacons, dry_run debug(explain) file(SConstruct-variables)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -73,7 +73,7 @@ scons: building `outputs\tables\testZipf.txt' because it doesn't exist
 stata_run(["outputs\tables\testZipf.txt"], ["code\testZipfArgs.do"])
 scons: done building targets.
 
-. statacons --sconstruct=SConstruct-variables
+. statacons, file(SConstruct-variables)
 scons: Reading SConscript files ...
 Using 'LabelsFormatsOnly' custom_datasignature.
 Calculates timestamp-independent checksum of dataset, 
@@ -83,21 +83,21 @@ Edit use_custom_datasignature in config_project.ini to change.
 scons: done reading SConscript files.
 scons: Building targets ...
 stata_run(["outputs\data\dta\abyss.dta"], ["code\countWords.do"])
-Running: StataMP-64.exe /e do "code\countWords.do" "abyss". log=countWords-8e4b
-> f7a2.log.
-  Starting in hidden desktop (pid=128).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\countWords.do" "
+> abyss". log=countWords-8e4bf7a2.log.
+  Starting in hidden desktop (pid=27364).
 stata_run(["outputs\data\dta\isles.dta"], ["code\countWords.do"])
-Running: StataMP-64.exe /e do "code\countWords.do" "isles". log=countWords-fad1
-> dc5c.log.
-  Starting in hidden desktop (pid=18280).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\countWords.do" "
+> isles". log=countWords-fad1dc5c.log.
+  Starting in hidden desktop (pid=22752).
 stata_run(["outputs\data\dta\last.dta"], ["code\countWords.do"])
-Running: StataMP-64.exe /e do "code\countWords.do" "last". log=countWords-3cf89
-> 5f1.log.
-  Starting in hidden desktop (pid=1276).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\countWords.do" "
+> last". log=countWords-3cf895f1.log.
+  Starting in hidden desktop (pid=28564).
 stata_run(["outputs\tables\testZipf.txt"], ["code\testZipfArgs.do"])
-Running: StataMP-64.exe /e do "code\testZipfArgs.do" "isles last abyss". log=te
-> stZipfArgs-b47d1d91.log.
-  Starting in hidden desktop (pid=9004).
+Running: "C:\Program Files\Stata16\StataMP-64.exe" /e do "code\testZipfArgs.do"
+>  "isles last abyss". log=testZipfArgs-b47d1d91.log.
+  Starting in hidden desktop (pid=6296).
 scons: done building targets.
 
 . 
