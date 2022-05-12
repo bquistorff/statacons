@@ -44,81 +44,18 @@
 </head>
 <section id="setup">
 <h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Install <code class="docutils literal notranslate"><span class="pre">statacons</span></code> following the <a class="reference external" href="https://bquistorff.github.io/statacons/installation.html">installation guide</a>: <a class="reference external" href="https://bquistorff.github.io/statacons/installation.html">https://bquistorff.github.io/statacons/installation.html</a></p>
+</section>
 <section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
 <p>You need to download some files to follow this lesson:</p>
 <ol class="arabic simple">
-<li><p>Download <code class="docutils literal notranslate"><span class="pre">statacons-lesson.zip</span></code></p></li>
-<li><p>Move zip into a directory which you can access.</p></li>
+<li><p>Download <a class="reference external" href="https://github.com/bquistorff/statacons/blob/main/examples/stataconsIntro.zip">statacons-lesson.zip</a> from <a class="reference external" href="https://github.com/bquistorff/statacons/blob/main/examples/stataconsIntro.zip">https://github.com/bquistorff/statacons/blob/main/examples/stataconsIntro.zip</a>.</p></li>
+<li><p>Move zip into a directory you can access.</p></li>
 <li><p>Unpack zip.</p></li>
 </ol>
-</section>
-<section id="software">
-<h2>Software<a class="headerlink" href="#software" title="Permalink to this headline">¶</a></h2>
-<p>A brief installation guide follows. For additional detail, see the <a class="reference external" href="https://github.com/bquistorff/statacons">statacons repository</a> or the Installation Guide appendix of our paper.</p>
-<section id="stata">
-<h3>Stata<a class="headerlink" href="#stata" title="Permalink to this headline">¶</a></h3>
-<p>Stata version 16 or higher is required to run <code class="docutils literal notranslate"><span class="pre">statacons</span></code>.</p>
-</section>
-<section id="python">
-<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
-<p>Python 3.5 is the minimum requirement. We recommend Python 3.8 or later.    <a class="reference external" href="https://www.anaconda.com/products/individual">Anaconda</a> is a convenient wrapper for Python and contains many of the standard Python packages.</p>
-<section id="scons">
-<h4>SCons<a class="headerlink" href="#scons" title="Permalink to this headline">¶</a></h4>
-<p>SCons 4.2 or later is required.</p>
-<p>See the SCons User Guide for complete installation instructions.</p>
-<p>Check if you already have SCons installed by typing <code class="docutils literal notranslate"><span class="pre">SCons</span> <span class="pre">-v</span></code> into a terminal (for example, Anaconda Powershell Prompt in Windows).</p>
-<p>In Windows Python, install SCons from the terminal using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">SCons</span></code> or download from <a class="reference external" href="https://sourceforge.net/projects/scons/">Scons Download</a>.</p>
-<p>In Anaconda, type <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">scons</span></code></p>
-<p>In Linux, install SCons from the terminal using <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">SCons</span></code> on Linux.</p>
-</section>
-<section id="pystatacons">
-<h4>pystatacons<a class="headerlink" href="#pystatacons" title="Permalink to this headline">¶</a></h4>
-<p>Install pystatacons in python: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pystatacons</span></code></p>
-</section>
-</section>
-<section id="statacons">
-<h3>Statacons<a class="headerlink" href="#statacons" title="Permalink to this headline">¶</a></h3>
-<p>Version 2.0.1 of Statacons is included in <code class="docutils literal notranslate"><span class="pre">statacons-lesson.zip</span></code>. Running the included <code class="docutils literal notranslate"><span class="pre">profile.do</span></code> will set your <code class="docutils literal notranslate"><span class="pre">adopath</span></code> locally to this project, so Stata will find this included version of Statacons.</p>
-<p>To install the most recent version of Statacons, visit Statacons on <a class="reference external" href="https://github.com/bquistorff/statacons">github</a> and follow the installation instructions.</p>
-</section>
-<section id="verifying-setup">
-<h3>Verifying setup<a class="headerlink" href="#verifying-setup" title="Permalink to this headline">¶</a></h3>
-<p>To check that statacons, SCons, and pystatacons are installed, up-to-date, and accessible in Stata:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-. // run profile.do to point Stata to the local PLUS folder
-. qui do profile.do
-
-. // check that your ado-path, especially PLUS is set correctly
-. adopath
-  [1]  (BASE)      &quot;C:\Program Files\Stata17\ado\base/&quot;
-  [2]  (SITE)      &quot;C:\Program Files\Stata17\ado\site/&quot;
-  [3]              &quot;.&quot;
-  [4]  (PERSONAL)  &quot;code/ado/personal/&quot;
-  [5]  (PLUS)      &quot;code/ado/plus/&quot;
-  [6]  (OLDPLACE)  &quot;code/ado/&quot;
-  [7]              &quot;../pkg&quot;
-
-. 
-. which statacons
-../pkg\statacons.ado
-*! version 2.0.2  May 04 2022  statacons team
-
-. python
------------------------------------------------ python (type end to exit) -----
-&gt;&gt;&gt; import SCons
-&gt;&gt;&gt; print(SCons.__version__)
-4.2.0
-&gt;&gt;&gt; import pystatacons
-&gt;&gt;&gt; print(pystatacons.__version__)
-2.1.5
-&gt;&gt;&gt; end
--------------------------------------------------------------------------------
-
-
-</pre></div>
-</div>
-</section>
 </section>
 </section>
 
