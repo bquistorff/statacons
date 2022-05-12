@@ -4,6 +4,13 @@
 Welcome to the statacons home page
 =======================================
 
+Paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Revised and resubmitted, The Stata Journal. PDF_.
+
+.. _PDF: https://osf.io/preprints/metaarxiv/qesx6/download
+
+
+OSF Archive: https://doi.org/10.31222/osf.io/qesx6
+
 .. toctree::
    :maxdepth: 1
    :caption: Installation instructions:
@@ -16,6 +23,18 @@ Welcome to the statacons home page
 
    statacons.md
    stataconsign.md
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Project repository (for issues, bug reports, and contributions)
+
+   https://github.com/bquistorff/statacons
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Project wiki page (additional options and features)
+
+   https://github.com/bquistorff/statacons/wiki
 
 .. toctree::
    :maxdepth: 2
