@@ -9,7 +9,6 @@ Paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "st
 .. _PDF: https://osf.io/preprints/metaarxiv/qesx6/download
 
 
-OSF Archive: https://doi.org/10.31222/osf.io/qesx6
 
 .. toctree::
    :maxdepth: 1
@@ -47,6 +46,19 @@ OSF Archive: https://doi.org/10.31222/osf.io/qesx6
    :caption: Python package API documentation:
 
    api
+
+.. toctree::
+   :maxdepth: 1
+   :caption: OSF archive (software, replication code and data):
+
+   https://osf.io/gbh4m/
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: MetaArXiV paper archive:
+
+   https://doi.org/10.31222/osf.io/qesx6
 
    
 
