@@ -1,49 +1,32 @@
 # statacons
+
 `statacons` is a set of tools for the [SCons](https://scons.org/) build-system to allow running [Stata](https://stata.com) projects. It does not require changes to existing code, is [correct](https://doi.ieeecomputersociety.org/10.1109/MS.2018.111095025) (no unnecessary rebuilds), extensible via Python, and git-friendly.
 
 With data analysis projects it can be difficult to know what needs to be rebuilt when code changes (either because the there are many dependencies to track or it involves multiple contributors) and some tasks take a long time, making full-rebuilds costly. "Build-systems" solve this by allowing the user to define how task inputs generate ouputs (for SCons, using `SConstruct` files) and tracking file changes to know what must be rebuilt. Thinks of this as a more robust way to specify a project's "master" run script. The `SConstruct` provides an easy view for what happens in a projects.
 
-Project components:
+
+## Resources:
+
+The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <https://bquistorff.github.io/statacons/index.html> hosts or links to all `statacons` resources, including
+
+ - The paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Under review at the Stata Journal. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
+ - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
+ - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
+ - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features (user contributions welcome): https://github.com/bquistorff/statacons/wiki
+ - Documentation for `statacons`, `stataconsign`, and `pystatacons`
+ - The [MetaArXiV site](https://osf.io/preprints/metaarxiv/qesx6/) hosting drafts of the paper: <https://osf.io/preprints/metaarxiv/qesx6/>.
+ - The [OSF site](https://osf.io/gbh4m/) archiving all versions of the software and replication code and data: <https://osf.io/gbh4m/>
+
+## Installation:
+
+See the [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
+
+## Project components:
+
 - A Stata `statacons` command to run `scons` (a Python package/script) from inside of Stata so that one does not have to use the system terminal. 
 - A Python `pystatacons` package to aid in writing SCons build scripts, called `SConstruct` files. It provides (a) an SCons build environment that can automatically find most Stata installations, (b) a `StataBuilder()` method that takes care of running Stata in batch-mode, and checking the output for errors, (c) smart checking of Stata `.dta` files to know when their content atually changes (and not just their internal timestamp), and (d) a simple configuration system to over-ride package defaults
 - Optional ancillary files: sample `SConstruct` file to get started, sample configuration files to override package defaults (a git-versionable `config_project.ini` and a not-to-version `config_local.ini`), and some worked-examples with more functionality. 
 
-For more information, see our working paper:
-
-Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, January 2022, https://go.ncsu.edu/cenrep-wp-22-001. Under review at the Stata Journal. [PDF](https://go.ncsu.edu/cenrep-wp-22-001.pdf)
-
-## Installation
-Requirements: Stata 16+, Python 3.5+ (some advanced options require Python 3.8+) and the package [scons](https://scons.org/) 4.2+.
-
-### Installing Python and SCons, and Linking Python with Stata
-
-On the Stata Blog, Chuck Huber has a series of helpful posts for setting up Python with Stata and adding packages to Python: [part 1](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/); [part 2](https://blog.stata.com/2020/08/25/stata-python-integration-part-2-three-ways-to-use-python-in-stata/); [part 3](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/).  
-
-See Appendix A of our paper for a detailed installation guide.  
-
-### Installing statacons  
-
-#### statacons Stata package
-You can install the `statacons` Stata package by using the following in Stata:
-```
-net install statacons, from(https://raw.github.com/bquistorff/statacons/main/)
-```
-
-#### pystatacons Python package
-You can install the `pystatacons` Python package using `pip` from your Python environment:
-```
-pip install pystatacons
-```
-
-#### Project Files
-See here for a zip of the project files: [src/project_files.zip](src/project_files.zip). You can extract those into the root of a project that you're working on.
-
-### Other installation notes  
-
-* If you have Stata installed in a non-default location, you'll then need to edit `config_local.ini` to provide the path to your Stata executable. Examples are provided in `config_local_template.ini`.  
-* If this project is git-versioned, then you'll want to add `config_local.ini` and a few other files (e.g., `.sconsign.dblite`) to your `.gitignore`. 
-* If you are updating the package, be sure to restart Stata. The Python environment caches imports, so updates will not take effect until Stata restarts.
-* The included project file `debugging-checklist.do` will provide some useful information as you install `statacons` and set up your build files.
 
 
 ## Usage
