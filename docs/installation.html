@@ -35,7 +35,45 @@
             
   <section id="installation-guide">
 <h1>Installation guide<a class="headerlink" href="#installation-guide" title="Permalink to this headline">¶</a></h1>
-<p>Text</p>
+<p>Requirements: Stata 16+, Python 3.5+ (some advanced options require Python 3.8+) and the package <a class="reference external" href="https://scons.org/">scons</a> 4.2+.</p>
+<section id="installing-python-and-scons-and-linking-python-with-stata">
+<h2>Installing Python and SCons, and Linking Python with Stata<a class="headerlink" href="#installing-python-and-scons-and-linking-python-with-stata" title="Permalink to this headline">¶</a></h2>
+<p>On the Stata Blog, Chuck Huber has a series of helpful posts for setting up Python with Stata and adding packages to Python: <a class="reference external" href="https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/">part 1</a>; <a class="reference external" href="https://blog.stata.com/2020/08/25/stata-python-integration-part-2-three-ways-to-use-python-in-stata/">part 2</a>; <a class="reference external" href="https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/">part 3</a>.</p>
+</section>
+<section id="installing-statacons">
+<h2>Installing statacons<a class="headerlink" href="#installing-statacons" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="statacons-stata-package">
+<h2>statacons Stata package<a class="headerlink" href="#statacons-stata-package" title="Permalink to this headline">¶</a></h2>
+<p>You can install the <code class="docutils literal notranslate"><span class="pre">statacons</span></code> Stata package by using the following in Stata:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">net</span> <span class="n">install</span> <span class="n">statacons</span><span class="p">,</span> <span class="n">from</span><span class="p">(</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bquistorff</span><span class="o">/</span><span class="n">statacons</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pystatacons-python-package">
+<h2>pystatacons Python package<a class="headerlink" href="#pystatacons-python-package" title="Permalink to this headline">¶</a></h2>
+<p>You can install the <code class="docutils literal notranslate"><span class="pre">pystatacons</span></code> Python package using <code class="docutils literal notranslate"><span class="pre">pip</span></code> from your Python environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pystatacons</span>
+</pre></div>
+</div>
+</section>
+<section id="project-files">
+<h2>Project Files<a class="headerlink" href="#project-files" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://github.com/bquistorff/statacons/blob/main/src/project_files.zip">here</a> for a zip of the project files: <a class="reference external" href="https://github.com/bquistorff/statacons/blob/main/src/project_files.zip">https://github.com/bquistorff/statacons/blob/main/src/project_files.zip</a>. You can extract those into the root of a project that you’re working on.</p>
+</section>
+<section id="other-installation-notes">
+<h2>Other installation notes<a class="headerlink" href="#other-installation-notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>If you have Stata installed in a non-default location, you’ll then need to edit <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code> to provide the path to your Stata executable. Examples are provided in <code class="docutils literal notranslate"><span class="pre">config_local_template.ini</span></code>.</p></li>
+<li><p>If this project is git-versioned, then you’ll want to add <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code> and a few other files (e.g., <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>) to your <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>.</p></li>
+<li><p>If you are updating the package, be sure to restart Stata. The Python environment caches imports, so updates will not take effect until Stata restarts.</p></li>
+<li><p>The included project file <code class="docutils literal notranslate"><span class="pre">debugging-checklist.do</span></code> will provide some useful information as you install <code class="docutils literal notranslate"><span class="pre">statacons</span></code> and set up your build files.</p></li>
+</ul>
+</section>
+<section id="introductory-examples">
+<h2>Introductory examples<a class="headerlink" href="#introductory-examples" title="Permalink to this headline">¶</a></h2>
+<p>To try out statacons, download the code and data for our introductory example from <a class="reference external" href="https://github.com/bquistorff/statacons/main/raw/examples/stataconsIntro.zip">https://github.com/bquistorff/statacons/main/raw/examples/stataconsIntro.zip</a>, then follow Section 2 of the paper.</p>
+</section>
 </section>
 
 
@@ -64,13 +102,29 @@
 <li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons">https://github.com/bquistorff/statacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project wiki page (additional options and features)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons/wiki">https://github.com/bquistorff/statacons/wiki</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Web tutorial based on Software Carpentry's make lesson:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="swc.html">pystatacons SWC documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swc.html">statacons Web Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Python Package API documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">OSF archive (software, replication code and data):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://osf.io/gbh4m/">https://osf.io/gbh4m/</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MetaArXiV paper archive:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.31222/osf.io/qesx6">https://doi.org/10.31222/osf.io/qesx6</a></li>
 </ul>
 
 <div class="relations">
