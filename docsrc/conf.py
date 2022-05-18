@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('../src/'))
 # -- Project information -----------------------------------------------------
 
 project = 'statacons'
-copyright = '2022, Brian Quistorff'
-author = 'Brian Quistorff'
+copyright = '2022, Statacons team'
+author = 'Statacons team'
 
 # The full version, including alpha/beta/rc tags
 release = '2.1.5'
