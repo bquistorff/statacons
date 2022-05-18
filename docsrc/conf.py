@@ -22,7 +22,7 @@ copyright = '2022, Statacons team'
 author = 'Statacons team'
 
 # The full version, including alpha/beta/rc tags
-release = '2.1.5'
+release = '3.0.0'
 
 
 # -- General configuration ---------------------------------------------------
