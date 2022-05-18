@@ -4,9 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>stataconsign &#8212; statacons 2.1.5 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>stataconsign &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -15,7 +14,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="statacons Web Tutorial" href="swc.html" />
+    <link rel="next" title="complete_datasignature" href="complete_datasignature.html" />
     <link rel="prev" title="statacons" href="statacons.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -33,18 +32,18 @@
 
           <div class="body" role="main">
             
-  <p><em>version 2.0.0</em></p>
-<section id="stataconsign">
+  <p><em>version 3.0.0</em></p>
+<div class="section" id="stataconsign">
 <h1>stataconsign<a class="headerlink" href="#stataconsign" title="Permalink to this headline">¶</a></h1>
-<p><strong>stataconsign</strong> – calls the SCons function <strong>sconsign</strong> to print the contents of the <strong>sconsign</strong> database, typically <strong>.sconsign.dblite</strong>, to the Stata window.</p>
+<p><strong>stataconsign</strong> -- calls the SCons function <strong>sconsign</strong> to print the contents of the <strong>sconsign</strong> database, typically <strong>.sconsign.dblite</strong>, to the Stata window.</p>
 <p>The syntax of <strong>stataconsign</strong> mimics that of <strong>sconsign</strong>. This help file reproduces the contents of the <strong>sconsign</strong> help, which can be accessed from the appropriate shell prompt with <strong>sconsign -h</strong>, and adds a few comments.</p>
-<section id="syntax">
+<div class="section" id="syntax">
 <h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p><strong>stataconsign</strong> [OPTIONS] [FILE …]</p>
+<div><p><strong>stataconsign</strong> [OPTIONS] [FILE ...]</p>
 </div></blockquote>
 <p>By default, <strong>stataconsign</strong> will look in the current directory for an file <strong>sconsign.dblite</strong> and print the contents of that database to the Stata window.</p>
-<section id="options">
+<div class="section" id="options">
 <h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
 <table class="colwidths-auto docutils align-default">
 <thead>
@@ -53,51 +52,51 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>-a, –act, –action</p></td>
+<tr class="row-even"><td><p>-a, --act, --action</p></td>
 <td><p>Print build action information.</p></td>
 </tr>
-<tr class="row-odd"><td><p>-c, –csig</p></td>
+<tr class="row-odd"><td><p>-c, --csig</p></td>
 <td><p>Print content signature information.</p></td>
 </tr>
-<tr class="row-even"><td><p>-d DIR, –dir=DIR</p></td>
+<tr class="row-even"><td><p>-d DIR, --dir=DIR</p></td>
 <td><p>Print only info about DIR.</p></td>
 </tr>
-<tr class="row-odd"><td><p>-e ENTRY, –entry=ENTRY</p></td>
+<tr class="row-odd"><td><p>-e ENTRY, --entry=ENTRY</p></td>
 <td><p>Print only info about ENTRY.</p></td>
 </tr>
-<tr class="row-even"><td><p>-f FORMAT, –format=FORMAT</p></td>
+<tr class="row-even"><td><p>-f FORMAT, --format=FORMAT</p></td>
 <td><p>FILE is in the specified FORMAT.</p></td>
 </tr>
-<tr class="row-odd"><td><p>-h, –help</p></td>
+<tr class="row-odd"><td><p>-h, --help</p></td>
 <td><p>Print this message and exit.</p></td>
 </tr>
-<tr class="row-even"><td><p>-i, –implicit</p></td>
+<tr class="row-even"><td><p>-i, --implicit</p></td>
 <td><p>Print implicit dependency information.</p></td>
 </tr>
-<tr class="row-odd"><td><p>-r, –readable</p></td>
+<tr class="row-odd"><td><p>-r, --readable</p></td>
 <td><p>Print timestamps in human-readable form.</p></td>
 </tr>
-<tr class="row-even"><td><p>–raw</p></td>
+<tr class="row-even"><td><p>--raw</p></td>
 <td><p>Print raw Python object representations.</p></td>
 </tr>
-<tr class="row-odd"><td><p>-s, –size</p></td>
+<tr class="row-odd"><td><p>-s, --size</p></td>
 <td><p>Print file sizes.</p></td>
 </tr>
-<tr class="row-even"><td><p>-t, –timestamp</p></td>
+<tr class="row-even"><td><p>-t, --timestamp</p></td>
 <td><p>Print timestamp information.</p></td>
 </tr>
-<tr class="row-odd"><td><p>-v, –verbose</p></td>
+<tr class="row-odd"><td><p>-v, --verbose</p></td>
 <td><p>Verbose, describe each field.</p></td>
 </tr>
 </tbody>
 </table>
-</section>
-</section>
-<section id="remarks">
+</div>
+</div>
+<div class="section" id="remarks">
 <h2>Remarks<a class="headerlink" href="#remarks" title="Permalink to this headline">¶</a></h2>
 <p><strong>stataconsign</strong> is useful for obtaining information on what SCons considers to be the most recent build, i.e., the last time the project was built <em>by SCons</em>.</p>
-</section>
-<section id="examples">
+</div>
+<div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <p>basic use</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>. stataconsign
@@ -111,33 +110,33 @@
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>. stataconsign dbs/.sconsignParallel.dblite
 </pre></div>
 </div>
-</section>
-<section id="advanced-use">
+</div>
+<div class="section" id="advanced-use">
 <h2>Advanced Use<a class="headerlink" href="#advanced-use" title="Permalink to this headline">¶</a></h2>
 <p>Use the <strong>SConsignFile()</strong> function in an SConstruct to specify a filename and directory for the sconsign database associated with that SConstruct. For example:</p>
 <blockquote>
-<div><p>SConsignFile(“dbs/.sconsignParallel.dblite”)</p>
+<div><p>SConsignFile(&quot;dbs/.sconsignParallel.dblite&quot;)</p>
 </div></blockquote>
 <p>See the SCons User Manual and SCons Man Page for more details.</p>
 <p>From a shell prompt, the screen output of <strong>sconsign</strong> can be saved to a text file as follows:</p>
 <blockquote>
 <div><p>sconsign &gt; sconsign.txt</p>
 </div></blockquote>
-</section>
-<section id="author">
+</div>
+<div class="section" id="author">
 <h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
 <p><strong>statacons</strong> team
 <a class="reference external" href="https://github.com/bquistorff/statacons">https://github.com/bquistorff/statacons</a></p>
-</section>
-<section id="references">
+</div>
+<div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p>SCons Development Team (2021a), <a class="reference external" href="https://scons.org/doc/4.3.0/PDF/scons-man.pdf">SCons 4.3.0 Man page, https://scons.org/doc/4.3.0/PDF/scons-man.pdf</a></p>
 <p>SCons Development Team (2021b), <a class="reference external" href="https://scons.org/doc/4.3.0/PDF/scons-user.pdf">SCons 4.3.0 User Guide, https://scons.org/doc/4.3.0/PDF/scons-user.pdf</a></p>
 <hr class="docutils" />
 <p>This help file was dynamically produced by
 <a class="reference external" href="http://www.haghish.com/markdoc/">MarkDoc Literate Programming package</a></p>
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -167,6 +166,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
 <ul>
@@ -198,7 +198,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="statacons.html" title="previous chapter">statacons</a></li>
-      <li>Next: <a href="swc.html" title="next chapter">statacons Web Tutorial</a></li>
+      <li>Next: <a href="complete_datasignature.html" title="next chapter">complete_datasignature</a></li>
   </ul></li>
 </ul>
 </div>
@@ -225,10 +225,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, Brian Quistorff.
+      &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

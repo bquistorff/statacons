@@ -4,9 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>A Simple SConstruct file &#8212; statacons 2.1.5 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Simple SConstruct file &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -15,7 +14,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Solution for “Exercise: Write Two New Rules”" href="solution_2newrules.html" />
+    <link rel="next" title="Solution for &#34;Exercise: Write Two New Rules&#34;" href="solution_2newrules.html" />
     <link rel="prev" title="Introduction" href="introduction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -42,14 +41,14 @@
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 </head>
-<section id="a-simple-sconstruct-file">
+<div class="section" id="a-simple-sconstruct-file">
 <h1>A Simple SConstruct file<a class="headerlink" href="#a-simple-sconstruct-file" title="Permalink to this headline">¶</a></h1>
 <p>We concluded the previous module with</p>
 <blockquote>
 <div><p>What we really want is an executable description of our pipeline that allows software to do the tricky part for us: figuring out what steps need to be rerun.</p>
 </div></blockquote>
-<p>This is where SCons comes in – we write an <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> file that codifies our workflow: what are the outputs, what are the inputs (including data and code), and what must be done to create the outputs from the inputs. Furthermore, SCons can tell which steps need to be re-run as the inputs change.</p>
-<section id="a-first-example">
+<p>This is where SCons comes in -- we write an <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> file that codifies our workflow: what are the outputs, what are the inputs (including data and code), and what must be done to create the outputs from the inputs. Furthermore, SCons can tell which steps need to be re-run as the inputs change.</p>
+<div class="section" id="a-first-example">
 <h2>A first example<a class="headerlink" href="#a-first-example" title="Permalink to this headline">¶</a></h2>
 <p>In your text editor, open the file called <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> (no extension).</p>
 <p>Skip the section at the top marked</p>
@@ -71,23 +70,23 @@
     <span class="s1">&#39;code/ado/personal/countWords.ado&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Let’s walk through this one piece at a time.</p>
+<p>Let's walk through this one piece at a time.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code> is the name we are giving to this task. It will allow us to refer to this task elsewhere in the SConstruct if we need to.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">env.StataBuild</span></code> tells SCons that this task will be performed according to <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code>. Essentially, <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> tells Stata “Do the do-file <code class="docutils literal notranslate"><span class="pre">source</span></code> in batch mode.”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">env.StataBuild</span></code> tells SCons that this task will be performed according to <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code>. Essentially, <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> tells Stata &quot;Do the do-file <code class="docutils literal notranslate"><span class="pre">source</span></code> in batch mode.&quot;</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> is the file to be created or built, so this task will be building <code class="docutils literal notranslate"><span class="pre">outputs/data/isles.dta</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">source</span></code> is the do-file we will use to build our target. In general, source can include other dependencies. However, we have set up <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> to <code class="docutils literal notranslate"><span class="pre">do</span></code> the first thing it finds in <code class="docutils literal notranslate"><span class="pre">source</span></code>, so we list only the do-file we want to run.</p></li>
-<li><p>in <code class="docutils literal notranslate"><span class="pre">Depends</span></code>, we list the remaining inputs (or “dependencies”) for our task <code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code>. In this case, we have three additional dependencies. It is clear why the input file <code class="docutils literal notranslate"><span class="pre">inputs/txt/isles.txt</span></code> is a dependency – if the input data change, the output may change, so we will need to re-run our analysis. The next two are the two ado-files: <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, which is called by <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code>, and <code class="docutils literal notranslate"><span class="pre">wordCount.ado</span></code>, which is called by <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>. Our target <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> also depends on these, since, just like the input data, if either of them change, then the output potentially could change,</p></li>
+<li><p>in <code class="docutils literal notranslate"><span class="pre">Depends</span></code>, we list the remaining inputs (or &quot;dependencies&quot;) for our task <code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code>. In this case, we have three additional dependencies. It is clear why the input file <code class="docutils literal notranslate"><span class="pre">inputs/txt/isles.txt</span></code> is a dependency -- if the input data change, the output may change, so we will need to re-run our analysis. The next two are the two ado-files: <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, which is called by <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code>, and <code class="docutils literal notranslate"><span class="pre">wordCount.ado</span></code>, which is called by <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>. Our target <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> also depends on these, since, just like the input data, if either of them change, then the output potentially could change,</p></li>
 </ul>
 <p>So, in words, the code above reads</p>
 <blockquote>
-<div><p>“The the task named <code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code> is to create <code class="docutils literal notranslate"><span class="pre">output/data/isles.dta</span></code>. <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> tells us that we do that by running the <code class="docutils literal notranslate"><span class="pre">source</span></code> do-file  <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code> in batch mode.  The files this task depends on are <code class="docutils literal notranslate"><span class="pre">isles.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, and <code class="docutils literal notranslate"><span class="pre">wordcount.ado</span></code>. Check whether the source or any of the dependencies have changed since the last time we build this target. If any have changed, we must re-build the target. If none have changed, we do not need to re-build this target.”</p>
+<div><p>&quot;The the task named <code class="docutils literal notranslate"><span class="pre">cmd_isles_data</span></code> is to create <code class="docutils literal notranslate"><span class="pre">output/data/isles.dta</span></code>. <code class="docutils literal notranslate"><span class="pre">StataBuild</span></code> tells us that we do that by running the <code class="docutils literal notranslate"><span class="pre">source</span></code> do-file  <code class="docutils literal notranslate"><span class="pre">count_isles.do</span></code> in batch mode.  The files this task depends on are <code class="docutils literal notranslate"><span class="pre">isles.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code>, and <code class="docutils literal notranslate"><span class="pre">wordcount.ado</span></code>. Check whether the source or any of the dependencies have changed since the last time we build this target. If any have changed, we must re-build the target. If none have changed, we do not need to re-build this target.&quot;</p>
 </div></blockquote>
-</section>
-<section id="putting-our-first-example-to-work">
+</div>
+<div class="section" id="putting-our-first-example-to-work">
 <h2>Putting our first example to work<a class="headerlink" href="#putting-our-first-example-to-work" title="Permalink to this headline">¶</a></h2>
-<p>Let’s see how our script works.</p>
-<p>First, let’s start fresh by erasing our target <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> (if it already exists) using the <code class="docutils literal notranslate"><span class="pre">clean</span></code> option.</p>
+<p>Let's see how our script works.</p>
+<p>First, let's start fresh by erasing our target <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> (if it already exists) using the <code class="docutils literal notranslate"><span class="pre">clean</span></code> option.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="o">.</span> <span class="n">statacons</span><span class="p">,</span> <span class="n">clean</span>
 <span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
@@ -185,8 +184,8 @@ scons: done building targets.
 
 </pre></div>
 </div>
-<p>Notice the entry in the tree for <code class="docutils literal notranslate"><span class="pre">outputs\data\dta\isles.dta</span></code>: <code class="docutils literal notranslate"><span class="pre">statacons</span></code> knows to look for it, since it is a target in our <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>, but does not find it (no <code class="docutils literal notranslate"><span class="pre">E</span></code>) in the leftmost column and that it has to build it (<code class="docutils literal notranslate"><span class="pre">B</span></code> in the second column). Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> has checked all the dependencies for this target, and has found them all to be current (capital <code class="docutils literal notranslate"><span class="pre">C</span></code> in the third column). The <code class="docutils literal notranslate"><span class="pre">prune</span></code> option makes the tree easier to read by not repeating dependencies – if a file’s dependencies have already been listed, that file will be enclosed in brackets.</p>
-<p>Now that we have had a detailed look at what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> is planning to do, let’s see what it actually does:</p>
+<p>Notice the entry in the tree for <code class="docutils literal notranslate"><span class="pre">outputs\data\dta\isles.dta</span></code>: <code class="docutils literal notranslate"><span class="pre">statacons</span></code> knows to look for it, since it is a target in our <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>, but does not find it (no <code class="docutils literal notranslate"><span class="pre">E</span></code>) in the leftmost column and that it has to build it (<code class="docutils literal notranslate"><span class="pre">B</span></code> in the second column). Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> has checked all the dependencies for this target, and has found them all to be current (capital <code class="docutils literal notranslate"><span class="pre">C</span></code> in the third column). The <code class="docutils literal notranslate"><span class="pre">prune</span></code> option makes the tree easier to read by not repeating dependencies -- if a file's dependencies have already been listed, that file will be enclosed in brackets.</p>
+<p>Now that we have had a detailed look at what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> is planning to do, let's see what it actually does:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="o">.</span> <span class="n">statacons</span>
 <span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
@@ -283,8 +282,8 @@ scons: done building targets.
 
 </pre></div>
 </div>
-</section>
-<section id="adding-a-second-target">
+</div>
+<div class="section" id="adding-a-second-target">
 <h2>Adding a second target<a class="headerlink" href="#adding-a-second-target" title="Permalink to this headline">¶</a></h2>
 <p>We have successfully built <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code> using <code class="docutils literal notranslate"><span class="pre">statacons</span></code>, but now we would like to add <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> to the same build process.</p>
 <p>We copy <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> to a new file <code class="docutils literal notranslate"><span class="pre">SConstruct-addAbyss</span></code> and add a second task:</p>
@@ -301,8 +300,8 @@ scons: done building targets.
 
 </pre></div>
 </div>
-<p>This is essentially the same as our previous task, and a useful exercise is to try to translate it into words as we did in the first subsection above (“A first example”).</p>
-<p>Let’s see what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> thinks about this task. We use the option <code class="docutils literal notranslate"><span class="pre">file(SConstruct-addAbyss)</span></code> to tell <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to examine our new SConstruct file instead of the default (which is just to use the file called <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>):</p>
+<p>This is essentially the same as our previous task, and a useful exercise is to try to translate it into words as we did in the first subsection above (&quot;A first example&quot;).</p>
+<p>Let's see what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> thinks about this task. We use the option <code class="docutils literal notranslate"><span class="pre">file(SConstruct-addAbyss)</span></code> to tell <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to examine our new SConstruct file instead of the default (which is just to use the file called <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 . statacons, file(SConstruct-addAbyss) dry_run debug(explain) tree(status,prune
 &gt; )
@@ -361,7 +360,7 @@ scons: done building targets.
 
 </pre></div>
 </div>
-<p>There is an interesting line from the debug: <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">explain</span> <span class="pre">why</span> <span class="pre">outputs/data/dta/abyss.dta</span> <span class="pre">is</span> <span class="pre">being</span> <span class="pre">rebuilt:</span> <span class="pre">No</span> <span class="pre">previous</span> <span class="pre">build</span> <span class="pre">information</span> <span class="pre">found</span></code>. This is a reminder of how <code class="docutils literal notranslate"><span class="pre">scons</span></code> decides whether to rebuild a target: it checks whether the target’s dependencies have changed since the last time <code class="docutils literal notranslate"><span class="pre">scons</span></code> built the target. We created <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> in the previous module, and have not erased it, so <code class="docutils literal notranslate"><span class="pre">statacons</span></code> sees that it exists. However, since we have not built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> using <code class="docutils literal notranslate"><span class="pre">statacons</span></code> before, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> cannot answer the question “have the dependencies changed since the last time you built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code>?””, and will choose to rebuild it.</p>
+<p>There is an interesting line from the debug: <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">explain</span> <span class="pre">why</span> <span class="pre">outputs/data/dta/abyss.dta</span> <span class="pre">is</span> <span class="pre">being</span> <span class="pre">rebuilt:</span> <span class="pre">No</span> <span class="pre">previous</span> <span class="pre">build</span> <span class="pre">information</span> <span class="pre">found</span></code>. This is a reminder of how <code class="docutils literal notranslate"><span class="pre">scons</span></code> decides whether to rebuild a target: it checks whether the target's dependencies have changed since the last time <code class="docutils literal notranslate"><span class="pre">scons</span></code> built the target. We created <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> in the previous module, and have not erased it, so <code class="docutils literal notranslate"><span class="pre">statacons</span></code> sees that it exists. However, since we have not built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> using <code class="docutils literal notranslate"><span class="pre">statacons</span></code> before, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> cannot answer the question &quot;have the dependencies changed since the last time you built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code>?&quot;&quot;, and will choose to rebuild it.</p>
 <p>Notice that there is no <code class="docutils literal notranslate"><span class="pre">C</span></code> in the status report for <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> from the tree, since its status is not known to be Current.</p>
 <p>Now we rebuild:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
@@ -383,8 +382,8 @@ scons: done building targets.
 </pre></div>
 </div>
 <p>Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> has built <code class="docutils literal notranslate"><span class="pre">abyss.dta</span></code> but not <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code>. (Question for the user: why has <code class="docutils literal notranslate"><span class="pre">statacons</span></code> not rebuilt <code class="docutils literal notranslate"><span class="pre">isles.dta</span></code>? Hint: check the <code class="docutils literal notranslate"><span class="pre">tree</span></code> above.)</p>
-</section>
-<section id="exercise-write-two-new-rules">
+</div>
+<div class="section" id="exercise-write-two-new-rules">
 <h2>Exercise: Write Two New Rules<a class="headerlink" href="#exercise-write-two-new-rules" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple" start="0">
 <li><p>Create a copy of <code class="docutils literal notranslate"><span class="pre">SConstruct-addAbyss</span></code> and rename it <code class="docutils literal notranslate"><span class="pre">SConstruct-2NewRules</span></code></p></li>
@@ -394,8 +393,8 @@ scons: done building targets.
 <li><p>Add a rule in our new SConstruct to build  <code class="docutils literal notranslate"><span class="pre">testZipf.txt</span></code>.</p></li>
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">SConstruct-2NewRules</span></code> to see if any of the targets need to be rebuilt.</p></li>
 </ol>
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -425,6 +424,7 @@ scons: done building targets.
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
 <ul>
@@ -440,10 +440,10 @@ scons: done building targets.
 <li class="toctree-l2"><a class="reference internal" href="setup.html">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">A Simple SConstruct file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solution_2newrules.html">Solution for “Exercise: Write Two New Rules”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_2newrules.html">Solution for &quot;Exercise: Write Two New Rules&quot;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="variables.html">Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parameters-Solution.html">Solution for “Exercise: Parameters”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters-Solution.html">Solution for &quot;Exercise: Parameters&quot;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="separation.html">Separation of Concerns Part 1: Separating Analysis from Presentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="metadata.html">Separation of Concerns Part 2: Separating Metadata and Data</a></li>
 </ul>
@@ -468,7 +468,7 @@ scons: done building targets.
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="swc.html">statacons Web Tutorial</a><ul>
       <li>Previous: <a href="introduction.html" title="previous chapter">Introduction</a></li>
-      <li>Next: <a href="solution_2newrules.html" title="next chapter">Solution for “Exercise: Write Two New Rules”</a></li>
+      <li>Next: <a href="solution_2newrules.html" title="next chapter">Solution for &quot;Exercise: Write Two New Rules&quot;</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -496,10 +496,10 @@ scons: done building targets.
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, Brian Quistorff.
+      &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

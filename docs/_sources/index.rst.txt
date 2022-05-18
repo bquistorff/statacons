@@ -22,6 +22,7 @@ Paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "st
 
    statacons.md
    stataconsign.md
+   complete_datasignature.md
 
 .. toctree::
    :maxdepth: 1

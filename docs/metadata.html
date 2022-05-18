@@ -4,9 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Separation of Concerns Part 2: Separating Metadata and Data &#8212; statacons 2.1.5 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Separation of Concerns Part 2: Separating Metadata and Data &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -42,7 +41,7 @@
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 </head>
-<section id="separation-of-concerns-part-2-separating-metadata-and-data">
+<div class="section" id="separation-of-concerns-part-2-separating-metadata-and-data">
 <h1>Separation of Concerns Part 2: Separating Metadata and Data<a class="headerlink" href="#separation-of-concerns-part-2-separating-metadata-and-data" title="Permalink to this headline">¶</a></h1>
 <p>In Part 1, we improved our workflow by separating the regression analysis from the creation and formatting of tables and figures. This saves the step of re-running our regressions unnecessarily if we want to tweak our tables or figures. (Remember, we are imagining that these regressions take a very long time.)</p>
 <p>However, a problem remained: suppose we need to edit the labels on our variables, either to fix a mistake or make an improvement. The variable labels are <em>metadata</em> stored in the dataset <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code>. Because <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> is a dependency of <code class="docutils literal notranslate"><span class="pre">regressions.tex</span></code>, any changes to <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> will lead <code class="docutils literal notranslate"><span class="pre">statacons</span></code> to rebuild <code class="docutils literal notranslate"><span class="pre">regressions.tex</span></code>, i.e., re-run <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code>. However, we should not have to re-run <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code>: since none of the underlying data have changed, only the labels, the regression results will not change.</p>
@@ -134,7 +133,7 @@ desc, f
 
 </pre></div>
 </div>
-<p>We can see why this will help us avoid re-running <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> unnecessarily – observe that when variable labels change, the signature of <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> changes but the signature of <code class="docutils literal notranslate"><span class="pre">auto-nometa.dta</span></code> does not.</p>
+<p>We can see why this will help us avoid re-running <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> unnecessarily -- observe that when variable labels change, the signature of <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> changes but the signature of <code class="docutils literal notranslate"><span class="pre">auto-nometa.dta</span></code> does not.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span> <span class="n">do</span> <span class="n">code</span><span class="o">/</span><span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
 
 <span class="o">.</span> <span class="o">//</span> <span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
@@ -235,7 +234,7 @@ desc, f
 </pre></div>
 </div>
 <p>Notice that the signature of <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> has changed again, to <code class="docutils literal notranslate"><span class="pre">74:13(15616):2430311699:721316426:2443606894</span></code> , although only in the fourth segment, corresponding to the labels. The signature of <code class="docutils literal notranslate"><span class="pre">auto-noMeta.dta</span></code> has not changed.</p>
-<p>Let’s think through what will happen in <code class="docutils literal notranslate"><span class="pre">statacons</span></code>. <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code> will continue to depend on <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code> and <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> – through its dependency on <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code>, we will update <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code> if the regression results change; through its dependency on <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> we will also update it if the metadata (variable or value labels) change, even if the underlying data have not changed.</p>
+<p>Let's think through what will happen in <code class="docutils literal notranslate"><span class="pre">statacons</span></code>. <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code> will continue to depend on <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code> and <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> -- through its dependency on <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code>, we will update <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code> if the regression results change; through its dependency on <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> we will also update it if the metadata (variable or value labels) change, even if the underlying data have not changed.</p>
 <p>We now run the process through statacons:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span> <span class="n">statacons</span><span class="p">,</span> <span class="n">file</span><span class="p">(</span><span class="n">SConstruct</span><span class="o">-</span><span class="n">metadata</span><span class="p">)</span> <span class="n">clean</span>
 <span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
@@ -274,12 +273,12 @@ desc, f
 
 </pre></div>
 </div>
-<section id="exercise-reattach-labels-to-auto-nometa-dta">
-<h2>Exercise – Reattach Labels to <code class="docutils literal notranslate"><span class="pre">auto-noMeta.dta</span></code><a class="headerlink" href="#exercise-reattach-labels-to-auto-nometa-dta" title="Permalink to this headline">¶</a></h2>
-<p>One simplifying aspect of the above is that, since <code class="docutils literal notranslate"><span class="pre">estout</span></code> / <code class="docutils literal notranslate"><span class="pre">esttab</span></code> use the variable labels of the dataset in memory, we do not need to reattach the labels to <code class="docutils literal notranslate"><span class="pre">auto-noMeta.dta</span></code> – we can just load <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> when we create <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code> and <code class="docutils literal notranslate"><span class="pre">estout</span></code> will use the correct labels. If we were using other tools to produce our tables, we might need to use a different workflow.</p>
+<div class="section" id="exercise-reattach-labels-to-auto-nometa-dta">
+<h2>Exercise -- Reattach Labels to <code class="docutils literal notranslate"><span class="pre">auto-noMeta.dta</span></code><a class="headerlink" href="#exercise-reattach-labels-to-auto-nometa-dta" title="Permalink to this headline">¶</a></h2>
+<p>One simplifying aspect of the above is that, since <code class="docutils literal notranslate"><span class="pre">estout</span></code> / <code class="docutils literal notranslate"><span class="pre">esttab</span></code> use the variable labels of the dataset in memory, we do not need to reattach the labels to <code class="docutils literal notranslate"><span class="pre">auto-noMeta.dta</span></code> -- we can just load <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> when we create <code class="docutils literal notranslate"><span class="pre">regTable.tex</span></code> and <code class="docutils literal notranslate"><span class="pre">estout</span></code> will use the correct labels. If we were using other tools to produce our tables, we might need to use a different workflow.</p>
 <p>Imagine that, instead of storing our regression results in <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code>, we stored them in a dataset <code class="docutils literal notranslate"><span class="pre">regressions.dta</span></code> that had variable names but no variable labels. As an exercise: (1) save the variable labels from <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> and (2) use the saved metadata to include the new variable labels in <code class="docutils literal notranslate"><span class="pre">regressions.dta</span></code>.</p>
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -309,6 +308,7 @@ desc, f
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
 <ul>
@@ -324,10 +324,10 @@ desc, f
 <li class="toctree-l2"><a class="reference internal" href="setup.html">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simpleSConstruct.html">A Simple SConstruct file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solution_2newrules.html">Solution for “Exercise: Write Two New Rules”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_2newrules.html">Solution for &quot;Exercise: Write Two New Rules&quot;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="variables.html">Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parameters-Solution.html">Solution for “Exercise: Parameters”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters-Solution.html">Solution for &quot;Exercise: Parameters&quot;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="separation.html">Separation of Concerns Part 1: Separating Analysis from Presentation</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Separation of Concerns Part 2: Separating Metadata and Data</a></li>
 </ul>
@@ -380,10 +380,10 @@ desc, f
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, Brian Quistorff.
+      &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

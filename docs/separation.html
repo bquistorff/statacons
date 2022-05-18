@@ -4,9 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Separation of Concerns Part 1: Separating Analysis from Presentation &#8212; statacons 2.1.5 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Separation of Concerns Part 1: Separating Analysis from Presentation &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -16,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Separation of Concerns Part 2: Separating Metadata and Data" href="metadata.html" />
-    <link rel="prev" title="Solution for “Exercise: Parameters”" href="parameters-Solution.html" />
+    <link rel="prev" title="Solution for &#34;Exercise: Parameters&#34;" href="parameters-Solution.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -42,9 +41,9 @@
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 </head>
-<section id="separation-of-concerns-part-1-separating-analysis-from-presentation">
+<div class="section" id="separation-of-concerns-part-1-separating-analysis-from-presentation">
 <h1>Separation of Concerns Part 1: Separating Analysis from Presentation<a class="headerlink" href="#separation-of-concerns-part-1-separating-analysis-from-presentation" title="Permalink to this headline">¶</a></h1>
-<section id="review-of-introductory-example">
+<div class="section" id="review-of-introductory-example">
 <h2>Review of Introductory Example<a class="headerlink" href="#review-of-introductory-example" title="Permalink to this headline">¶</a></h2>
 <p>In the first part of this two-part lesson, we revisit the <em>Introductory Example</em> of the main paper to implement the principle of <em>separation of concerns</em>. That example proceeded in two steps. First, in <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code>, we prepared our dataset <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> for analysis. Then, in <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>, we ran our regressions and produced tables and figures. We reproduce the do-files, SConstruct, and workflow below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
@@ -126,10 +125,10 @@ scons: done building targets.
 
 </pre></div>
 </div>
-</section>
-<section id="separation-of-concerns-the-problem">
+</div>
+<div class="section" id="separation-of-concerns-the-problem">
 <h2>Separation of Concerns: The Problem<a class="headerlink" href="#separation-of-concerns-the-problem" title="Permalink to this headline">¶</a></h2>
-<p>The issue with this workflow can be seen in the following example. Let’s suppose that the regressions in <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code> take a very long time to run. Furthermore, let’s suppose that we wanted to improve the formatting of our graph, <code class="docutils literal notranslate"><span class="pre">scatterplot.pdf</span></code>, so that the y-axis labels are horizontal. We edit <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code> to add <code class="docutils literal notranslate"><span class="pre">ylabels(,</span> <span class="pre">angle(horizontal))</span></code> to the command creating <code class="docutils literal notranslate"><span class="pre">scatterplot.gph</span></code>:</p>
+<p>The issue with this workflow can be seen in the following example. Let's suppose that the regressions in <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code> take a very long time to run. Furthermore, let's suppose that we wanted to improve the formatting of our graph, <code class="docutils literal notranslate"><span class="pre">scatterplot.pdf</span></code>, so that the y-axis labels are horizontal. We edit <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code> to add <code class="docutils literal notranslate"><span class="pre">ylabels(,</span> <span class="pre">angle(horizontal))</span></code> to the command creating <code class="docutils literal notranslate"><span class="pre">scatterplot.gph</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">analysis</span><span class="o">.</span><span class="n">do</span>
 <span class="n">version</span> <span class="mf">16.1</span>
 
@@ -167,9 +166,9 @@ scons: done building targets.
 
 </pre></div>
 </div>
-<p>As expected, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> tells us that it will need to re-run <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>. This is wasteful – we should not re-run all these regressions just to change the formatting of tables or figures.</p>
-</section>
-<section id="separating-analysis-from-presentation">
+<p>As expected, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> tells us that it will need to re-run <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>. This is wasteful -- we should not re-run all these regressions just to change the formatting of tables or figures.</p>
+</div>
+<div class="section" id="separating-analysis-from-presentation">
 <h2>Separating Analysis from Presentation<a class="headerlink" href="#separating-analysis-from-presentation" title="Permalink to this headline">¶</a></h2>
 <p>The principle of <em>separation of concerns</em> suggests that we should split <code class="docutils literal notranslate"><span class="pre">analysis.do</span></code>: <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> should handle regressions; <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> should take the regression results and produce tables and figures. To implement this, we need <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> to save regression results in <code class="docutils literal notranslate"><span class="pre">regressions.sters</span></code>, which <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> can then use as an input.</p>
 <p>Here are the new do-files, <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code> and <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code>:</p>
@@ -292,10 +291,10 @@ scons: done building targets.
 
 </pre></div>
 </div>
-</section>
-<section id="testing-separation">
+</div>
+<div class="section" id="testing-separation">
 <h2>Testing separation<a class="headerlink" href="#testing-separation" title="Permalink to this headline">¶</a></h2>
-<p>Now let’s test whether our separation of concerns has been successful. Let’s change the number of significant digits in our regression table from the default to 2.</p>
+<p>Now let's test whether our separation of concerns has been successful. Let's change the number of significant digits in our regression table from the default to 2.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="o">//</span> <span class="n">tabfig</span><span class="o">.</span><span class="n">do</span>
 
@@ -316,7 +315,7 @@ scons: done building targets.
 
 </pre></div>
 </div>
-<p>Let’s see what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> does and does not rebuild.</p>
+<p>Let's see what <code class="docutils literal notranslate"><span class="pre">statacons</span></code> does and does not rebuild.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 . statacons, file(SConstruct-separation) debug(explain)
 scons: Reading SConscript files ...
@@ -338,10 +337,10 @@ scons: done building targets.
 </pre></div>
 </div>
 <p>Notice that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> does rebuild the outputs of <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> because <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code> has changed, but does not re-run any regressions.</p>
-</section>
-<section id="metadata-variable-labels">
+</div>
+<div class="section" id="metadata-variable-labels">
 <h2>Metadata (variable labels)<a class="headerlink" href="#metadata-variable-labels" title="Permalink to this headline">¶</a></h2>
-<p>Now let’s suppose that we want to edit the labels of our variables, for example to change the label of <strong>price</strong> from “Price” to “Price (USD)”.</p>
+<p>Now let's suppose that we want to edit the labels of our variables, for example to change the label of <strong>price</strong> from &quot;Price&quot; to &quot;Price (USD)&quot;.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
 <span class="n">version</span> <span class="mf">16.1</span>
 
@@ -389,8 +388,8 @@ scons: done building targets.
 </pre></div>
 </div>
 <p>To avoid re-running <code class="docutils literal notranslate"><span class="pre">regressions.do</span></code>, we could manually adjust the label of <strong>price</strong> in <code class="docutils literal notranslate"><span class="pre">tabfig.do</span></code>. However, this could lead to inconsistency across analyses and contradicts the goal of an automatic workflow. We will take up this problem in the next lesson.</p>
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -420,6 +419,7 @@ scons: done building targets.
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
 <ul>
@@ -435,10 +435,10 @@ scons: done building targets.
 <li class="toctree-l2"><a class="reference internal" href="setup.html">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simpleSConstruct.html">A Simple SConstruct file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solution_2newrules.html">Solution for “Exercise: Write Two New Rules”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solution_2newrules.html">Solution for &quot;Exercise: Write Two New Rules&quot;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="variables.html">Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parameters-Solution.html">Solution for “Exercise: Parameters”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters-Solution.html">Solution for &quot;Exercise: Parameters&quot;</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Separation of Concerns Part 1: Separating Analysis from Presentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="metadata.html">Separation of Concerns Part 2: Separating Metadata and Data</a></li>
 </ul>
@@ -462,7 +462,7 @@ scons: done building targets.
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="swc.html">statacons Web Tutorial</a><ul>
-      <li>Previous: <a href="parameters-Solution.html" title="previous chapter">Solution for “Exercise: Parameters”</a></li>
+      <li>Previous: <a href="parameters-Solution.html" title="previous chapter">Solution for &quot;Exercise: Parameters&quot;</a></li>
       <li>Next: <a href="metadata.html" title="next chapter">Separation of Concerns Part 2: Separating Metadata and Data</a></li>
   </ul></li>
   </ul></li>
@@ -491,10 +491,10 @@ scons: done building targets.
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, Brian Quistorff.
+      &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
