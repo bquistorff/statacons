@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Requirements &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
@@ -32,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="requirements">
+  <section id="requirements">
 <h1>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h1>
 <p>The following are required :</p>
 <ul class="simple">
@@ -40,8 +41,8 @@
 <li><p>Python 3.5 or later (3.8 required for some advanced options)</p></li>
 <li><p>SCons 4.2 or later</p></li>
 </ul>
-</div>
-<div class="section" id="step-1-python-setup">
+</section>
+<section id="step-1-python-setup">
 <h1>Step 1: Python Setup<a class="headerlink" href="#step-1-python-setup" title="Permalink to this headline">¶</a></h1>
 <p>We provide the basic steps for installing Python and configuring Stata for use with Python. For more details, we recommend a series of posts by Chuck Huber on the <a class="reference external" href="https://blog.stata.com/tag/python/">Stata
 Blog</a>. See especially  <a class="reference external" href="https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/">post 1</a>  and <a class="reference external" href="https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/">post 3</a>.</p>
@@ -58,20 +59,20 @@ implementation of Python. Some popular examples include</p>
 <li><p>macOS: Terminal</p></li>
 <li><p>Unix-like (e.g., Linux): terminal</p></li>
 </ul>
-<div class="section" id="step-1-1-install-python">
+<section id="step-1-1-install-python">
 <h2>Step 1.1: Install Python<a class="headerlink" href="#step-1-1-install-python" title="Permalink to this headline">¶</a></h2>
 <p>Install Python 3.5 or later (3.8 or later recommended).</p>
-</div>
-<div class="section" id="step-1-2-configure-stata-to-work-with-python">
+</section>
+<section id="step-1-2-configure-stata-to-work-with-python">
 <h2>Step 1.2: Configure Stata to work with Python<a class="headerlink" href="#step-1-2-configure-stata-to-work-with-python" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="step-1-2-1-locate-python-executable">
+<section id="step-1-2-1-locate-python-executable">
 <h3>Step 1.2.1: Locate Python executable<a class="headerlink" href="#step-1-2-1-locate-python-executable" title="Permalink to this headline">¶</a></h3>
 <p>In Stata, enter</p>
 <p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">search</span></code></p>
 <p>to locate the Python executable. If your system has both Python 2 and
 Python 3 installed, be sure to use the Python 3 executable.</p>
-</div>
-<div class="section" id="step-1-2-2-set-path-to-python-executable-in-stata">
+</section>
+<section id="step-1-2-2-set-path-to-python-executable-in-stata">
 <h3>Step 1.2.2: Set path to Python executable in Stata<a class="headerlink" href="#step-1-2-2-set-path-to-python-executable-in-stata" title="Permalink to this headline">¶</a></h3>
 <p>Stata will use the default Python, unless configured before first use.
 To do so, in Stata, enter</p>
@@ -80,14 +81,14 @@ To do so, in Stata, enter</p>
 <p>If Stata is started in a specific Anaconda environment, we provide a
 simple Stata command <code class="docutils literal notranslate"><span class="pre">set_python_exec_env</span></code> to query the environment and set the Python path
 accordingly.</p>
-</div>
-<div class="section" id="step-1-2-3-check-setup">
+</section>
+<section id="step-1-2-3-check-setup">
 <h3>Step 1.2.3: check setup<a class="headerlink" href="#step-1-2-3-check-setup" title="Permalink to this headline">¶</a></h3>
 <p>In Stata, check your setup by entering</p>
 <p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">query</span></code></p>
-</div>
-</div>
-<div class="section" id="step-1-3-install-python-packages-scons-and-pystatacons">
+</section>
+</section>
+<section id="step-1-3-install-python-packages-scons-and-pystatacons">
 <h2>Step 1.3: Install Python packages scons and pystatacons<a class="headerlink" href="#step-1-3-install-python-packages-scons-and-pystatacons" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">pip</span></code> is the standard way to install Python packages. In the terminal, enter</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    pip install scons
@@ -100,11 +101,11 @@ and enter</p>
     python which pystatacons
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="step-2-statacons-installation-and-setup">
+</section>
+</section>
+<section id="step-2-statacons-installation-and-setup">
 <h1>Step 2: statacons installation and setup<a class="headerlink" href="#step-2-statacons-installation-and-setup" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="step-2-1-install-stata-package">
+<section id="step-2-1-install-stata-package">
 <h2>Step 2.1: Install Stata package<a class="headerlink" href="#step-2-1-install-stata-package" title="Permalink to this headline">¶</a></h2>
 <p>First, check your <code class="docutils literal notranslate"><span class="pre">adopath</span></code>. By default <code class="docutils literal notranslate"><span class="pre">statacons</span></code> will be installed to your <code class="docutils literal notranslate"><span class="pre">PLUS</span></code> directory.
 Users working in collaboration with others may wish to change the <code class="docutils literal notranslate"><span class="pre">PLUS</span></code> and <code class="docutils literal notranslate"><span class="pre">PERSONAL</span></code>
@@ -125,8 +126,8 @@ program use:</p>
 </pre></div>
 </div>
 <p>To check that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> is installed, enter <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">statacons</span></code> in Stata.</p>
-</div>
-<div class="section" id="step-2-2-install-project-files">
+</section>
+<section id="step-2-2-install-project-files">
 <h2>Step 2.2: Install project files<a class="headerlink" href="#step-2-2-install-project-files" title="Permalink to this headline">¶</a></h2>
 <p>To install the project files, navigate to the root of your project
 directory and then run</p>
@@ -151,8 +152,8 @@ rm project_files.zip
 </div>
 <p>The only project file required is <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>. You may also wish to use the template files; if so, copy them into the main project folder (removing
 the <code class="docutils literal notranslate"><span class="pre">_template</span></code> suffix).</p>
-</div>
-<div class="section" id="step-2-3-configuration">
+</section>
+<section id="step-2-3-configuration">
 <h2>Step 2.3: Configuration<a class="headerlink" href="#step-2-3-configuration" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">statacons</span></code> is intended to work without additional user configuration, for example by automatically detecting the location of the Stata executable.
 However, some configuration may be required. For example, if you have more than one version of Stata installed, <code class="docutils literal notranslate"><span class="pre">statacons</span></code> may not find your preferred
@@ -162,8 +163,8 @@ the Stata project files give several examples of how to set commonly-used parame
 <p>The default is that these configuration files, if used, will be stored in the same directory as the <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>. The command line option <code class="docutils literal notranslate"><span class="pre">config_file()</span></code>
 can instruct SCons to use a custom location or filename instead.</p>
 <p>To check the configuration of <code class="docutils literal notranslate"><span class="pre">statacons</span></code>, enter <code class="docutils literal notranslate"><span class="pre">statacons,</span> <span class="pre">show_config</span></code> in Stata. The do-file <code class="docutils literal notranslate"><span class="pre">debugging-checklist.do</span></code> included in the <code class="docutils literal notranslate"><span class="pre">utils</span></code> folder may also be useful in checking that components are in the right places.</p>
-</div>
-<div class="section" id="step-2-4-optional-setup-for-version-control">
+</section>
+<section id="step-2-4-optional-setup-for-version-control">
 <h2>Step 2.4 (optional): Setup for Version Control<a class="headerlink" href="#step-2-4-optional-setup-for-version-control" title="Permalink to this headline">¶</a></h2>
 <p>If you are using version control software such as git, here are a few recommendations:</p>
 <ul class="simple">
@@ -172,15 +173,15 @@ can instruct SCons to use a custom location or filename instead.</p>
 <li><p>files to <em>exclude</em> from version control: <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code>, <code class="docutils literal notranslate"><span class="pre">debugging-checklist.do</span></code>, all generated files, including SConsign files (e.g., <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>) and batch-generated <code class="docutils literal notranslate"><span class="pre">.log</span></code>-files. See <code class="docutils literal notranslate"><span class="pre">.gitignore_template</span></code> in the <code class="docutils literal notranslate"><span class="pre">utils</span></code> folder for what we recommend.</p></li>
 </ul>
 <p>See the Online Appendix Section B for more details on working with version control.</p>
-</div>
-</div>
-<div class="section" id="step-3-test-run-with-introductory-example">
+</section>
+</section>
+<section id="step-3-test-run-with-introductory-example">
 <h1>Step 3: Test run with Introductory Example<a class="headerlink" href="#step-3-test-run-with-introductory-example" title="Permalink to this headline">¶</a></h1>
 <p>Replication code and data for our Introductory Example as well as the extensions to that example are provided in
-<a class="reference external" href="https://github.com/bquistorff/statacons/main/raw/examples/stataconsIntro.zip">https://github.com/bquistorff/statacons/main/raw/examples/stataconsIntro.zip</a>,
+<a class="reference external" href="https://github.com/bquistorff/statacons/raw/main/examples/stataconsIntro.zip">https://github.com/bquistorff/statacons/raw/main/examples/stataconsIntro.zip</a>,
 posted to <a class="reference external" href="https://github.com/bquistorff/statacons">our
 repository</a>. To run the example, unpack the zip archive and follow the steps in Section 2 of the paper.</p>
-</div>
+</section>
 
 
           </div>
@@ -272,7 +273,7 @@ repository</a>. To run the example, unpack the zip archive and follow the steps 
       &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

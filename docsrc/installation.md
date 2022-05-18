@@ -153,6 +153,6 @@ See the Online Appendix Section B for more details on working with version contr
 # Step 3: Test run with Introductory Example
 
 Replication code and data for our Introductory Example as well as the extensions to that example are provided in
-<https://github.com/bquistorff/statacons/main/raw/examples/stataconsIntro.zip>,
+<https://github.com/bquistorff/statacons/raw/main/examples/stataconsIntro.zip>,
 posted to [our
 repository](https://github.com/bquistorff/statacons). To run the example, unpack the zip archive and follow the steps in Section 2 of the paper.

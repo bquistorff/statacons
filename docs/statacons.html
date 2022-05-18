@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>statacons &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
@@ -33,7 +34,7 @@
           <div class="body" role="main">
             
   <p><em>version 3.0.0</em></p>
-<div class="section" id="statacons">
+<section id="statacons">
 <h1>statacons<a class="headerlink" href="#statacons" title="Permalink to this headline">¶</a></h1>
 <p><strong>statacons</strong> -- calls <strong>SCons</strong> to build a project defined in an <strong>SConstruct</strong>.</p>
 <p>The syntax of  <strong>statacons</strong> follows that of <strong>scons</strong>, with a few additions and customizations. For the most commonly used options, we
@@ -42,7 +43,7 @@ These options are listed below. We also allow users to use the standard
 SCons syntax, although not a mix of the two in the same command.</p>
 <p>In this help file, we list only the most important options. We borrow heavily from the <strong>scons</strong> help.</p>
 <p>To see the full list of options, type  <strong>statacons, help</strong> at the Stata prompt or <strong>scons -h</strong> at the appropriate shell prompt. See the SCons User Manual and SCons Man Page for more details.</p>
-<div class="section" id="syntax">
+<section id="syntax">
 <h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
 <p>The syntax of <strong>statacons</strong> is:</p>
 <blockquote>
@@ -53,7 +54,7 @@ SCons syntax, although not a mix of the two in the same command.</p>
 <div><p><strong>statacons</strong> [option[=value]] [ <em>targets</em> ]</p>
 </div></blockquote>
 <p>By default, <strong>statacons</strong> will look in the current directory for an <strong>SConstruct</strong> file, consider all targets described in that file, and then build or re-build targets if needed.</p>
-<div class="section" id="specifying-targets">
+<section id="specifying-targets">
 <h3>Specifying targets<a class="headerlink" href="#specifying-targets" title="Permalink to this headline">¶</a></h3>
 <p>By default, <strong>statacons</strong> will build all targets described in the <strong>SConstruct</strong>. The user can specify a target or a subset of targets using the <em>target</em> option on the command line:</p>
 <blockquote>
@@ -61,8 +62,8 @@ SCons syntax, although not a mix of the two in the same command.</p>
 </div></blockquote>
 <p>The SCons equivalent is identical.</p>
 <p>Default targets can also be specified in the SConstruct with the Default() function, although targets specified at the command line override defaults specified in the SConstruct. Targets can be excluded from the default group with the Ignore() function.</p>
-</div>
-<div class="section" id="standard-scons-options">
+</section>
+<section id="standard-scons-options">
 <h3>Standard SCons Options<a class="headerlink" href="#standard-scons-options" title="Permalink to this headline">¶</a></h3>
 <p>We list the most common options, with Stata syntax on the first line and the SCons equivalent on the second line.</p>
 <table class="colwidths-auto docutils align-default">
@@ -128,8 +129,8 @@ SCons syntax, although not a mix of the two in the same command.</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="custom-statacons-options">
+</section>
+<section id="custom-statacons-options">
 <h3>Custom statacons options<a class="headerlink" href="#custom-statacons-options" title="Permalink to this headline">¶</a></h3>
 <table class="colwidths-auto docutils align-default">
 <thead>
@@ -170,15 +171,15 @@ SCons syntax, although not a mix of the two in the same command.</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="return-values">
+</section>
+<section id="return-values">
 <h3>Return values<a class="headerlink" href="#return-values" title="Permalink to this headline">¶</a></h3>
 <p><strong>statacons</strong> will return the Python return code in <em>r(py_rc)</em>. If non-zero, <strong>statacons</strong> will issue error 7103 &quot;error occurs when running a Python script file or importing a Python module&quot;.</p>
-</div>
-</div>
-<div class="section" id="sconstruct-syntax">
+</section>
+</section>
+<section id="sconstruct-syntax">
 <h2>SConstruct Syntax<a class="headerlink" href="#sconstruct-syntax" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="basic-sconstruct-recipe">
+<section id="basic-sconstruct-recipe">
 <h3>Basic SConstruct Recipe<a class="headerlink" href="#basic-sconstruct-recipe" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import pystatacons
 env = pystatacons.init_env()
@@ -193,8 +194,8 @@ Depends(task_name, [&#39;path/to/dependency1.ext&#39;,
 </div>
 <p>This defines a <strong>task</strong> <em>task_name</em> from the <em>StataBuild</em> method with <strong>targets</strong> <em>path/to/target1.ext</em> and <em>path/to/target2.ext</em>, <strong>source</strong>  <em>path/to/dofile.do</em> and <strong>dependencies</strong> <em>path/to/dependency1.ext</em> and <em>path/to/dependency2.ext</em>.
 <strong>statacons</strong> will call Stata's batch mode to <em>do path/to/dofile.do</em>.</p>
-</div>
-<div class="section" id="additional-options-for-sconstruct-recipe">
+</section>
+<section id="additional-options-for-sconstruct-recipe">
 <h3>Additional Options for SConstruct Recipe<a class="headerlink" href="#additional-options-for-sconstruct-recipe" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>task_name = env.StataBuild(
           target = [&#39;path/to/target1.ext&#39;, &#39;path/to/target2.ext&#39;],
@@ -234,20 +235,20 @@ This will ignore the <em>file_cmd</em>, <em>source</em>, and <em>params</em>.</p
 </div>
 <p>defines a <strong>task</strong> <em>helpFile</em> from the <em>StataBuild</em> method with <strong>target</strong> <em>statacons.sthlp</em>, <strong>source</strong>  <em>statacons.ado</em> and <strong>params</strong> ', <em>export(statacons.sthlp) mini replace'</em>.
 <strong>statacons</strong> will call Stata in batch mode with command <strong>markdoc statacons.ado, export(sthlp) replace mini</strong>.</p>
-</div>
-<div class="section" id="sconstruct-functions">
+</section>
+<section id="sconstruct-functions">
 <h3>SConstruct Functions<a class="headerlink" href="#sconstruct-functions" title="Permalink to this headline">¶</a></h3>
 <p>See the SCons User Manual and SCons Man Page for <em>functions</em> available in SConstructs.</p>
-</div>
-</div>
-<div class="section" id="configuration">
+</section>
+</section>
+<section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p><strong>statacons</strong> should run without configuration on most standard setups, assuming python and scons are installed properly.
 See <strong>utils/config_local_template.ini</strong> and <strong>config_project.ini</strong> for configuration options.</p>
 <p>Run <strong>statacons, show_config</strong> to show current configuration.</p>
 <p>Run <strong>utils/debugging-checklist.do</strong> to obtain useful information for debugging.</p>
-</div>
-<div class="section" id="example-s">
+</section>
+<section id="example-s">
 <h2>Example(s)<a class="headerlink" href="#example-s" title="Permalink to this headline">¶</a></h2>
 <p>basic use</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>. statacons
@@ -269,21 +270,21 @@ See <strong>utils/config_local_template.ini</strong> and <strong>config_project.
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>. statacons, assume_built(*)
 </pre></div>
 </div>
-</div>
-<div class="section" id="author">
+</section>
+<section id="author">
 <h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
 <p><strong>statacons</strong> team
 <a class="reference external" href="https://github.com/bquistorff/statacons">https://github.com/bquistorff/statacons</a></p>
-</div>
-<div class="section" id="references">
+</section>
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <p>SCons Development Team (2021a), <a class="reference external" href="https://scons.org/doc/4.3.0/PDF/scons-man.pdf">SCons 4.3.0 Man page, https://scons.org/doc/4.3.0/PDF/scons-man.pdf</a></p>
 <p>SCons Development Team (2021b), <a class="reference external" href="https://scons.org/doc/4.3.0/PDF/scons-user.pdf">SCons 4.3.0 User Guide, https://scons.org/doc/4.3.0/PDF/scons-user.pdf</a></p>
 <hr class="docutils" />
 <p>This help file was dynamically produced by
 <a class="reference external" href="http://www.haghish.com/markdoc/">MarkDoc Literate Programming package</a></p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -375,7 +376,7 @@ See <strong>utils/config_local_template.ini</strong> and <strong>config_project.
       &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

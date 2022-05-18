@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Introduction &#8212; statacons 3.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
@@ -41,10 +42,10 @@
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 </head>
-<div class="section" id="introduction">
+<section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <p>Let's imagine that we're interested in testing Zipf's Law in some of our favorite books.</p>
-<div class="section" id="zipf-s-law">
+<section id="zipf-s-law">
 <h2>Zipf's Law<a class="headerlink" href="#zipf-s-law" title="Permalink to this headline">¶</a></h2>
 <p>The most frequently-occurring word occurs approximately twice as often as the second most frequent word. This is Zipf's Law.</p>
 <p>The texts we want to analyze are in .txt format:</p>
@@ -255,8 +256,8 @@
 <p>so that <code class="docutils literal notranslate"><span class="pre">master.do</span></code> will skip over these lines and not re-run the analysis.</p>
 <p>For a simple workflow, this is probably OK, but it can be a source of errors in more complicated workflows or in collaborative work. For example, in a complicated workflow, you might update an input file, but then forget that you had commented out the analysis lines in your script. Or, in a collaborative project, a co-author may have made a change to <code class="docutils literal notranslate"><span class="pre">countWords.ado</span></code> that you have not noticed.</p>
 <p>In order to avoid both types of error -- re-running analyses that are not necessary or failing to update analyses when needed -- what we really want is an executable description of our pipeline that allows software to do the tricky part for us: figuring out what steps need to be rerun.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -361,7 +362,7 @@
       &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
