@@ -21,7 +21,7 @@ Install `statacons` following the [installation guide](https://bquistorff.github
 
 You need to download some files to follow this lesson:
 
-1. Download [statacons-lesson.zip](https://github.com/bquistorff/statacons/blob/main/examples/stataconsIntro.zip) from <https://github.com/bquistorff/statacons/blob/main/examples/stataconsIntro.zip>.
+1. Download [statacons-lesson.zip](https://github.com/bquistorff/statacons/raw/main/examples/statacons-lesson.zip) from <https://github.com/bquistorff/statacons/raw/main/examples/statacons-lesson.zip>.
 
 2. Move zip into a directory you can access.
 
