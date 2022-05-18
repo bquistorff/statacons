@@ -2,7 +2,7 @@
 
 
 {p 4 4 2}
-{it:version 2.0.1}
+{it:version 3.0.0}
 
 
 {title:statacons}
@@ -49,7 +49,7 @@ By default, {bf:statacons} will build all targets described in the {bf:SConstruc
 The SCons equivalent is identical.
 
 {p 4 4 2}
-Default targets can also be specified in the SConstruct with the {bf:Default()} function, although targets specified at the command line override defaults specified in the SConstruct. Targets can be excluded from the default group with the {bf:Ignore()} function.
+Default targets can also be specified in the SConstruct with the Default() function, although targets specified at the command line override defaults specified in the SConstruct. Targets can be excluded from the default group with the Ignore() function.
 
 {p 4 4 2}{bf:Standard SCons Options}
 
@@ -140,7 +140,7 @@ The additional options to {bf:StataBuild} are
 
 {break}    - file_cmd : the command SCons should pass to Stata{c 39}s batch mode.
 
-    The default is _do_, but the user can specify anything that Stata can accept as a command,
+    The default is _do_ , but the user can specify anything that Stata can accept as a command,
 		e.g., {it:dyndoc}, {it:markdown}, {it:net}, etc.
 
 {break}    - params : arguments or options that should follow the source in the call to Stata batch mode.
@@ -184,7 +184,7 @@ See the SCons User Manual and SCons Man Page for {it:functions} available in SCo
 See {bf:utils/config_local_template.ini} and {bf:config_project.ini} for configuration options.
 
 {p 4 4 2}
-Run {bf:statacons --show-config} to show current configuration.
+Run {bf:statacons, show_config} to show current configuration.
 
 {p 4 4 2}
 Run {bf:utils/debugging-checklist.do} to obtain useful information for debugging.
@@ -216,7 +216,7 @@ build target called {c 39}dl_original_data{c 39}
 {p 4 4 2}
 mark all targets as built
 
-    . statacons assume_built(*)
+    . statacons, assume_built(*)
 
 
 

@@ -1,4 +1,4 @@
-*! version 2.0.2  May 04 2022  statacons team
+*! version 3.0.0  May 17 2022  statacons team
 * Copyright 2022. This work is licensed under a CC BY 4.0 license.
 
 program statacons, rclass
@@ -54,7 +54,7 @@ end
 /***
 
 
-_version 2.0.1_
+_version 3.0.0_
 
 statacons
 ======
@@ -91,7 +91,7 @@ By default, __statacons__ will build all targets described in the __SConstruct__
 
 The SCons equivalent is identical.
 
-Default targets can also be specified in the SConstruct with the __Default()__ function, although targets specified at the command line override defaults specified in the SConstruct. Targets can be excluded from the default group with the __Ignore()__ function.
+Default targets can also be specified in the SConstruct with the Default() function, although targets specified at the command line override defaults specified in the SConstruct. Targets can be excluded from the default group with the Ignore() function.
 
 ### Standard SCons Options
 
@@ -178,7 +178,7 @@ The additional options to __StataBuild__ are
 
 - file_cmd : the command SCons should pass to Stata's batch mode.
 
-    The default is _do_, but the user can specify anything that Stata can accept as a command,
+    The default is _do_ , but the user can specify anything that Stata can accept as a command,
 		e.g., _dyndoc_, _markdown_, _net_, etc.
 
 - params : arguments or options that should follow the source in the call to Stata batch mode.
@@ -217,7 +217,7 @@ Configuration
 __statacons__ should run without configuration on most standard setups, assuming python and scons are installed properly.
 See __utils/config_local_template.ini__ and __config_project.ini__ for configuration options.
 
-Run __statacons --show-config__ to show current configuration.
+Run __statacons, show_config__ to show current configuration.
 
 Run __utils/debugging-checklist.do__ to obtain useful information for debugging.
 
@@ -243,7 +243,7 @@ build target called 'dl_original_data'
 
 mark all targets as built
 
-    . statacons assume_built(*)
+    . statacons, assume_built(*)
 
 
 

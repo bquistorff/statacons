@@ -1,4 +1,4 @@
-*! version 1.0.0  January 2022  statacons team
+*! version 3.0.0  May 17 2022  statacons team
 * Copyright 2022. This work is licensed under a CC BY 4.0 license.
 version 16.1
 
@@ -78,7 +78,7 @@ end
 
 /***
 
-_version 1.0.0_
+_version 3.0.0_
 
 complete_datasignature
 ======
@@ -102,9 +102,9 @@ By default, __complete_datasignature__ will use the dta-file in memory to create
 |----------------------------|----------------------------------------------------|
 | dta_file("file.dta")           | Use  "file.dta"  instead of dta-file in memory       |
 | fname("sigfile.ext")           | write signature to "sigfile.ext"     |
-| nometa                     | Do not include any metadata <br>  equivalent of Stata's __datasignature__          |
-| labels_formats_only             | Include variable labels and value labels               |
-| fast          | use __\_datasignature__'s _fast_ mode <br> faster but not machine-independent                       |
+| nometa                     | Do not include any metadata -- equivalent of Stata's __datasignature__          |
+| labels_formats_only             | Include variable formats, variable and value labels               |
+| fast          | use ___datasignature__ in _fast_ mode -- faster but not machine-independent                       |
 
 
 
@@ -119,7 +119,7 @@ Example(s)
         . complete_datasignature, nometa
     74:12(71728):3831085005:1395876116
         . complete_datasignature, labels_formats_only
-    74:12(71728):3831085005:1395876116:17340132
+    74:12(71728):3831085005:1395876116:2144891519
         . complete_datasignature
     74:12(71728):3831085005:1395876116:711253444
         . ret li
