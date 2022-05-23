@@ -2,7 +2,7 @@
 
 `statacons` is a set of tools for the [SCons](https://scons.org/) build-system to allow running [Stata](https://stata.com) projects. It does not require changes to existing code, is [correct](https://doi.ieeecomputersociety.org/10.1109/MS.2018.111095025) (no unnecessary rebuilds), extensible via Python, and git-friendly.
 
-With data analysis projects it can be difficult to know what needs to be rebuilt when code changes (either because the there are many dependencies to track or it involves multiple contributors) and some tasks take a long time, making full-rebuilds costly. "Build-systems" solve this by allowing the user to define how task inputs generate ouputs (for SCons, using `SConstruct` files) and tracking file changes to know what must be rebuilt. Thinks of this as a more robust way to specify a project's "master" run script. The `SConstruct` provides an easy view for what happens in a projects.
+With data analysis projects it can be difficult to know what needs to be rebuilt when code changes (either because the there are many dependencies to track or it involves multiple contributors) and some tasks take a long time, making full-rebuilds costly. "Build systems" solve this by allowing the user to define how task inputs generate ouputs (for SCons, using `SConstruct` files) and tracking file changes to know what must be rebuilt. Thinks of this as a more robust way to specify a project's "master" run script. The `SConstruct` provides an easy view for what happens in a projects.
 
 
 ## Resources:
@@ -12,9 +12,9 @@ The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <ht
  - The paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Under review at the Stata Journal. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
  - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
  - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
- - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features (user contributions welcome): https://github.com/bquistorff/statacons/wiki
+ - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features, a troubleshooting guide, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
  - Documentation for `statacons`, `stataconsign`, and `pystatacons`
- - The [MetaArXiV site](https://osf.io/preprints/metaarxiv/qesx6/) hosting drafts of the paper: <https://osf.io/preprints/metaarxiv/qesx6/>.
+ - The [MetaArXiV site](https://osf.io/preprints/metaarxiv/qesx6/) archiving all pre-publication drafts of the paper: <https://osf.io/preprints/metaarxiv/qesx6/>.
  - The [OSF site](https://osf.io/gbh4m/) archiving all versions of the software and replication code and data: <https://osf.io/gbh4m/>
 
 ## Installation:
