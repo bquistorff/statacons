@@ -1,11 +1,16 @@
 d 'statacons': statacons
 d
-d   Enables using SCons with Stata
+d   statacons is a set of tools for the SCons build-system to allow running
+d Stata projects. It does not require changes to existing code, is correct (no
+d unnecessary rebuilds), extensible via Python, and git-friendly. It is
+d comprised of a 'statacons' Stata package (this package) and a 'pystatacons'
+d Python package. It requires a python environment with SCons installed. For
+d more information see https://bquistorff.github.io/statacons/index.html .
 d
-d Version 2.0.0
+d Version 3.0.0
 d
-d Distribution-Date: 20220118
-d Requires: Python and SCons package
+d Distribution-Date: 20220517
+d Requires: Python and SCons and pystatacons packages
 d
 d KW: build system, dependency
 d
@@ -20,3 +25,4 @@ f src/stataconsign.ado
 f src/stataconsign.sthlp
 f src/sconstruct_fns.py
 f src/project_files.zip
+f src/set_python_exec_env.ado
