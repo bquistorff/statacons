@@ -4,7 +4,7 @@
 Welcome to the statacons home page
 =======================================
 
-Paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Revised and resubmitted, The Stata Journal. PDF_.
+Paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Accepted, The Stata Journal. PDF_.
 
 .. _PDF: https://osf.io/preprints/metaarxiv/qesx6/download
 
@@ -15,6 +15,12 @@ Paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "st
    :caption: Installation instructions:
 
    installation.md
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Appendices:
+
+   appendices
 
 .. toctree::
    :maxdepth: 1
