@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>A. Other Advanced Features &#8212; statacons 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="a-other-advanced-features">
+<h1>A. Other Advanced Features<a class="headerlink" href="#a-other-advanced-features" title="Permalink to this headline">¶</a></h1>
+<section id="a-1-sconscripts-and-hierarchical-builds">
+<h2>A.1. SConscripts and Hierarchical Builds<a class="headerlink" href="#a-1-sconscripts-and-hierarchical-builds" title="Permalink to this headline">¶</a></h2>
+<p>SConscripts allow dividing a project into parts. <strong>Listing A1</strong> shows how we can divide our
+Introductory Example into separate <code class="docutils literal notranslate"><span class="pre">SConscript</span></code>s for dataprep and
+analysis. Note the <code class="docutils literal notranslate"><span class="pre">Export()</span></code> and <code class="docutils literal notranslate"><span class="pre">Import()</span></code> statements needed to pass
+environments and variables across the <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">SConscript</span></code>s.</p>
+<p><strong>Listing A1: An SConstruct file with two SConscript files</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#--------- SConstruct file ----------</span>
+<span class="c1"># **** Setup from pystatacons package *****</span>
+<span class="kn">import</span> <span class="nn">pystatacons</span> <span class="n">env</span> <span class="o">=</span> <span class="n">pystatacons</span><span class="o">.</span><span class="n">init_env</span><span class="p">()</span>
+
+<span class="c1"># **** Substance begins  *****</span>
+<span class="n">Export</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">)</span> <span class="c1"># allow SConscripts to import environment</span>
+<span class="n">SConscript</span><span class="p">(</span><span class="s1">&#39;SConscript-dataprep&#39;</span><span class="p">)</span>
+<span class="n">SConscript</span><span class="p">(</span><span class="s1">&#39;SConscript-analysis&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># -------- SConscript-dataprep ------------</span>
+<span class="c1"># get environment from SConstruct</span>
+<span class="n">Import</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="n">dataprep_Targets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">]</span>
+<span class="n">Alias</span><span class="p">(</span><span class="s1">&#39;dataprep&#39;</span><span class="p">,</span><span class="n">dataprep_Targets</span><span class="p">)</span>
+<span class="n">cmd_dataprep</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">dataprep_Targets</span><span class="p">,</span>
+    <span class="n">source</span> <span class="o">=</span><span class="s1">&#39;code/dataprep.do&#39;</span> <span class="p">)</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">cmd_dataprep</span><span class="p">,[</span><span class="s1">&#39;inputs/auto-original.dta&#39;</span><span class="p">])</span>
+<span class="c1"># allow SConscript-dataprep to access dataprep_Targets variable</span>
+<span class="n">Export</span><span class="p">(</span><span class="s1">&#39;dataprep_Targets&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># -------- SConscript-analysis ------------</span>
+<span class="c1"># get environment from SConstruct</span>
+<span class="n">Import</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="c1"># get dataprep_Targets variable exported by SConscript-dataprep</span>
+<span class="n">Import</span><span class="p">(</span><span class="s1">&#39;dataprep_Targets&#39;</span><span class="p">)</span>
+<span class="n">analysis_Targets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/scatterplot.pdf&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;outputs/regressionTable.tex&#39;</span><span class="p">]</span>
+<span class="n">Alias</span><span class="p">(</span><span class="s1">&#39;analysis&#39;</span><span class="p">,</span><span class="n">analysis_Targets</span><span class="p">)</span>
+<span class="n">cmd_analysis</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+     <span class="n">target</span> <span class="o">=</span> <span class="n">analysis_Targets</span><span class="p">,</span>
+     <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/analysis.do&#39;</span> <span class="p">)</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">cmd_analysis</span><span class="p">,</span> <span class="n">dataprep_Targets</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition to breaking up large <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>s into more manageable,
+readable parts, using <code class="docutils literal notranslate"><span class="pre">SConscript</span></code>s allows assigning different options
+or parameters to different parts of the project.</p>
+</section>
+<section id="a-2-parallel-builds">
+<h2>A.2. Parallel Builds<a class="headerlink" href="#a-2-parallel-builds" title="Permalink to this headline">¶</a></h2>
+<p>SCons can manage <em>parallel builds</em>, conducting tasks that are not
+interdependent simultaneously by dividing the computer's processors
+among the tasks. This can reduce computation time relative to running
+tasks sequentially.</p>
+<p>At present, parallel builds are only supported in SCons itself, i.e.,
+running <code class="docutils literal notranslate"><span class="pre">scons</span></code> from a terminal, not in <code class="docutils literal notranslate"><span class="pre">statacons</span></code>.</p>
+<p>Using parallel builds without any modification to code can reduce
+computation time. Furthermore, writing code with parallel builds in mind
+can unlock additional gains. In our Applied Example, the event study
+methodology of Sun and Abraham, J. Econometrics, 2021, is conducted for
+four different variables. Each estimation is independent of the others,
+so the four can be conducted in parallel. <strong>Listing A2</strong> provides the <code class="docutils literal notranslate"><span class="pre">SConscript</span></code> for this process. We
+use an SConscript so that we can set the number of separate jobs for
+these tasks without affecting the rest of the build. Note the
+<code class="docutils literal notranslate"><span class="pre">SetOption('num_jobs',2)</span></code> line in the SConscript. We use 2 as a minimal
+working example, users with more processors may wish to allow more jobs.</p>
+<p><strong>Listing A2: SConstruct: Parallel Jobs in Applied Example</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ** Setup</span>
+<span class="kn">import</span> <span class="nn">pystatacons</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pystatacons</span><span class="o">.</span><span class="n">init_env</span><span class="p">()</span>
+<span class="c1"># use an sconsign database specific to this SConstruct</span>
+<span class="n">SConsignFile</span><span class="p">(</span><span class="s2">&quot;sconsignParallel&quot;</span><span class="p">)</span>
+<span class="c1"># set up parallel</span>
+<span class="c1"># set default maximum of 2 jobs</span>
+<span class="n">SetOption</span><span class="p">(</span><span class="s1">&#39;num_jobs&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># or set from command line, e.g.,</span>
+<span class="c1"># scons -j 2 --file=SConstructParallel</span>
+
+<span class="c1"># selection:</span>
+<span class="c1">#  pare down dataset to variables and observations used</span>
+<span class="c1">#  create one dataset per outcome variable</span>
+<span class="n">select_parallel</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+  <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;code/sunabraham_select_parallel.do&quot;</span><span class="p">,</span>
+  <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/dta/sunAbrahamSample_jallowrate.dta&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;outputs/dta/sunAbrahamSample_awards.dta&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;outputs/dta/sunAbrahamSample_decisions.dta&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;outputs/dta/sunAbrahamSample_dispositions.dta&#39;</span><span class="p">])</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">select_parallel</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;inputs/judgePanel.dta&#39;</span><span class="p">])</span>
+
+<span class="c1"># estimation</span>
+<span class="c1">#   one task per outcome variable</span>
+<span class="n">cmds</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;awards&quot;</span><span class="p">,</span><span class="s2">&quot;decisions&quot;</span><span class="p">,</span><span class="s2">&quot;jallowrate&quot;</span><span class="p">,</span><span class="s2">&quot;dispositions&quot;</span><span class="p">]:</span>
+<span class="n">cmds</span><span class="p">[</span><span class="n">outcome</span><span class="p">]</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+  <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;code/sunabraham_estimation_&quot;</span><span class="o">+</span><span class="n">outcome</span><span class="o">+</span>\<span class="s2">&quot;.do&quot;</span><span class="p">,</span>
+  <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/dta/sunAbrahamResults_&#39;</span><span class="o">+</span><span class="n">outcome</span><span class="o">+</span><span class="s1">&#39;.dta&#39;</span><span class="p">],</span>
+  <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/dta/sunAbrahamSample_&#39;</span><span class="o">+</span><span class="n">outcome</span><span class="o">+</span><span class="s1">&#39;.dta&#39;</span><span class="p">]</span> <span class="p">)</span>
+
+<span class="c1"># plot results</span>
+<span class="n">figs_parallel</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+ <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;code/sunabraham_graph_parallel.do&quot;</span><span class="p">,</span>
+ <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/figures/sunabraham_parallel.png&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;outputs/figures/lnallowrate_sunabraham_parallel.png&#39;</span><span class="p">])</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">figs_parallel</span><span class="p">,</span>
+ <span class="p">[</span><span class="s1">&#39;outputs/dta/sunAbrahamResults_awards.dta&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;outputs/dta/sunAbrahamResults_jallowrate.dta&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;outputs/dta/sunAbrahamResults_decisions.dta&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;outputs/dta/sunAbrahamResults_dispositions.dta&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>We have included the do-files for this parallel build in our
+Supplemental Materials online. The basic idea is that (1) for each
+outcome variable, we (a) create a dataset with that variable and the
+relevant controls and identifiers, (b) perform the estimate for that
+outcome and save the results in a dataset, then (2) once the estimation
+is complete for all four variables, we combine the estimation results
+for the four outcome variables and present the results.</p>
+<p>The gains from parallel builds will depend on many factors, including
+the nature of the task, the hardware, version of Stata, file size, and
+the system I/O throughput. For example, User A with 8 processors but a
+4-core version of Stata MP will likely experience greater <em>relative</em>
+gains by adding a second, parallel job than User B with 8 processors and
+8-core Stata MP: User A was only using 4 processors previously, and now
+can use all 8 simultaneously, still applying 4 to each task; User B was
+previously devoting 8 processors to each task sequentially, and now will
+devote 4 processors to each task simultaneously.<a class="footnote-reference brackets" href="#id2" id="id1">1</a>. Similarly, tasks
+that use only a small fraction of the available RAM can run in parallel
+without much cost to the speed of the individual tasks, while tasks that
+are demanding of available RAM may not be sped up as much when run in
+parallel. Finally, as noted in the paper, <code class="docutils literal notranslate"><span class="pre">parallel</span></code> (Vega Yon and
+Quistorff, Stata Journal, 2019) is a better option for bootstrapping or
+simulation.</p>
+<p>Some care should be taken in writing code in these cases -- while there
+is no issue with multiple Stata processes <em>accessing</em> the same dataset
+at once, it is important that parallel tasks not <em>write</em> to the same
+dataset. This just requires a bit of caution that no output filenames
+are repeated across jobs.</p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>For some rough guidance on the types of tasks more or less likely
+to benefit from parallel builds, see the &quot;Stata/MP Performance
+Report&quot; (<a class="reference external" href="https://www.stata.com/statamp/report.pdf">https://www.stata.com/statamp/report.pdf</a>) for data on
+speed gains as the number of cores increases for different commands.
+Note that the gains as the number of cores increases is <em>negatively</em>
+related to gains from parallel builds if a fixed number of cores are
+being divided among tasks.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">statacons</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Installation instructions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-1-python-setup">Step 1: Python Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-2-statacons-installation-and-setup">Step 2: statacons installation and setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-3-test-run-with-introductory-example">Step 3: Test run with Introductory Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Stata package documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons">https://github.com/bquistorff/statacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project wiki page (additional options and features)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons/wiki">https://github.com/bquistorff/statacons/wiki</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Web tutorial based on Software Carpentry's make lesson:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="swc.html">statacons Web Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python Package API documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">OSF archive (software, replication code and data):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://osf.io/gbh4m/">https://osf.io/gbh4m/</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MetaArXiV paper archive:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.31222/osf.io/qesx6">https://doi.org/10.31222/osf.io/qesx6</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Statacons team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/appendix-A-OtherAdvanced.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -78,7 +78,7 @@ a filename and return a string signature.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pystatacons.init_env">
-<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">init_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_scons_sig_fns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_scons_vs_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pystatacons.init_env" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">init_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_scons_sig_fns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_scons_vs_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pystatacons.init_env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets up an environment for Stata.</p>
 <p>Reads configuration data and saves to env['CONFIG']. By default it will check for and read
 two ini files ('config_project.ini' then 'config_local.ini'), though
@@ -97,7 +97,6 @@ Optionally patches SCons to allow for file-extension-specific signature function
 <li><p><strong>env</strong> (<em>Optional</em><em>[</em><em>SCons.Script.SConscript.SConsEnvironment</em><em>]</em>) -- Environment to configure for Stata support. If not provided will instantiate a DefaultEnvironment with the
 <cite>os.environ</cite> and no tools (many Stata users don't have defaults ones that SCons would complain about not
 finding).</p></li>
-<li><p><strong>tools</strong> (<em>list</em>) -- List of tools to initialize the returned environment with.</p></li>
 <li><p><strong>patch_scons_sig_fns</strong> (<em>bool</em>) -- Whether to patch the SCons file signature functions to support special signature functions by file extensions.
 Default support is provided for .dta files.</p></li>
 <li><p><strong>skip_scons_vs_check</strong> (<em>bool</em>) -- If false, will not output a warning when using a version of SCons that has not been tested.</p></li>
@@ -239,7 +238,7 @@ set the 'win_stata_hidden' key's value to False in the section [Programs].</p>
       &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
