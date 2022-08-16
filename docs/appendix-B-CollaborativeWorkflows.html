@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>B. Collaborative Workflows &#8212; statacons 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="b-collaborative-workflows">
+<h1>B. Collaborative Workflows<a class="headerlink" href="#b-collaborative-workflows" title="Permalink to this headline">¶</a></h1>
+<section id="the-problem">
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
+<p>In this Appendix, we discuss a few models for collaborative workflows.
+The main difficulty with collaboration is that, as we mention in the
+Limitations section (6.3), SCons only understands builds it has done
+itself. That is, SCons compares the current state of targets and
+dependencies to their state as recorded in the <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>
+database the last time SCons ran the build.</p>
+<p>As an example, suppose that Users A and B are collaborating on the
+Introductory Example of Section 2. User A is working primarily on the
+dataprep task and User B is working primarily on analysis. Imagine for
+the sake of this example that the dataprep task takes a very long time
+to run. User A has made some edits to <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code> and updated
+<code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code>. User A shares these two files with User B.</p>
+<p>The issue is that User B's SCons will look at <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code>, compare its
+current status to its status the last time <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> was built
+<em>as recorded in User B's <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code></em>, see that <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code> is
+different, and conclude that <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> needs to be rebuilt.
+User B could use the <code class="docutils literal notranslate"><span class="pre">assume_built()</span></code> or <code class="docutils literal notranslate"><span class="pre">assume_done()</span></code> options we have
+added to SCons to tell SCons that in fact <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code> is up to
+date, but in more complex projects this sort of mental
+dependency-tracking is prone to failure.</p>
+<p>The underlying problem is that there are three competing values: we want
+builds to be complete (all targets up-to-date), we do not want to
+duplicate work, and we want to automate the build and avoid manual
+workarounds, which are error-prone. Our preferred approach is to use the
+SCons <em>cache</em> to share built files. While this requires a small amount
+of effort to set up and some care to maintain, it satisfies all three
+values without introducing too much additional complexity. We will
+describe this approach below, then mention a few alternatives and their
+limitations.</p>
+<p>Our project Wiki contains a simple worked example of a
+collaborative project using the SCons cache along with GitHub: <a class="reference external" href="https://github.com/bquistorff/statacons/wiki/Collaboration-using-GitHub-and-the-SCons-cache">https://github.com/bquistorff/statacons/wiki/Collaboration-using-GitHub-and-the-SCons-cache</a>.</p>
+</section>
+<section id="scons-cache">
+<h2>SCons Cache<a class="headerlink" href="#scons-cache" title="Permalink to this headline">¶</a></h2>
+<p>Our preferred approach is to use the SCons <em>cache</em> to share derived
+files. See <strong>Listing B1</strong> for an example SConstruct.</p>
+<p><strong>Listing B1: SConstruct for Introductory Example Using SCons Cache</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># **** Setup from pystatacons package *****</span>
+<span class="kn">import</span> <span class="nn">pystatacons</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pystatacons</span><span class="o">.</span><span class="n">init_env</span><span class="p">()</span>
+<span class="c1"># use an sconsign database specific to this SConstruct</span>
+<span class="n">SConsignFile</span><span class="p">(</span><span class="s2">&quot;.sconsignCache&quot;</span><span class="p">)</span>
+<span class="c1"># set path to cache directory</span>
+<span class="c1"># shared cache dir</span>
+<span class="c1"># hard-coded -- if hard-coding path with spaces, *must* enclose in quotes</span>
+<span class="c1"># dropbox example</span>
+<span class="c1">#CacheDir(&#39;C:/Users/Username/Dropbox/SJ-BuildTools/simpleCacheShare&#39;)</span>
+<span class="c1"># local folder example</span>
+<span class="c1">#CacheDir(&#39;./scons_cache&#39;)</span>
+<span class="c1"># from config_local.ini</span>
+<span class="o">--</span> <span class="ow">in</span> <span class="n">config</span><span class="p">,</span> <span class="n">do</span> <span class="o">*</span><span class="ow">not</span><span class="o">*</span> <span class="n">enclose</span> <span class="n">path</span> <span class="k">with</span> <span class="n">spaces</span> <span class="ow">in</span> <span class="n">quotes</span>
+<span class="n">CacheDir</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;CONFIG&#39;</span><span class="p">][</span><span class="s1">&#39;Project&#39;</span><span class="p">][</span><span class="s1">&#39;cache_dir&#39;</span><span class="p">])</span>
+<span class="c1"># **** Substance begins *****</span>
+<span class="c1"># analysis</span>
+<span class="n">cmd_analysis</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/scatterplot.pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;outputs/regressionTable.tex&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/analysis.do&#39;</span> <span class="p">)</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">cmd_analysis</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">])</span>
+<span class="c1"># dataprep</span>
+<span class="n">cmd_dataprep</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">],</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/dataprep.do&#39;</span> <span class="p">)</span>
+<span class="n">Depends</span><span class="p">(</span><span class="n">cmd_dataprep</span><span class="p">,[</span><span class="s1">&#39;inputs/auto-original.dta&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In the SConstruct, we designate a shared folder to store the cache:</p>
+<p><code class="docutils literal notranslate"><span class="pre">CacheDir('path/to/cache')</span></code></p>
+<p>Rather than hard-code the path into the SConstruct, the path can be
+coded into a configuration file (e.g., <code class="docutils literal notranslate"><span class="pre">config_project.ini</span></code>,
+<code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code>, or other specified through the <code class="docutils literal notranslate"><span class="pre">config_file()</span></code>
+option), which the SConstruct can then read. Here, we use a local
+<code class="docutils literal notranslate"><span class="pre">scons_cache</span></code> folder so that this can be a self-contained example, but
+in practice this may be a shared drive or a folder on a file-sharing
+service. See <code class="docutils literal notranslate"><span class="pre">config_local_template.ini</span></code> for several examples.</p>
+<p>SCons will then store built files in the cache and, before building
+targets, check to see whether an up-to-date version is available in the
+cache. See the SCons User Guide for details on how this works.<a class="footnote-reference brackets" href="#id4" id="id1">1</a></p>
+<p>We have found that this approach handles the three competing goals of a
+build tool (complete builds; reduce unnecessary builds; automaticity
+instead of manual intervention) well, with a few caveats.</p>
+<p>The main caveat is that by default SCons will update the cache whenever
+a target is newly built, which is not desirable while writing and
+testing code since it will lead to filling the cache with unnecessary
+files, and other users will be repeatedly downloading these unnecessary
+files. It is good practice to update the cache only when you are sure
+the work is complete. There are two ways to do this.</p>
+<p>The first way is to use the command-line option <code class="docutils literal notranslate"><span class="pre">cache_readonly</span></code> to tell
+SCons to check and read from the cache but not update the cache with any
+built files, or <code class="docutils literal notranslate"><span class="pre">cache_disable</span></code> to tell SCons to ignore the cache
+entirely. Once you have successfully completed your build, use the
+option <code class="docutils literal notranslate"><span class="pre">cache_force</span></code> to force SCons to update the cache. This will also
+make it less likely that two users will attempt to update the same
+cached file at the same time.</p>
+<p>The second way is to edit the SConstruct so that the default is to have
+the cache disabled, and a command-line option is required to read to or
+write to the cache. We provide an example on our project Wiki: <a class="reference external" href="https://github.com/bquistorff/statacons/wiki/Cache-with-cache-disabled-as-default">https://github.com/bquistorff/statacons/wiki/Cache-with-cache-disabled-as-default</a>.</p>
+<p>A few additional caveats. First, the cache can get large and
+periodically need to be cleaned and rebuilt.<a class="footnote-reference brackets" href="#id5" id="id2">2</a> Second, when using the
+cache, SCons calculates build signatures regardless of the Decider
+method chosen, so there are no time savings from using, for example,
+<code class="docutils literal notranslate"><span class="pre">content-timestamp</span></code>. Of course, this does not affect those using the
+default <code class="docutils literal notranslate"><span class="pre">content</span></code>. Finally, in its own storage, the cache uses file
+signatures as filenames, instead of the cached file's own name, which is
+slightly inconvenient if you need to find and examine the cached version
+of a particular file. The <code class="docutils literal notranslate"><span class="pre">cache_debug</span></code> option will provide information
+on the files being used, and note that the file will be stored in a
+subfolder corresponding to the first two characters of the cached
+filename. For example, a cached file <code class="docutils literal notranslate"><span class="pre">d7581eba1ac59ad5f92b2fceba04477f</span></code>
+will be in subfolder <code class="docutils literal notranslate"><span class="pre">D7</span></code>.</p>
+<p>We list some useful command-line options for the cache below. Using
+these options together with <code class="docutils literal notranslate"><span class="pre">dry_run</span></code> can be instructive to get a
+preview of how SCons will interact with the cache.</p>
+<p>We list the Stata-style syntax first, then the standard SCons syntax.
+Recall that either syntax is allowed but the two cannot be mixed in a
+single command.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">cache_debug(-)</span></code> prints information on the cache files being used to the
+screen</p>
+<p>SCons equivalent: <code class="docutils literal notranslate"><span class="pre">–cache-debug=-</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">cache_debug(file)</span></code> saves information on the cache files being used to
+the file <code class="docutils literal notranslate"><span class="pre">file</span></code></p>
+<p>SCons equivalent: <code class="docutils literal notranslate"><span class="pre">–cache-debug=file</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">cache_disable</span></code> do not use files from the cache, do not write files to
+the cache</p>
+<p>SCons equivalent: <code class="docutils literal notranslate"><span class="pre">–cache-disable</span></code>, <code class="docutils literal notranslate"><span class="pre">–no-cache</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">cache_force</span></code> write all derived files to the cache, whether they are
+built in this call to SCons or have previously been built. This
+overrides the default, which is to write only files that are built or
+rebuilt files in the current call to SCons.</p>
+<p>SCons equivalent: <code class="docutils literal notranslate"><span class="pre">–cache-force</span></code>, <code class="docutils literal notranslate"><span class="pre">–cache-populate</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">cache_readonly</span></code> use files from the cache but do not write files to the
+cache</p>
+<p>SCons equivalent: <code class="docutils literal notranslate"><span class="pre">–cache-readonly</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">cache_show</span></code> by default, SCons will print &quot;<code class="docutils literal notranslate"><span class="pre">retrieved</span> <span class="pre">file</span> <span class="pre">from</span> <span class="pre">cache</span></code>&quot;
+to the screen when it pulls a file from the cache rather than building
+it. With the <code class="docutils literal notranslate"><span class="pre">cache_show</span></code> option, SCons will instead print what it
+<em>would have done</em> to build the file if it had not used the cache.</p>
+</div></blockquote>
+<blockquote>
+<div><p>SCons equivalent: <code class="docutils literal notranslate"><span class="pre">–cache-show</span></code></p>
+</div></blockquote>
+</section>
+<section id="other-options">
+<h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this headline">¶</a></h2>
+<p>Here are a few alternatives, along with what we see as their main
+drawbacks.</p>
+<section id="shared-sconsign-dblite-database">
+<h3>Shared <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> database<a class="headerlink" href="#shared-sconsign-dblite-database" title="Permalink to this headline">¶</a></h3>
+<p>Since SCons uses the <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> database to decide which targets
+need to be rebuilt, it is tempting to use a shared database, whether
+through a file-synchronization service like Dropbox or version-control
+system like Git or GitHub. However, this is unlikely to work well. Since
+the <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> is a single, binary file, version conflicts or
+file corruption can arise even if users are working on different aspects
+of a project. Furthermore, unless all users have all their code, targets
+and dependencies synchronized at all times, a shared <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>
+database will cause SCons to get very confused, since it will see
+discrepancies between files and database entries every time any user
+updates any file. This might be approximately workable if all users are
+synced to the same shared folder, e.g., a shared Dropbox folder, but
+this is not possible if one is using more full-featured source code and
+collaboration management solutions such as git.</p>
+</section>
+<section id="marking-files-as-built">
+<h3>Marking files as built<a class="headerlink" href="#marking-files-as-built" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">assume_built</span></code>/<code class="docutils literal notranslate"><span class="pre">assume_done</span></code> options we have added for <code class="docutils literal notranslate"><span class="pre">statacons</span></code>
+can help in one-off cases. See Section 3.2 of the main paper for their
+description. In the example above, User B could update to User A's
+latest <code class="docutils literal notranslate"><span class="pre">dataprep.do</span></code> and <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code>, then run</p>
+<p><code class="docutils literal notranslate"><span class="pre">statacons</span> <span class="pre">,</span> <span class="pre">assume_built(’outputs/auto-modified.dta’)</span></code></p>
+<p>SCons will then skip rebuilding <code class="docutils literal notranslate"><span class="pre">auto-modified.dta</span></code>, record the current
+file signature as in <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>, and move on to rebuilding the
+final outputs.</p>
+<p>While this approach can be useful, it relies on users accurately keeping
+track of what is up to date and what is not, and making manual choices
+in builds, both of which build tools are intended to make unnecessary.
+For example, we have found <code class="docutils literal notranslate"><span class="pre">assume_built(*)</span></code> to be useful if a minor
+change to the builder has caused SCons to think all files need to be
+re-built when in fact none of them do. Again, though, we have to be sure
+that the change to the builder will not result in any substantive
+change.</p>
+</section>
+</section>
+<section id="additional-comments-on-collaborative-workflows">
+<h2>Additional Comments on Collaborative Workflows<a class="headerlink" href="#additional-comments-on-collaborative-workflows" title="Permalink to this headline">¶</a></h2>
+<section id="version-control">
+<h3>Version Control<a class="headerlink" href="#version-control" title="Permalink to this headline">¶</a></h3>
+<p>If you are using a version control system like Git or SVN, we recommend
+that you do <em>not</em> keep <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code> or <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> under
+version control. In the case of <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code>, this is simply
+because the purpose of this file is to account for things that will vary
+across users. In the case of <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>, see our discussion
+under &quot;Shared .sconsign.dblite database&quot; above. There are a few additional Python-generated files (e.g.,
+<code class="docutils literal notranslate"><span class="pre">__pycache__</span></code>) that should not be kept under version control. In Git,
+this is handled with a <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> file. In the replication archive we
+provide for our Introductory Example, we have included an example
+<code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> that excludes the files above. In addition, we recommend
+excluding all generated files. That is, as a rule, we keep only code (in
+the broad sense of things a human has typed, as opposed to things
+generated by the computer) under version control. This is generally
+considered good practice but is essential when using the SCons cache,
+since the cache is already essentially handling version control for
+generated files, and having both SCons and the version control software
+attempting the same task will lead to conflicts.</p>
+<p>We do recommend keeping user-written programs under version control to
+ensure that all users have the same version of these programs. In our
+Introductory Example, we have kept user-written <code class="docutils literal notranslate"><span class="pre">estout</span></code> (Jann, Stata
+Journal, 2007) in the folder <code class="docutils literal notranslate"><span class="pre">code/ado/plus</span></code>. Our <code class="docutils literal notranslate"><span class="pre">profile.do</span></code> sets
+Stata's <code class="docutils literal notranslate"><span class="pre">adopath</span></code> to instruct Stata to look in this folder (and
+subfolders). Similarly, we keep <code class="docutils literal notranslate"><span class="pre">config_project.ini</span></code>, the <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>,
+<code class="docutils literal notranslate"><span class="pre">statacons.ado</span></code> and the other associated files under version control,
+again so that the build will be consistent across users. The downside of
+this practice is that you will need to maintain separate copies of the
+same programs for each project.</p>
+</section>
+<section id="shared-scons-cache">
+<h3>Shared SCons cache<a class="headerlink" href="#shared-scons-cache" title="Permalink to this headline">¶</a></h3>
+<p>If you are using Dropbox or a similar service to share your SCons cache,
+make sure that you have offline access to the folder containing the
+cache.<a class="footnote-reference brackets" href="#id6" id="id3">3</a> Using the &quot;Smart Sync&quot; or &quot;Streaming Access&quot; options that
+store files online and then fetch them when requested is likely to cause
+several problems. First, Python may not find folders that are only
+available in the cloud. Second, this will slow down the process of
+retrieving cached files. Third, you may not be able to access certain
+recently cached files when working offline.</p>
+<p>Finally, as of April 2022 we do not recommend Google Drive for sharing
+caches. Google Drive will sometimes be able to discern the type of
+cached files and will add a file extension to the filename in the cache.
+This happens especially frequently with <code class="docutils literal notranslate"><span class="pre">.pdf</span></code>s. This will confuse SCons
+and prevent it from successfully retrieving that file from the cache. We
+have not found this to occur with Dropbox.</p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>As of SCons 4.3.0 (December 2021), this is Section 22, &quot;Caching
+Built Files.&quot; See especially the first footnote in that section,
+which describes the information SCons stores and uses to determine
+whether a target is up to date.</p>
+</dd>
+<dt class="label" id="id5"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Rebuilding the cache does not require rebuilding the project, just
+erasing the cache and then calling SCons with the option
+<code class="docutils literal notranslate"><span class="pre">cache_force</span></code>.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>As of April 2022: in Dropbox, either turn off &quot;Smart Sync&quot; to make
+all of your Dropbox content available offline, or use &quot;Selective
+Sync&quot; to keep your cache folders available offline. While we
+currently do not recommend Google Drive for shared caches (see the
+next paragraph), if you do use Google Drive, choose either &quot;Mirror
+files&quot; to make <em>all</em> of your Google Drive content available offline,
+or follow the instructions under &quot;Stream files -- Choose specific
+files and folders to make available offline&quot; to keep your cache
+folders available offline.</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">statacons</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Installation instructions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-1-python-setup">Step 1: Python Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-2-statacons-installation-and-setup">Step 2: statacons installation and setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-3-test-run-with-introductory-example">Step 3: Test run with Introductory Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Stata package documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons">https://github.com/bquistorff/statacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project wiki page (additional options and features)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons/wiki">https://github.com/bquistorff/statacons/wiki</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Web tutorial based on Software Carpentry's make lesson:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="swc.html">statacons Web Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python Package API documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">OSF archive (software, replication code and data):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://osf.io/gbh4m/">https://osf.io/gbh4m/</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MetaArXiV paper archive:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.31222/osf.io/qesx6">https://doi.org/10.31222/osf.io/qesx6</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Statacons team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/appendix-B-CollaborativeWorkflows.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
