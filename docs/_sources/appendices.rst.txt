@@ -7,5 +7,6 @@ Appendices
 
    appendix-A-OtherAdvanced.md
    appendix-B-CollaborativeWorkflows.md
+   appendix-C-CompilingPDF.md
 
 
