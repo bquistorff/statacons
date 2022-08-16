@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>C. Compiling a PDF from the Introductory Example &#8212; statacons 3.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="c-compiling-a-pdf-from-the-introductory-example">
+<h1>C. Compiling a PDF from the Introductory Example<a class="headerlink" href="#c-compiling-a-pdf-from-the-introductory-example" title="Permalink to this headline">¶</a></h1>
+<p><strong>Figure C1: Workflow for Compiling PDF from Introductory Example</strong></p>
+<p><img alt="simplestWithPDF" src="_images/workflow-PDF.png" />
+<img alt="workflowLegend" src="_images/workflow-legend.png" /></p>
+<p><strong>Listing C2: SConstruct for Compiling PDF from Introductory Example</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># SConstructCompilePDF</span>
+<span class="c1"># **** Setup from pystatacons package *****</span>
+<span class="kn">import</span> <span class="nn">pystatacons</span> <span class="n">env</span> <span class="o">=</span> <span class="n">pystatacons</span><span class="o">.</span><span class="n">init_env</span><span class="p">()</span>
+<span class="n">Help</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;To compile analysis targets only:</span>
+<span class="s2">    &#39;statacons, file(SConstructCompilePDF)&#39;</span>
+<span class="s2">    &#39;scons --file=SConstructCompilePDF&#39;</span>
+<span class="s2">To clean only analysis targets (not compiled PDF)</span>
+<span class="s2">    &#39;statacons, file(SConstructCompilePDF) clean&#39;</span>
+<span class="s2">    &#39;scons --file=SConstructCompilePDF -c&#39;</span>
+<span class="s2">To compile PDF:</span>
+<span class="s2">    &#39;statacons compilePDF, file(SConstructCompilePDF)&#39;</span>
+<span class="s2">    &#39;scons --file=SConstructCompilePDF compilePDF&#39;</span>
+<span class="s2">To clean all targets plus all latex helper files (aux, bbl, etc)</span>
+<span class="s2">    &#39;statacons compilePDF, file(SConstructCompilePDF) clean&#39;</span>
+<span class="s2">    &#39;scons --file=SConstructCompilePDF compilePDF -c&#39;</span>
+<span class="s2">To clean only latex helper files (aux, bbl, etc)</span>
+<span class="s2">    &#39;statacons cleanPDFhelp, file(SConstructCompilePDF) clean&#39;</span>
+<span class="s2">    &#39;scons --file=SConstructCompilePDF cleanPDFhelp -c&#39; &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># **** Substance begins *****</span>
+<span class="c1"># dataprep</span>
+<span class="n">dataprep_Targets</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;outputs/auto-modified.dta&#39;</span><span class="p">]</span>
+<span class="n">Alias</span><span class="p">(</span><span class="s1">&#39;dataprep&#39;</span><span class="p">,</span><span class="n">dataprep_Targets</span><span class="p">)</span>
+<span class="n">cmd_dataprep</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">dataprep_Targets</span><span class="p">,</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/dataprep.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;inputs/auto-original.dta&#39;</span><span class="p">])</span>
+
+<span class="c1"># analysis</span>
+<span class="n">analysis_Targets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;outputs/scatterplot.pdf&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;outputs/regressionTable.tex&#39;</span><span class="p">]</span>
+<span class="n">Alias</span><span class="p">(</span><span class="s1">&#39;analysis&#39;</span><span class="p">,</span><span class="n">analysis_Targets</span><span class="p">)</span>
+<span class="n">cmd_analysis</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">StataBuild</span><span class="p">(</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">analysis_Targets</span><span class="p">,</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;code/analysis.do&#39;</span><span class="p">,</span>
+    <span class="n">depends</span> <span class="o">=</span> <span class="n">dataprep_Targets</span><span class="p">)</span>
+<span class="n">Default</span><span class="p">(</span><span class="s1">&#39;analysis&#39;</span><span class="p">)</span>
+
+<span class="c1"># compile PDF - SCons knows how to scan tex files for dependencies</span>
+<span class="n">env</span><span class="o">.</span><span class="n">Tool</span><span class="p">(</span><span class="s2">&quot;pdftex&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">AppendUnique</span><span class="p">(</span><span class="n">PDFLATEXFLAGS</span><span class="o">=</span><span class="s1">&#39;-quiet&#39;</span><span class="p">)</span>
+<span class="n">pdf_output</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">PDF</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s1">&#39;outputs/results.pdf&#39;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;code/results.tex&#39;</span><span class="p">)</span>
+<span class="n">Alias</span><span class="p">(</span><span class="s1">&#39;compilePDF&#39;</span><span class="p">,</span><span class="s1">&#39;outputs/results.pdf&#39;</span><span class="p">)</span>
+<span class="c1"># extra files generated by pdflatex to clean</span>
+<span class="n">pdfToClean</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;outputs/results&quot;</span><span class="o">+</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.synctex.gz&#39;</span><span class="p">,</span><span class="s1">&#39;.fls&#39;</span><span class="p">,</span><span class="s1">&#39;.log&#39;</span><span class="p">,</span><span class="s1">&#39;.aux&#39;</span><span class="p">,</span><span class="s1">&#39; &gt; .bbl&#39;</span><span class="p">,</span><span class="s1">&#39;.out&#39;</span><span class="p">,</span><span class="s1">&#39;.dvi&#39;</span><span class="p">,</span><span class="s1">&#39;.blg&#39;</span><span class="p">]]</span>
+<span class="n">Clean</span><span class="p">(</span><span class="s1">&#39;cleanPDFhelp&#39;</span><span class="p">,</span><span class="n">pdfToClean</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p><strong>Listing C3: SCons output from Compiling PDF from Introductory Example</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span> <span class="n">statacons</span> <span class="n">compilePDF</span><span class="p">,</span> <span class="n">file</span><span class="p">(</span><span class="n">SConstructCompilePDF</span><span class="p">)</span> <span class="n">debug</span><span class="p">(</span><span class="n">explain</span><span class="p">)</span>
+<span class="n">tree</span><span class="p">(</span><span class="n">status</span><span class="p">,</span><span class="n">prune</span><span class="p">)</span> <span class="n">scons</span><span class="p">:</span> <span class="n">Reading</span> <span class="n">SConscript</span> <span class="n">files</span> <span class="o">...</span>
+<span class="n">Using</span> <span class="s1">&#39;LabelsFormatsOnly&#39;</span> <span class="n">custom_datasignature</span><span class="o">.</span>
+<span class="n">Calculates</span> <span class="n">timestamp</span><span class="o">-</span><span class="n">independent</span> <span class="n">checksum</span> <span class="n">of</span> <span class="n">dataset</span><span class="p">,</span>
+  <span class="n">including</span> <span class="n">variable</span> <span class="n">formats</span><span class="p">,</span> <span class="n">variable</span> <span class="n">labels</span> <span class="ow">and</span> <span class="n">value</span> <span class="n">labels</span><span class="o">.</span>
+<span class="n">Edit</span> <span class="n">use_custom_datasignature</span> <span class="ow">in</span> <span class="n">config_project</span><span class="o">.</span><span class="n">ini</span> <span class="n">to</span> <span class="n">change</span><span class="o">.</span>
+  <span class="p">(</span><span class="n">other</span> <span class="n">options</span> <span class="n">are</span> <span class="n">Strict</span><span class="p">,</span> <span class="n">DataOnly</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">reading</span> <span class="n">SConscript</span> <span class="n">files</span><span class="o">.</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">Building</span> <span class="n">targets</span><span class="o">...</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">building</span> <span class="s1">&#39;outputs results.pdf&#39;</span> <span class="n">because</span> <span class="n">it</span> <span class="n">doesn</span><span class="s1">&#39;t exist</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">D</span> <span class="n">outputs</span> <span class="o">&amp;&amp;</span> <span class="n">pdflatex</span> <span class="o">-</span><span class="n">interaction</span><span class="o">=</span><span class="n">nonstopmode</span> <span class="o">-</span><span class="n">recorder</span> <span class="o">-</span><span class="n">quiet</span> <span class="n">results</span><span class="o">.</span><span class="n">tex</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">D</span> <span class="n">outputs</span> <span class="o">&amp;&amp;</span> <span class="n">bibtex</span> <span class="n">results</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">D</span> <span class="n">outputs</span> <span class="o">&amp;&amp;</span> <span class="n">pdflatex</span> <span class="o">-</span><span class="n">interaction</span><span class="o">=</span><span class="n">nonstopmode</span> <span class="o">-</span><span class="n">recorder</span> <span class="o">-</span><span class="n">quiet</span> <span class="n">results</span><span class="o">.</span><span class="n">tex</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">D</span> <span class="n">outputs</span> <span class="o">&amp;&amp;</span> <span class="n">pdflatex</span> <span class="o">-</span><span class="n">interaction</span><span class="o">=</span><span class="n">nonstopmode</span> <span class="o">-</span><span class="n">recorder</span> <span class="o">-</span><span class="n">quiet</span> <span class="n">results</span><span class="o">.</span><span class="n">tex</span>
+<span class="n">E</span>           <span class="o">=</span> <span class="n">exists</span>
+  <span class="n">R</span>         <span class="o">=</span> <span class="n">exists</span> <span class="ow">in</span> <span class="n">repository</span> <span class="n">only</span>
+   <span class="n">b</span>        <span class="o">=</span> <span class="n">implicit</span> <span class="n">builder</span>
+    <span class="n">B</span>       <span class="o">=</span> <span class="n">explicit</span> <span class="n">build</span>
+     <span class="n">S</span>      <span class="o">=</span> <span class="n">side</span> <span class="n">effect</span>
+      <span class="n">P</span>     <span class="o">=</span> <span class="n">precious</span>
+       <span class="n">A</span>    <span class="o">=</span> <span class="n">always</span> <span class="n">build</span>
+        <span class="n">C</span>   <span class="o">=</span> <span class="n">current</span>
+         <span class="n">N</span>  <span class="o">=</span> <span class="n">no</span> <span class="n">clean</span>
+          <span class="n">H</span> <span class="o">=</span> <span class="n">no</span> <span class="n">cache</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">b</span> <span class="p">]</span><span class="o">+-</span><span class="n">compilePDF</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">B</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span><span class="n">outputs</span>\<span class="n">results</span><span class="o">.</span><span class="n">pdf</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span><span class="n">code</span>\<span class="n">results</span><span class="o">.</span><span class="n">tex</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span><span class="n">code</span>\<span class="n">results</span><span class="o">.</span><span class="n">bib</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">B</span> <span class="n">P</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span><span class="n">outputs</span>\<span class="n">regressionTable</span><span class="o">.</span><span class="n">tex</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">C</span> <span class="p">]</span> <span class="o">|</span> <span class="o">+-</span><span class="n">code</span>\<span class="n">analysis</span><span class="o">.</span><span class="n">do</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">B</span> <span class="n">P</span> <span class="n">C</span> <span class="p">]</span> <span class="o">|</span> <span class="o">+-</span><span class="n">outputs</span>\<span class="n">auto</span><span class="o">-</span><span class="n">modified</span><span class="o">.</span><span class="n">dta</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">C</span> <span class="p">]</span> <span class="o">|</span> <span class="o">+-</span><span class="n">code</span>\<span class="n">dataprep</span><span class="o">.</span><span class="n">do</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">C</span> <span class="p">]</span> <span class="o">|</span> <span class="o">+-</span><span class="n">inputs</span>\<span class="n">auto</span><span class="o">-</span><span class="n">original</span><span class="o">.</span><span class="n">dta</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">B</span> <span class="n">P</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span><span class="n">outputs</span>\<span class="n">scatterplot</span><span class="o">.</span><span class="n">pdf</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span><span class="n">code</span>\<span class="n">analysis</span><span class="o">.</span><span class="n">do</span>
+<span class="p">[</span><span class="n">E</span> <span class="n">B</span> <span class="n">P</span> <span class="n">C</span> <span class="p">]</span> <span class="o">+-</span>\<span class="p">[</span><span class="n">outputs</span>\<span class="n">auto</span><span class="o">-</span><span class="n">modified</span><span class="o">.</span><span class="n">dta</span>\<span class="p">]</span>
+<span class="n">scons</span><span class="p">:</span> <span class="n">done</span> <span class="n">building</span> <span class="n">targets</span><span class="o">.</span>
+
+</pre></div>
+</div>
+<p><strong>Figure C4: Compiled PDF from Introductory Example</strong></p>
+<p><a class="reference download internal" download="" href="_downloads/b5b5ee4e28c14eb2e16082f59c2cec6d/results.pdf"><span class="xref download myst">results.pdf</span></a></p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">statacons</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Installation instructions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-1-python-setup">Step 1: Python Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-2-statacons-installation-and-setup">Step 2: statacons installation and setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#step-3-test-run-with-introductory-example">Step 3: Test run with Introductory Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Stata package documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="statacons.html">statacons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stataconsign.html">stataconsign</a></li>
+<li class="toctree-l1"><a class="reference internal" href="complete_datasignature.html">complete_datasignature</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project repository (for issues, bug reports, and contributions)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons">https://github.com/bquistorff/statacons</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project wiki page (additional options and features)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/bquistorff/statacons/wiki">https://github.com/bquistorff/statacons/wiki</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Web tutorial based on Software Carpentry's make lesson:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="swc.html">statacons Web Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python package API documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python Package API documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">OSF archive (software, replication code and data):</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://osf.io/gbh4m/">https://osf.io/gbh4m/</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MetaArXiV paper archive:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.31222/osf.io/qesx6">https://doi.org/10.31222/osf.io/qesx6</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Statacons team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/appendix-C-CompilingPDF.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
