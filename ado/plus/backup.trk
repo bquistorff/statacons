@@ -1,0 +1,196 @@
+* 00000005
+*! version 1.0.0
+* Do not erase or edit this file
+* It is used by Stata to track the ado and help
+* files you have installed.
+
+S https://haghish.github.io/github
+N github.pkg
+D  2 Jan 2022
+U 1
+d 'GITHUB': github package manager
+d 
+d search, install, and manage github packages
+d 
+d Distribution-Date:   20210920
+d License: MIT
+d 
+f a\abspath.ado
+f a\abspath.sthlp
+f g\gitget.ado
+f g\gitget.dta
+f g\gitget.sthlp
+f g\gitgetlist.ado
+f g\github.ado
+f g\github.dlg
+f g\github.sthlp
+f g\githubcheck.ado
+f g\githubcheckfilename.ado
+f g\githubconfirm.ado
+f g\githubdb.ado
+f g\githubdependency.ado
+f g\githubfiles.dta
+f g\githubfindall.ado
+f g\githubfindall.sthlp
+f g\githubhot.ado
+f g\githublistpack.ado
+f g\githublistpack.sthlp
+f g\githubmake.ado
+f g\githuboutput.ado
+f g\githubquery.ado
+f g\githubsearch.ado
+f g\githubsearchsteps.ado
+f m\make.ado
+f m\make.dlg
+f m\make.sthlp
+f m\makedlg.ado
+f w\wdpermissions.ado
+e
+S w:\SJ_StataSCons\pkg\markdoc-5.0.2
+N markdoc.pkg
+D  2 Jan 2022
+U 2
+d 'MARKDOC': a general-purpose literate programming package
+d 
+d generate dynamic document, slides, stata help files,  and package vignette in various formats
+d 
+d Distribution-Date:   20190610
+d License: MIT
+d 
+f m\markdoc.ado
+f m\markdoc.dlg
+f m\markdoc.sthlp
+f m\markdoc_formal.docx
+f m\markdoc_minimal.docx
+f m\markdoc_simple.docx
+f m\markdoc_stata.docx
+f m\markdoc_title.dlg
+f m\markdoccheck.ado
+f m\markdocpandoc.ado
+f m\markdocstyle.ado
+f m\markdocversion.ado
+f m\markdocwkhtmltopdf.ado
+f m\markup.ado
+f m\mdconvert.ado
+f m\mdconvert.sthlp
+f m\mdminor.ado
+f m\mdminor.sthlp
+f m\mini.ado
+f m\mini.dlg
+f m\mini.sthlp
+f p\pandoc.ado
+f p\pandoc.sthlp
+f r\rundoc.ado
+f s\sthlp.ado
+f s\sthlp.sthlp
+f w\wkhtmltopdf.ado
+f w\wkhtmltopdf.sthlp
+e
+S https://raw.githubusercontent.com/haghish/weaver/master
+N weaver.pkg
+D  2 Jan 2022
+U 3
+d 'WEAVER': module to produce dynamic reports in HTML, LaTeX and PDF
+d 
+d  Weaver produces dynamic reports in HTML, LaTeX, and PDF. It
+d includes a built-in  JavaScript syntax highlighter and a
+d simplified markup language which makes writing  and styling text
+d more convenient. Weaver is primarily a new log system that can
+d be run in parallel with Stata smcl log system. However, it is not
+d autonomous and allows the users to select what should appear in
+d the HTML or LaTeX log. The log can is updated in real-time  and
+d the user can create a PDF preview of the document at any point.
+d 
+d KW: Dynamic Document
+d KW: Reproducible Research
+d KW: Pandoc
+d KW: MarkDoc
+d KW: Markdown
+d KW: smcl
+d KW: HTML
+d KW: LaTeX
+d KW: Log
+d 
+d Requires: Stata version 11
+d 
+d Distribution-Date: 20160929
+d 
+d Author: E.F. Haghish, University of Freiburg
+d Support: email haghish@@imbi.uni-freiburg.de
+d 
+f w\weave.ado
+f w\weave.sthlp
+f w\weaver.sthlp
+f c\codes.ado
+f d\div.ado
+f d\div.sthlp
+f h\html.ado
+f h\html.sthlp
+f i\img.ado
+f i\img.sthlp
+f r\report.ado
+f r\reportcheck.ado
+f r\results.ado
+f t\tbl.ado
+f t\tbl.sthlp
+f t\txt.ado
+f t\txt.sthlp
+f w\weavend.ado
+f w\weavercheck.ado
+f w\weavermarkup.ado
+f w\weavermath.ado
+f w\weaver_markup.sthlp
+f w\weaver_mathematical_notation.sthlp
+f w\weavercontroller.ado
+f w\weaverstyle.ado
+f w\weaverversion.ado
+f w\weaverwkhtmltopdf.ado
+f w\weaverzoom.ado
+e
+S https://raw.githubusercontent.com/haghish/statax/master
+N statax.pkg
+D  2 Jan 2022
+U 4
+d 'STATAX': module to highlight Stata syntax
+d 
+d  Statax is a JavaScript and LaTeX engine for highlighting Stata syntax
+d  in LaTeX and web-based documents. It can be used in online forum or any
+d  website or blog for highlighting Stata syntax. The program
+d  acurately highlights Stata commands, functions, string, local
+d  and global macros, digits, comments, and braces.
+d 
+d KW: Syntax highlighting
+d KW: HTML
+d KW: LaTeX
+d 
+d Requires: Stata version 11
+d 
+d Distribution-Date: 20160914
+d 
+d Author: E.F. Haghish, University of Southern Denmark
+d Support: email haghish@imada.sdu.dk
+d 
+f s\sh_main.js
+f s\statax.css
+f s\statax.js
+f s\stataxsource.js
+f s\sunset.css
+f d\daring.css
+f w\wrangler.css
+f s\statax.tex
+f s\sunset.tex
+f d\daring.tex
+f w\wrangler.tex
+e
+S https://raw.githubusercontent.com/haghish/md2smcl/master
+N md2smcl.pkg
+D  2 Jan 2022
+U 5
+d 'MD2SMCL': a Stata module to convert Markdown syntax in coumpound double-string
+d 
+d Distribution-Date:   20190609
+d License: MIT
+d 
+f m\md2smcl.ado
+f m\md2smcl.sthlp
+e
