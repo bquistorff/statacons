@@ -1,1 +1,8 @@
+pkg/__pycache__/*
+*.pyc
+*.sconsign.dblite
+*.zip
+.env
+*.log
+.vscode/
 docs/.buildinfo

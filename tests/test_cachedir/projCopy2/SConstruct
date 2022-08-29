@@ -1,0 +1,27 @@
+# **** Boiler-plate code *****
+import pystatacons
+env = pystatacons.init_env()
+
+# *** Configuration *****
+CacheDir(env['CONFIG']['SCons']['CacheDir'])
+
+# *** define tasks (dataprep and analysis) ***
+
+cmd1 = env.StataBuild(
+    target = ['out1.dta', 'out2.dta'], 
+    source = 'gen_out1_out2.do'
+)
+
+cmd2 = env.StataBuild(
+    target = ['out3.dta'], 
+    source = 'use_out1_gen_out3.do'
+)
+Depends(cmd2, ['out1.dta'])
+
+cmd3 = env.StataBuild(
+    target = ['out4.dta'], 
+    source = 'use_out2_gen_out4.do'
+)
+Depends(cmd3, ['out2.dta'])
+
+

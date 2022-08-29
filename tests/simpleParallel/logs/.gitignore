@@ -1,0 +1,10 @@
+# Ignore everything
+*
+# Don't ignore directories, so we can recurse into them
+!*/
+# Don't ignore .gitignore and .gitkeep files
+# having .gitkeepdir means git will version the directory, but no contents (since we're ignoring them)
+!.gitignore
+!.gitkeepdir
+# don't ignore smcl files -- these are text and useful to have under version control
+!.smcl

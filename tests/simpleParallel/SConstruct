@@ -1,0 +1,13 @@
+import pystatacons
+env = pystatacons.init_env()
+
+# **** Substance begins        *****
+
+wait_time= 10
+n_tasks = 4
+for t in range(n_tasks):
+    env.StataBuild(
+        target = ['outputs/auto-modified' + str(t) + '.dta'],
+        source = 'code/dataprep.do',
+        params = str(t) + " " + str(wait_time)
+    )

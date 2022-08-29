@@ -1,0 +1,21 @@
+# things to ignore in this directory and all subdirectories
+
+# SCons - ignore all dblite
+*.dblite
+
+# ignore all temp files, e.g. .lyx~
+*~
+
+
+# things to ignore in this directory only
+config_local.ini
+
+# ignore nohup.out from batch job
+/*.out
+/nohup.out
+# ignore log-files from batch
+/*.log
+/*.log.extra
+utils/__pycache__/*
+
+.ipynb_checkpoints/*

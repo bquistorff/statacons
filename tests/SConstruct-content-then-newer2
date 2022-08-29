@@ -1,0 +1,10 @@
+import pystatacons
+env = pystatacons.init_env()
+
+
+env.StataBuild(
+    target=['outputs/auto-modified.dta'],
+    source='code/dataprep.do',
+    depends=['inputs/simple-input.txt']
+)
+Decider(pystatacons.decider_str_lookup['content-timestamp-newer-timestamp-changed'])

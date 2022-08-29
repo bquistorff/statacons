@@ -1,0 +1,54 @@
+import pystatacons
+env = pystatacons.init_env()
+
+# dataprep
+cmd_dataprep = env.StataBuild(
+    target=['outputs/auto-modified.dta'],
+    source='code/dataprep.do'
+)
+Depends(cmd_dataprep, ['inputs/auto-original.dta'])
+
+# analysis
+cmd_analysis = env.StataBuild(
+    target=['outputs/auto-modified2.dta'],
+    source='code/analysis.do'
+)
+Depends(cmd_analysis, ['outputs/auto-modified.dta'])
+
+Default(['outputs/auto-modified.dta', 'outputs/auto-modified2.dta'])
+
+# Error
+env.StataBuild(
+    target=['outputs/error.pdf'],
+    source='code/error.do'
+)
+
+
+# CWD Absolute path
+env.StataBuild(
+    target=['outputs/auto-modified-cwd_abs.dta'],
+    source='code/cwd_abs.do',
+    depends=['inputs/auto-original.dta']
+)
+
+# CWD source dir
+env.StataBuild(
+    target=['outputs/auto-modified-cwd_source.dta'],
+    source='code/cwd_source.do',
+    depends=['inputs/auto-original.dta']
+)
+
+# Any escapes needed for parens or double-quotes?
+env.StataBuild(
+    target=['outputs/auto-modified-escape.dta'],
+    source='code/escape.do',
+    params='saving("outputs/auto-modified-escape.dta")'
+)
+
+# Python builder
+env.Append(BUILDERS={'PyBuilder': Builder(action='python $SOURCE > out.log')})
+env.PyBuilder(target="outputs/py.txt", source="code/test.py")
+
+# R builder
+env.Append(BUILDERS={'RBuilder': Builder(action='Rscript --vanilla $SOURCE > out.log')})
+env.RBuilder(target="outputs/mtcars.rds", source="code/test.R")
