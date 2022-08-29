@@ -1,0 +1,18 @@
+# this is a model gitignore file
+# to use it, copy to your main project directory
+# and remove _template
+
+# things to ignore in this directory and all subdirectories
+
+# SCons - ignore all dblite
+*.dblite
+
+# things to ignore in this directory only
+# config_local.ini and debugging-checklist.do are both things we want
+#  to allow different users to set independently
+config_local.ini
+debugging-checklist.do
+/*.smcl
+
+# ignore log-files from batch
+/*.log

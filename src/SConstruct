@@ -1,0 +1,49 @@
+# **** Setup and configuration *****
+
+import pystatacons
+env = pystatacons.init_env()
+
+    
+# **** Substance begins        *****
+
+# Basic SConstruct Recipe
+task_name = env.StataBuild(
+      target = ['path/to/target1.ext', 'path/to/target2.ext'],
+      source = 'path/to/dofile.do'
+)
+Depends(task_name, ['path/to/dependency1.ext',
+                    'path/to/dependency2.ext']
+)
+
+# Additional Options for SConstruct Recipe
+task_name = env.StataBuild(
+      target = ['path/to/target1.ext', 'path/to/target2.ext'],
+      source = 'path/to/source.ext',
+      file_cmd = "command",
+      params = 'arguments or options',
+      depends = ['path/to/dependency1.ext', 'path/to/dependency2.ext']
+)
+
+
+# example of basic recipe 
+cmd_analysis = env.StataBuild(
+    target = ['outputs/scatterplot.pdf',
+              'outputs/regressionTable.tex'],
+    source = 'code/analysis.do'
+)
+Depends(cmd_analysis, ['outputs/auto-modified.dta'])
+# should lead to batch mode stata:
+#  do code/analysis.do 
+# to build outputs/scatterplot.pdf and outputs/regressionTable.tex
+
+# example with parameters and non-do-file command 
+helpFile = env.StataBuild(
+    target = ['statacons.sthlp'],
+    do_file = 'statacons.ado',
+    file_cmd = "markdoc",
+    params = ', export\(statacons.sthlp\) mini replace'
+)
+# should lead to batch mode stata:
+#  markdoc statacons.ado, export(sthlp) replace mini
+#  to build statacons.sthlp
+
