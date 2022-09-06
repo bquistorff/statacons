@@ -9,7 +9,7 @@ With data analysis projects it can be difficult to know what needs to be rebuilt
 
 The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <https://bquistorff.github.io/statacons/index.html> hosts or links to all `statacons` resources, including
 
- - The paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Under review at the Stata Journal. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
+ - The paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Accepted at the Stata Journal. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
  - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
  - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
  - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features, a troubleshooting guide, ideas for future improvements, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
