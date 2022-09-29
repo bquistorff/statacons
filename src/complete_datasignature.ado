@@ -54,6 +54,8 @@ if "`meta'"!="nometa" {
             }
         }
     }
+    
+    //could add the sortlist: -describe, varlist; r(sortlist)-
 
     file close meta_handle
     qui checksum "`meta_fname'"
