@@ -21,6 +21,8 @@ The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <ht
 
 See the [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
 
+We have tested `statacons` with Stata versions 16 and 17, flavors / editions IC/BE, SE and MP, for Windows, Mac and Unix, with Python 3.6, 3.8 and 3.10 and SCons 4.3 and 4.4, although not all combinations of these parameters.
+
 ## Project components:
 
 - A Stata `statacons` command to run `scons` (a Python package/script) from inside of Stata so that one does not have to use the system terminal. 
