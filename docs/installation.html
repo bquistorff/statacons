@@ -15,7 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="statacons" href="statacons.html" />
+    <link rel="next" title="Appendices" href="appendices.html" />
     <link rel="prev" title="Welcome to the statacons home page" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -38,8 +38,8 @@
 <p>The following are required :</p>
 <ul class="simple">
 <li><p>Stata 16.0 or later</p></li>
-<li><p>Python 3.5 or later (3.8 required for some advanced options)</p></li>
-<li><p>SCons 4.2 or later</p></li>
+<li><p>Python 3.6 or later (3.8 required for some advanced options)</p></li>
+<li><p>SCons 4.3 or later</p></li>
 </ul>
 </section>
 <section id="step-1-python-setup">
@@ -61,7 +61,7 @@ implementation of Python. Some popular examples include</p>
 </ul>
 <section id="step-1-1-install-python">
 <h2>Step 1.1: Install Python<a class="headerlink" href="#step-1-1-install-python" title="Permalink to this headline">¶</a></h2>
-<p>Install Python 3.5 or later (3.8 or later recommended).</p>
+<p>Install Python 3.6 or later (3.8 or later recommended).</p>
 </section>
 <section id="step-1-2-configure-stata-to-work-with-python">
 <h2>Step 1.2: Configure Stata to work with Python<a class="headerlink" href="#step-1-2-configure-stata-to-work-with-python" title="Permalink to this headline">¶</a></h2>
@@ -170,7 +170,7 @@ can instruct SCons to use a custom location or filename instead.</p>
 <ul class="simple">
 <li><p>set your ado-path so that <code class="docutils literal notranslate"><span class="pre">statacons</span></code> and other packages are installed in the project folder. This will ensure that all users have the same version of all ado-files. See <code class="docutils literal notranslate"><span class="pre">profile_template.do</span></code> in the <code class="docutils literal notranslate"><span class="pre">utils</span></code> folder</p></li>
 <li><p>files to keep under version control: <code class="docutils literal notranslate"><span class="pre">SConstruct</span></code>, <code class="docutils literal notranslate"><span class="pre">config_project.ini</span></code></p></li>
-<li><p>files to <em>exclude</em> from version control: <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code>, <code class="docutils literal notranslate"><span class="pre">debugging-checklist.do</span></code>, all generated files, including SConsign files (e.g., <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>) and batch-generated <code class="docutils literal notranslate"><span class="pre">.log</span></code>-files. See <code class="docutils literal notranslate"><span class="pre">.gitignore_template</span></code> in the <code class="docutils literal notranslate"><span class="pre">utils</span></code> folder for what we recommend.</p></li>
+<li><p>files to <em>exclude</em> from version control: <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code>, all generated files, including SConsign files (e.g., <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code>) and batch-generated <code class="docutils literal notranslate"><span class="pre">.log</span></code>-files. See <code class="docutils literal notranslate"><span class="pre">.gitignore_template</span></code> in the <code class="docutils literal notranslate"><span class="pre">utils</span></code> folder for what we recommend.</p></li>
 </ul>
 <p>See the Online Appendix Section B for more details on working with version control.</p>
 </section>
@@ -206,6 +206,10 @@ repository</a>. To run the example, unpack the zip archive and follow the steps 
 <li class="toctree-l1"><a class="reference internal" href="#step-1-python-setup">Step 1: Python Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#step-2-statacons-installation-and-setup">Step 2: statacons installation and setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#step-3-test-run-with-introductory-example">Step 3: Test run with Introductory Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendices:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Stata package documentation:</span></p>
 <ul>
@@ -243,7 +247,7 @@ repository</a>. To run the example, unpack the zip archive and follow the steps 
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to the statacons home page</a></li>
-      <li>Next: <a href="statacons.html" title="next chapter">statacons</a></li>
+      <li>Next: <a href="appendices.html" title="next chapter">Appendices</a></li>
   </ul></li>
 </ul>
 </div>

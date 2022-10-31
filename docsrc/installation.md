@@ -4,9 +4,9 @@ The following are required :
 
 -   Stata 16.0 or later
 
--   Python 3.5 or later (3.8 required for some advanced options)
+-   Python 3.6 or later (3.8 required for some advanced options)
 
--   SCons 4.2 or later
+-   SCons 4.3 or later
 
 # Step 1: Python Setup
 
@@ -28,7 +28,7 @@ implementation of Python. Some popular examples include
 -   Unix-like (e.g., Linux): terminal
 
 ## Step 1.1: Install Python
-Install Python 3.5 or later (3.8 or later recommended).
+Install Python 3.6 or later (3.8 or later recommended).
 
 ## Step 1.2: Configure Stata to work with Python
 
@@ -146,7 +146,7 @@ If you are using version control software such as git, here are a few recommenda
 
 -   files to keep under version control: `SConstruct`, `config_project.ini`
 
--   files to *exclude* from version control: `config_local.ini`, `debugging-checklist.do`, all generated files, including SConsign files (e.g., `.sconsign.dblite`) and batch-generated `.log`-files. See `.gitignore_template` in the `utils` folder for what we recommend.
+-   files to *exclude* from version control: `config_local.ini`, all generated files, including SConsign files (e.g., `.sconsign.dblite`) and batch-generated `.log`-files. See `.gitignore_template` in the `utils` folder for what we recommend.
 
 See the Online Appendix Section B for more details on working with version control.
 
