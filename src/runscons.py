@@ -37,6 +37,7 @@ if 'SCons' in globals():
     del SCons
 import SCons  # noqa: E402
 import SCons.Script  # noqa: E402
+from pkg_resources import packaging
 
 # Add the python dir to path otherwise SCons can't call python commands
 if platform.system() == "Windows":
@@ -57,7 +58,8 @@ if platform.system() == "Windows":
 # Patch things up for running in Stata (SCons doesn't handle these non-standard situations well)
 # OK to do even if not in Stata
 SCons.Script.Main.revert_io = sconstruct_fns.revert_io2
-SCons.Job.Jobs._reset_sig_handler = sconstruct_fns._reset_sig_handler2
+if packaging.version.parse(SCons.__version__) < packaging.version.parse("4.3.0"):
+    SCons.Job.Jobs._reset_sig_handler = sconstruct_fns._reset_sig_handler2
 
 # Actually execute:
 # If we don't catch SystemExit then it'll always display a "SystemExit: 0" even if no error.
