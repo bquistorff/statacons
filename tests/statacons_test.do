@@ -12,7 +12,7 @@ loc py_env "`r(python_env)'"
 if "`py_env'"!="`c(python_exec)'" {
 	set python_exec "`r(python_env)'"
 }
-if substr(`"$S_ADO"',3,6)!="../pkg" {
+if substr(`"$S_ADO"',3,6)!="../src" {
 	adopath ++ "`c(pwd)'/../src"
 }
 
