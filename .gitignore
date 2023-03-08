@@ -1,4 +1,5 @@
 pkg/__pycache__/*
+local/
 *.pyc
 *.sconsign.dblite
 *.zip
