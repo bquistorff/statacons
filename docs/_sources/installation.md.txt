@@ -6,7 +6,7 @@ The following are required :
 
 -   Python 3.6 or later (3.8 required for some advanced options)
 
--   SCons 4.3 or later
+-   SCons 4.3 or later (SCons 4.5 or later requires statacons 3.0.1 or later)
 
 # Step 1: Python Setup
 
@@ -156,3 +156,19 @@ Replication code and data for our Introductory Example as well as the extensions
 <https://github.com/bquistorff/statacons/raw/main/examples/stataconsIntro.zip>,
 posted to [our
 repository](https://github.com/bquistorff/statacons). To run the example, unpack the zip archive and follow the steps in Section 2 of the paper.
+
+
+# Updating statacons
+
+To update the statacons Stata package to the latest version, enter the following in Stata:
+
+~~~~
+    net install statacons, from(https://raw.github.com/bquistorff/statacons/main/) force replace
+~~~~
+
+To update the pystatacons Python package to the latest version, enter the following at the appropriate Python prompt:
+
+~~~~
+    pip install --upgrade pystatacons
+~~~~
+

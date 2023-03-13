@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Requirements &#8212; statacons 3.0.0 documentation</title>
+    <title>Requirements &#8212; statacons 3.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
 <ul class="simple">
 <li><p>Stata 16.0 or later</p></li>
 <li><p>Python 3.6 or later (3.8 required for some advanced options)</p></li>
-<li><p>SCons 4.3 or later</p></li>
+<li><p>SCons 4.3 or later (SCons 4.5 or later requires statacons 3.0.1 or later)</p></li>
 </ul>
 </section>
 <section id="step-1-python-setup">
@@ -182,6 +182,17 @@ can instruct SCons to use a custom location or filename instead.</p>
 posted to <a class="reference external" href="https://github.com/bquistorff/statacons">our
 repository</a>. To run the example, unpack the zip archive and follow the steps in Section 2 of the paper.</p>
 </section>
+<section id="updating-statacons">
+<h1>Updating statacons<a class="headerlink" href="#updating-statacons" title="Permalink to this headline">¶</a></h1>
+<p>To update the statacons Stata package to the latest version, enter the following in Stata:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">net</span> <span class="n">install</span> <span class="n">statacons</span><span class="p">,</span> <span class="n">from</span><span class="p">(</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bquistorff</span><span class="o">/</span><span class="n">statacons</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="p">)</span> <span class="n">force</span> <span class="n">replace</span>
+</pre></div>
+</div>
+<p>To update the pystatacons Python package to the latest version, enter the following at the appropriate Python prompt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pystatacons</span>
+</pre></div>
+</div>
+</section>
 
 
           </div>
@@ -206,6 +217,7 @@ repository</a>. To run the example, unpack the zip archive and follow the steps 
 <li class="toctree-l1"><a class="reference internal" href="#step-1-python-setup">Step 1: Python Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#step-2-statacons-installation-and-setup">Step 2: statacons installation and setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#step-3-test-run-with-introductory-example">Step 3: Test run with Introductory Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#updating-statacons">Updating statacons</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Appendices:</span></p>
 <ul>
@@ -277,7 +289,7 @@ repository</a>. To run the example, unpack the zip archive and follow the steps 
       &copy;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
