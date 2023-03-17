@@ -6,7 +6,7 @@ In `src/`: In Stata `zipfile SConstruct config_project.ini utils, saving(project
 In folder `pypkg`.
 
 ## Building
-Requirements (python packages): `build`, `wheel`, `setuptools`
+Requirements (python packages): `build` (`python-build` in Anaconda), `wheel`, `setuptools`
 
 ```
 python -m build
