@@ -1,30 +1,24 @@
 # statacons
 ## Building
-1. In `src/`: Bump version + date in `statacons.pkg` and `statacons.ado` (both) and `stataconsign.ado` (both).
-2. In `src/`: In Stata `do buildHelpFiles.do`
-3. In `src/`: In Stata `zipfile SConstruct config_project.ini utils, saving(project_files, replace)`
+In `src/`: In Stata `zipfile SConstruct config_project.ini utils, saving(project_files, replace)`
 
 # pystatacons
 In folder `pypkg`.
 
 ## Building
-Requirements (python packages): build, wheel, setuptools
+Requirements (python packages): `build`, `wheel`, `setuptools`
 
-Remember to bump versions in `setup.cfg`, `src/pystatacons/__init__.py` and `docs/conf.py`.
 ```
 python -m build
 ```
 
+## Installing (and dev-mode)
 Then you can install from the wheel file (or source distribution) in `dist/`. Or, to install the package in dev-mode (from this dir)
 ```
 conda develop src
 ```
 With pip it would be `pip install -e src`.
 
-Check Python code with `flake8` and `mypy`.
-
-## Dev-mode
-Normal (e.g., `conda develop pypkg` or `pip install -e pypkg`)
 
 ## To distribute
 Requirements: `twine`. API key
@@ -60,10 +54,26 @@ os.environ["S_ADO"] = "../src/;UPDATES;BASE;SITE;.;PERSONAL;PLUS;OLDPLACE"
 ```
 
 # Docs
-To build the documentation you will need `sphinx` and `myst-parser`. Copy `statacons.md`, `sconsign.md`, and `complete_datasignature.md` from `src/` to `docsrc/`. Then do steps in internal repo `CONTRIBUTING.md` and copy those files to `docsrc` (not currently documented well). Then you can go into `docsrc` and `make html` and see the generated docs in `docs/_build/html/index.html` (things should get copied to `docs/`).
+1. In `src/`: In Stata `do buildHelpFiles.do`
+2. Then in Python you will need `sphinx` and `myst-parser`. Copy `statacons.md`, `sconsign.md`, and `complete_datasignature.md` from `src/` to `docsrc/`. Then do steps in internal repo `CONTRIBUTING.md` and copy those files to `docsrc` (not currently documented well). Then you can go into `docsrc` and `make html` and see the generated docs in `docs/_build/html/index.html` (things should get copied to `docs/`).
+
+# Tests
+See `tests/README.md`.
+
+Check Python code with `flake8` and `mypy`.
+
+
+# Releasing (both)
+Versions are kept the same across both type packages.
+1. Pass tests?
+2. In `src/`: Bump version + date in `statacons.pkg` and `statacons.ado` (both) and `stataconsign.ado` (both).
+3. In `pypkg/`: Bump versions in `setup.cfg`, `src/pystatacons/__init__.py` and `docsrc/conf.py`.
+4. Update `CHANGELOG.md`
+5. Build docs
+6. Make release in in GitHub
+7. Distrubute Python Package
+
 
 # To track if new scons versions break our package
 Look at the functions we override in `special_sigs.py::monkey_patch_scons()` and `revert_io2` in `runscons.py`.
 
-# Tests
-See `tests/README.md`.
