@@ -1,4 +1,4 @@
-*! version 3.0.0  May 17 2022  statacons team
+*! version 3.0.1  Mar 13 2023  statacons team
 * Copyright 2022. This work is licensed under a CC BY 4.0 license.
 
 * Anaconda env's script dir is added to path when you switch environments, but not added to PYTHONPATH/sys.path,
