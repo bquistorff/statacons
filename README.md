@@ -4,12 +4,14 @@
 
 With data analysis projects it can be difficult to know what needs to be rebuilt when code changes (either because the there are many dependencies to track or it involves multiple contributors) and some tasks take a long time, making full-rebuilds costly. "Build systems" solve this by allowing the user to define how task inputs generate ouputs (for SCons, using `SConstruct` files) and tracking file changes to know what must be rebuilt. Thinks of this as a more robust way to specify a project's "master" run script. The `SConstruct` provides an easy view for what happens in a projects.
 
+Citation: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," The Stata Journal, 23(1):149-196, March 2023, [doi:10.1177/1536867X231162032](https://doi.org/10.1177/1536867X231162032).
+
 
 ## Resources:
 
 The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <https://bquistorff.github.io/statacons/index.html> hosts or links to all `statacons` resources, including
 
- - The paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. Accepted at the Stata Journal. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
+ - The final pre-publication version of the paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
  - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
  - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
  - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features, a troubleshooting guide, ideas for future improvements, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
