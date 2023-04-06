@@ -13,6 +13,11 @@ The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <ht
 
  - The final pre-publication version of the paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
  - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
+ - The [Online Appendices](https://bquistorff.github.io/statacons/appendices.html):
+    - [Online Appendix A: Other Advanced Features](https://bquistorff.github.io/statacons/appendix-A-OtherAdvanced.html)
+        - A.1 SConscripts and Hierarchical Builds
+        - A.2 Parallel Builds
+    - [Online Appendix B: Compiling a PDF](https://bquistorff.github.io/statacons/appendix-C-CompilingPDF.html)
  - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
  - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features, a troubleshooting guide, ideas for future improvements, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
  - Documentation for `statacons`, `stataconsign`, and `pystatacons`
