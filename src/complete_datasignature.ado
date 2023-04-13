@@ -1,5 +1,5 @@
-*! version 3.0.0  May 17 2022  statacons team
-* Copyright 2022. This work is licensed under a CC BY 4.0 license.
+*! version 3.0.1  Apr 13 2023  statacons team
+* Copyright 2023. This work is licensed under a CC BY 4.0 license.
 version 16.1
 
 // markdown source for help file is embedded below code
