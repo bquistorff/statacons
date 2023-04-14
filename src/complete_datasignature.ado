@@ -50,7 +50,7 @@ if "`meta'"!="nometa" {
         foreach ev in `evlist' {
             file write `meta_handle' "`ev'" _newline
             loc c_list : char `ev'[]
-            foreach c in `c_list' {
+            foreach c in `: list sort c_list' {
                 file write `meta_handle' "`c': `: char `ev'[`c']'" _newline
             }
         }
