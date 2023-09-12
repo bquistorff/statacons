@@ -27,7 +27,7 @@ if "`meta'"!="nometa" {
         loc vl_len : label `vl_name' maxlength
         file write `meta_handle' "`vl_len'" _newline
         forv i = 1/`vl_len' {
-            file write `meta_handle' "`i': `: label `vl_name' `i', strict'" _newline //strict means if no value return "" rather than `i'
+            file write `meta_handle' `"`i': `: label `vl_name' `i', strict'"' _newline //strict means if no value return "" rather than `i'
         }
     }
 
@@ -35,13 +35,13 @@ if "`meta'"!="nometa" {
     foreach v of varlist * {
         file write `meta_handle' "`v'" _newline
         file write `meta_handle' "`: format `v''" _newline
-        file write `meta_handle' "`: variable label `v''" _newline
+        file write `meta_handle' `"`: variable label `v''"' _newline
         file write `meta_handle' "`: value label `v''" _newline
     }
 
     if "`labels_formats_only'"=="" {
         //don't use describe as that prints timestamp
-        file write `meta_handle' "`: data label'" _newline
+        file write `meta_handle' `"`: data label'"' _newline
 
         //chars: includes notes
         //can't use -char dir- as it only prints to screen
@@ -51,7 +51,7 @@ if "`meta'"!="nometa" {
             file write `meta_handle' "`ev'" _newline
             loc c_list : char `ev'[]
             foreach c in `: list sort c_list' {
-                file write `meta_handle' "`c': `: char `ev'[`c']'" _newline
+                file write `meta_handle' `"`c': `: char `ev'[`c']'"' _newline
             }
         }
     }
