@@ -30,6 +30,8 @@ See the [Installation Guide](https://bquistorff.github.io/statacons/installation
 
 We have tested `statacons` with Stata versions 16, 17 and 18, flavors / editions IC/BE, SE and MP, for Windows, Mac and Unix, with Python 3.6, 3.8, 3.10 and 3.11 and SCons 4.3, 4.4, and 4.5, although not all combinations of these. SCons 4.5+ requires `statacons` version 3.0.1+.
 
+Requires: Stata 16+; python packages `pystatacons`, `scons`, `pywin32`
+
 ## Project components:
 
 - A Stata `statacons` command to run `scons` (a Python package/script) from inside of Stata so that one does not have to use the system terminal. 
