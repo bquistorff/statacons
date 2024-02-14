@@ -66,8 +66,16 @@ In Stata, check your setup by entering
 
         pip install scons
         pip install pystatacons
+        pip install pywin32
 
-To check that these are installed and recognized by Stata, open Stata
+You can confirm in the terminal that these are successfully installed as follows:
+
+        pip show scons
+        pip show pystatacons
+        pip show pywin32
+
+
+To check that SCons and pystatacons are recognized by Stata, open Stata
 and enter
 
         python which SCons // case-sensitive
