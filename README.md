@@ -26,11 +26,31 @@ The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <ht
 
 ## Installation:
 
+### Initial Install:
+
 See the [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
 
 We have tested `statacons` with Stata versions 16, 17 and 18, flavors / editions IC/BE, SE and MP, for Windows, Mac and Unix, with Python 3.6, 3.8, 3.10 and 3.11 and SCons 4.3, 4.4, and 4.5, although not all combinations of these. SCons 4.5+ requires `statacons` version 3.0.1+.
 
 Requires: Stata 16+; Python 3.6 or later (3.8 or later required for some advanced options); python packages `pystatacons`, `scons` (SCons 4.3 or later required), `pywin32`
+
+### Updating: 
+
+To update the statacons Stata package to the latest version, enter the following in Stata:
+
+~~~~
+    net install statacons, from(https://raw.github.com/bquistorff/statacons/main/) force replace
+~~~~
+
+This will update all the core program files (statacons.ado, statacons.ado, complete_datasignature.ado, runscons.py, etc.) and the help files as necessary.
+
+To update the pystatacons Python package to the latest version, enter the following at the appropriate Python prompt:
+
+~~~~
+    pip install --upgrade pystatacons
+~~~~
+
+
 
 ## Project components:
 
