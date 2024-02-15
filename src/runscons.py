@@ -37,7 +37,6 @@ if 'SCons' in globals():
     del SCons
 import SCons  # noqa: E402
 import SCons.Script  # noqa: E402
-from pkg_resources import packaging
 
 # Add the python dir to path otherwise SCons can't call python commands
 if platform.system() == "Windows":
@@ -58,7 +57,18 @@ if platform.system() == "Windows":
 # Patch things up for running in Stata (SCons doesn't handle these non-standard situations well)
 # OK to do even if not in Stata
 SCons.Script.Main.revert_io = sconstruct_fns.revert_io2
-if packaging.version.parse(SCons.__version__) < packaging.version.parse("4.3.0"):
+
+# Used to use packaging.version.parse from pkg_resources's packaging, but that's now deprecated.
+# Could have used the packaging package directly, but didn't want to add another dependency for a rare case.
+def version_lessthan(version_a_str, version_b_tuple):
+    version_a_tuple = tuple(map(int, (version_a_str.split("."))))
+    for i in range(min(len(version_a_tuple), len(version_b_tuple))):
+        if version_a_tuple[i]==version_b_tuple[i]:
+            continue
+        return version_a_tuple[i]<version_b_tuple[i]
+    return False
+
+if version_lessthan(SCons.__version__, (4,3,0)):
     SCons.Job.Jobs._reset_sig_handler = sconstruct_fns._reset_sig_handler2
 
 # Actually execute:

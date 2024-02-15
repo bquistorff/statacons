@@ -1,7 +1,6 @@
 import subprocess
 import re
 import os
-from pkg_resources import packaging
 import sys
 from pathlib import Path  # scons' Glob is not recursive
 import platform
@@ -442,6 +441,15 @@ def get_datasign(fname):
         sfi.SFIToolkit.pollnow()
     return sig
 
+# Used to use packaging.version.parse from pkg_resources's packaging, but that's now deprecated.
+# Could have used the packaging package directly, but didn't want to add another dependency for a rare case.
+def version_lessthan(version_a_str, version_b_tuple):
+    version_a_tuple = tuple(map(int, (version_a_str.split("."))))
+    for i in range(min(len(version_a_tuple), len(version_b_tuple))):
+        if version_a_tuple[i]==version_b_tuple[i]:
+            continue
+        return version_a_tuple[i]<version_b_tuple[i]
+    return False
 
 def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: bool = True,
              skip_scons_vs_check: bool = False) -> Environment:
@@ -476,7 +484,7 @@ def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: boo
     """
     import configparser
 
-    if not skip_scons_vs_check and packaging.version.parse(SCons.__version__) < packaging.version.parse("4.2.0"):
+    if not skip_scons_vs_check and version_lessthan(SCons.__version__, (4, 2,0)):
         print("WARNING: You are running SCons version" + SCons.__version__
               + " and statacons has only been tested on 4.2.0+.")
 
