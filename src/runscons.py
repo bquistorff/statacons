@@ -61,11 +61,14 @@ SCons.Script.Main.revert_io = sconstruct_fns.revert_io2
 # Used to use packaging.version.parse from pkg_resources's packaging, but that's now deprecated.
 # Could have used the packaging package directly, but didn't want to add another dependency for a rare case.
 def version_lessthan(version_a_str, version_b_tuple):
-    version_a_tuple = tuple(map(int, (version_a_str.split("."))))
-    for i in range(min(len(version_a_tuple), len(version_b_tuple))):
-        if version_a_tuple[i]==version_b_tuple[i]:
+    version_a_strs = version_a_str.split(".")
+    for i in range(min(len(version_a_strs), len(version_b_tuple))):
+        chunk = version_a_strs[i]
+        if not chunk.isdigit():
+            return False
+        if int(chunk)==version_b_tuple[i]:
             continue
-        return version_a_tuple[i]<version_b_tuple[i]
+        return int(chunk)<version_b_tuple[i]
     return False
 
 if version_lessthan(SCons.__version__, (4,3,0)):
