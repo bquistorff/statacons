@@ -32,7 +32,7 @@ special_sig_fns : dict
 
 """
 
-__version__ = "3.0.1"
+__version__ = "3.0.2"
 __all__ = ['init_env', 'decider_str_lookup', 'special_sig_fns', 'stata_run_params_factory']
 from .deciders import decider_str_lookup, dependency_newer_then_content_changed, \
     changed_timestamp_then_dependency_newer_then_content_content

@@ -1,25 +1,25 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Python Package API documentation &#8212; statacons 3.0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
-    <script src="_static/documentation_options.js?v=08bfcbec"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>Python Package API documentation &#8212; statacons 3.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Separation of Concerns Part 2: Separating Metadata and Data" href="metadata.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-
   
-  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
   
@@ -32,11 +32,11 @@
           <div class="body" role="main">
             
   <section id="module-pystatacons">
-<span id="python-package-api-documentation"></span><h1>Python Package API documentation<a class="headerlink" href="#module-pystatacons" title="Link to this heading">¶</a></h1>
+<span id="python-package-api-documentation"></span><h1>Python Package API documentation<a class="headerlink" href="#module-pystatacons" title="Permalink to this heading">¶</a></h1>
 <p>This module provides functions to write SConstruct files to process Stata
 projects.</p>
 <section id="additional-scons-options">
-<h2>Additional SCons Options<a class="headerlink" href="#additional-scons-options" title="Link to this heading">¶</a></h2>
+<h2>Additional SCons Options<a class="headerlink" href="#additional-scons-options" title="Permalink to this heading">¶</a></h2>
 <dl class="simple">
 <dt>--assume-done: list of file patterns</dt><dd><p>Skip execution, but mark all targets as up-to-date, for each script file in file pattern list</p>
 </dd>
@@ -49,7 +49,7 @@ projects.</p>
 </dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pystatacons.decider_str_lookup">
-<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">decider_str_lookup</span></span><a class="headerlink" href="#pystatacons.decider_str_lookup" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">decider_str_lookup</span></span><a class="headerlink" href="#pystatacons.decider_str_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary mapping string to objects that SCons' Decider function can handle.
 Can be used to easily specify our new Decider function 'content-timestamp-newer' which only runs a task
 if a depenency is different than last time SCons ran and a dependency is newer than all the targets
@@ -64,7 +64,7 @@ Decider(pystatacons.decider_str_lookup['content-timestamp-newer'])</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pystatacons.special_sig_fns">
-<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">special_sig_fns</span></span><a class="headerlink" href="#pystatacons.special_sig_fns" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">special_sig_fns</span></span><a class="headerlink" href="#pystatacons.special_sig_fns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary used by patch functions to have extension-specific signature functions.
 Can be updated with entries file-extension: function. The function should take
 a filename and return a string signature.</p>
@@ -78,7 +78,7 @@ a filename and return a string signature.</p>
 </section>
 <dl class="py function">
 <dt class="sig sig-object py" id="pystatacons.init_env">
-<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">init_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_scons_sig_fns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_scons_vs_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pystatacons.init_env" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">init_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_scons_sig_fns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_scons_vs_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pystatacons.init_env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets up an environment for Stata.</p>
 <p>Reads configuration data and saves to env['CONFIG']. By default it will check for and read
 two ini files ('config_project.ini' then 'config_local.ini'), though
@@ -94,7 +94,7 @@ Optionally patches SCons to allow for file-extension-specific signature function
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>env</strong> (<em>SConsEnvironment</em>) -- Environment to configure for Stata support. If not provided will instantiate a DefaultEnvironment with the
+<li><p><strong>env</strong> (<em>SConsEnvironment</em><em> | </em><em>None</em>) -- Environment to configure for Stata support. If not provided will instantiate a DefaultEnvironment with the
 <cite>os.environ</cite> and no tools (many Stata users don't have defaults ones that SCons would complain about not
 finding).</p></li>
 <li><p><strong>tools</strong> (<em>list</em>) -- List of tools to initialize the returned environment with.</p></li>
@@ -111,7 +111,7 @@ Default support is provided for .dta files.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pystatacons.stata_run_params_factory">
-<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">stata_run_params_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'do'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pystatacons.stata_run_params_factory" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pystatacons.</span></span><span class="sig-name descname"><span class="pre">stata_run_params_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'do'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_cmd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pystatacons.stata_run_params_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Factory function to create Builder instances for Stata tasks.</p>
 <p>Typically called as env.StataBuild() and omitting the first (self) argument.
 Marks all targets as Precious() (more intuitive for Stata users, and facilitates --assume-done/built).</p>
@@ -132,13 +132,13 @@ set the 'win_stata_hidden' key's value to False in the section [Programs].</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>self</strong> (<em>SConsEnvironment</em>) -- Environment</p></li>
 <li><p><strong>target</strong> (<em>list</em><em> | </em><em>str</em>) -- Targets of the task</p></li>
-<li><p><strong>source</strong> (<em>list</em><em> | </em><em>str</em>) -- Sources of the task. If mulitple, then the first should be the Stata script file.</p></li>
-<li><p><strong>do_file</strong> (<em>str</em>) -- Alternative way of specifying the do file.</p></li>
+<li><p><strong>source</strong> (<em>list</em><em> | </em><em>str</em><em> | </em><em>None</em>) -- Sources of the task. If mulitple, then the first should be the Stata script file.</p></li>
+<li><p><strong>do_file</strong> (<em>str</em><em> | </em><em>None</em>) -- Alternative way of specifying the do file.</p></li>
 <li><p><strong>params</strong> (<em>str</em>) -- Parameters to the script execution</p></li>
 <li><p><strong>file_cmd</strong> (<em>str</em>) -- Override 'do' command for the script.</p></li>
 <li><p><strong>file_cmd</strong> -- Alternative to (file_cmd, script file, params) for specifying the full command</p></li>
-<li><p><strong>depends</strong> (<em>list</em>) -- Additional dependencies of the task. Equivalent to using Depends().</p></li>
-<li><p><strong>full_cmd</strong> (<em>str</em>) -- </p></li>
+<li><p><strong>depends</strong> (<em>list</em><em> | </em><em>None</em>) -- Additional dependencies of the task. Equivalent to using Depends().</p></li>
+<li><p><strong>full_cmd</strong> (<em>str</em><em> | </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -240,11 +240,11 @@ set the 'win_stata_hidden' key's value to False in the section [Programs].</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &#169;2022, Statacons team.
+      &copy;2022, Statacons team.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/api.rst.txt"
