@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 3.0.2
 ### Fixed
 - pystatacons: Remove deprecation warning for `pkg_resource`
+### Fixed
+- complete_datasig.ado: Fix bug when dataset or variable notes include double-quotes
 ### Changed
 - pystatacons: Require `pywin32` on Windows to alleviate odd slow batch processing.
 
