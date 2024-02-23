@@ -7,9 +7,9 @@ d comprised of a 'statacons' Stata package (this package) and a 'pystatacons'
 d Python package. It requires a python environment with SCons installed. For
 d more information see https://bquistorff.github.io/statacons/index.html .
 d
-d Version 3.0.0
+d Version 3.0.2
 d
-d Distribution-Date: 20220517
+d Distribution-Date: 20240222
 d Requires: Python and SCons and pystatacons packages
 d
 d KW: build system, dependency
