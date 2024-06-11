@@ -427,10 +427,10 @@ def get_datasign(fname):
             vv_only_arg = " labels_formats_only" if vv_only else ""
             cmd_line = (int_env['STATABATCHCOM'] + ' complete_datasignature, dta_file(' + fname_abs + ') fname('
                         + sig_fname + ')' + meta_arg + fast_arg + vv_only_arg)
-            print_during_build("pywin32: " + cmd_line+'\n')
+            # print_during_build("pywin32: " + cmd_line+'\n')
             ret_code = try_hidden_desktop(cmd_line, tmpdirname)
         if ret_code is None:
-            print_during_build("subprocess: " + str(args_split) + "\n")
+            # print_during_build("subprocess: " + str(args_split) + "\n")
             cproc = subprocess.run(args_split, cwd=tmpdirname)
             ret_code = cproc.returncode
         if ret_code != 0:  # In case the Stata executable has a real issue
