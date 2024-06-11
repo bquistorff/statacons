@@ -4,7 +4,7 @@ env = pystatacons.init_env()
 
 # dataprep
 cmd_dataprep = env.StataBuild(
-    target=['outputs/auto-modified.dta'],
+    target=['output space/auto-modified.dta'],
     source='code/dataprep.do'
 )
 Depends(cmd_dataprep, ['inputs/auto-original.dta'])
@@ -14,6 +14,6 @@ cmd_analysis = env.StataBuild(
     target=['outputs/auto-modified2.dta'],
     source='code/analysis.do'
 )
-Depends(cmd_analysis, ['outputs/auto-modified.dta'])
+Depends(cmd_analysis, ['output space/auto-modified.dta'])
 
 env.Decider('timestamp-newer')

@@ -43,12 +43,21 @@ program touch_dta
 end
 
 *************************** Test output ***************************
-*MANUAL: make sure these are different
 sysuse auto, clear
 complete_datasignature
+loc r1 = "`r(signature)''"
 complete_datasignature, nometa
+loc r2 = "`r(signature)''"
 complete_datasignature, fast
+loc r3 = "`r(signature)''"
 complete_datasignature, labels_formats_only
+loc r4 = "`r(signature)''"
+_assert "`r1'"!="`r2'", msg("Should be different")
+_assert "`r1'"!="`r3'", msg("Should be different")
+_assert "`r1'"!="`r4'", msg("Should be different")
+_assert "`r2'"!="`r3'", msg("Should be different")
+_assert "`r2'"!="`r4'", msg("Should be different")
+_assert "`r3'"!="`r4'", msg("Should be different")
 
 
 *************************** Test output ***************************
@@ -67,18 +76,30 @@ statacons --silent
 *Test that running twice doesn't re-run anything. test debug=explain
 statacons -c
 statacons
-store_modts outputs/auto-modified.dta, local(mod1a)
+store_modts output space/auto-modified.dta, local(mod1a)
 store_modts outputs/auto-modified2.dta, local(mod1b)
 statacons --debug=explain
-store_modts outputs/auto-modified.dta, local(mod2a)
+store_modts output space/auto-modified.dta, local(mod2a)
 store_modts outputs/auto-modified2.dta, local(mod2b)
+di "`mod1a'.`mod1b'==`mod2a'`mod2b'"
+_assert "`mod1a'`mod1b'"=="`mod2a'`mod2b'", msg("Re-ran something'")
+
+* Try without pywin32
+statacons -c
+statacons --config-files=config_nohidden.ini
+store_modts output space/auto-modified.dta, local(mod1a)
+store_modts outputs/auto-modified2.dta, local(mod1b)
+statacons --config-files=config_nohidden.ini
+store_modts output space/auto-modified.dta, local(mod2a)
+store_modts outputs/auto-modified2.dta, local(mod2b)
+di "`mod1a'.`mod1b'==`mod2a'`mod2b'"
 _assert "`mod1a'`mod1b'"=="`mod2a'`mod2b'", msg("Re-ran something'")
 
 *Test early stopping
 statacons -c
 statacons
 store_modts outputs/auto-modified2.dta, local(mod1)
-rm outputs/auto-modified.dta //to rebuild the first step
+rm "output space/auto-modified.dta" //to rebuild the first step
 statacons
 store_modts outputs/auto-modified2.dta, local(mod2)
 _assert "`mod1'"=="`mod2'", msg("Didn't do early stopping")
@@ -89,7 +110,7 @@ _assert "`mod1'"=="`mod2'", msg("Didn't do early stopping")
 * Alternatively could delete the sconsdb file and then re-run.
 statacons -f SConstruct-timestamp -c
 statacons -f SConstruct-timestamp
-touch_dta outputs/auto-modified.dta
+touch_dta "output space/auto-modified.dta"
 //statacons -f SConstruct-timestamp //rebuilds
 statacons -f SConstruct-timestamp --assume-done="code/analysis.do" //will touch output
 //MANUAL: check output that the previous didn't actually rebuild anything
@@ -99,7 +120,7 @@ statacons -f SConstruct-timestamp
 store_modts outputs/auto-modified2.dta, local(mod3)
 _assert "`mod2'"=="`mod3'", msg("Rebuilt something")
 *Test assume-done
-touch_dta outputs/auto-modified.dta
+touch_dta "output space/auto-modified.dta"
 statacons -f SConstruct-timestamp --debug=explain --assume-built="outputs/auto-modified2.dta" //will touch output
 //MANUAL: check output that the previous didn't actually rebuild anything
 
@@ -112,18 +133,18 @@ write_txt 1, fname("inputs/simple-input.txt")
 statacons -f SConstruct-content-then-newer
 write_txt 2, fname("inputs/simple-input.txt")
 do code/dataprep.do
-store_modts outputs/auto-modified.dta, local(mod1)
-statacons -f SConstruct-content-then-newer
-store_modts outputs/auto-modified.dta, local(mod2)
+store_modts output space/auto-modified.dta, local(mod1)
+statacons -f SConstruct-content-then-newer --debug=explain
+store_modts output space/auto-modified.dta, local(mod2)
 _assert "`mod1'"=="`mod2'", msg("Accidentally rebuilt")
 *Test skip newer2
 write_txt 1, fname("inputs/simple-input.txt")
 statacons -f SConstruct-content-then-newer2
 write_txt 2, fname("inputs/simple-input.txt")
 do code/dataprep.do
-store_modts outputs/auto-modified.dta, local(mod1)
+store_modts output space/auto-modified.dta, local(mod1)
 statacons -f SConstruct-content-then-newer2
-store_modts outputs/auto-modified.dta, local(mod2)
+store_modts output space/auto-modified.dta, local(mod2)
 _assert "`mod1'"=="`mod2'", msg("Accidentally rebuilt")
 
 
@@ -132,17 +153,17 @@ statacons outputs/auto-modified-cwd_abs.dta --config-files=config_cwd_abs.ini
 statacons outputs/auto-modified-cwd_source.dta --config-files=config_cwd_source.ini
 
 statacons -c
-statacons outputs/auto-modified.dta --config-files=config_dta_mod_slow.ini
+statacons "output space/auto-modified.dta" --config-files=config_dta_mod_slow.ini
 
 * Test other sig types
 * MANUAL: make sure the output changes appropriately
-statacons outputs/auto-modified.dta --config-files=config_datasignature_DataOnly.ini
-statacons outputs/auto-modified.dta --config-files=config_datasignature_False.ini
-statacons outputs/auto-modified.dta --config-files=config_datasignature_VV.ini
+statacons "output space/auto-modified.dta" --config-files=config_datasignature_DataOnly.ini
+statacons "output space/auto-modified.dta" --config-files=config_datasignature_False.ini
+statacons "output space/auto-modified.dta" --config-files=config_datasignature_VV.ini
 
 *Test 
 statacons -c
-statacons outputs/auto-modified.dta --config-files=config_success_log_dir.ini
+statacons "output space/auto-modified.dta" --config-files=config_success_log_dir.ini
 rm dataprep.log
 
 * Test escapes
@@ -157,9 +178,9 @@ _assert "`mod1'"=="`mod2'", msg("Accidentally rebuilt")
 statacons, help
 statacons, show_config
 statacons, clean file(SConstruct)
-statacons outputs/auto-modified.dta
+statacons "output space/auto-modified.dta"
 statacons, clean
-statacons "outputs/auto-modified.dta"
+statacons outputs/auto-modified2.dta
 statacons, clean
 statacons, dry_run
 statacons, q tree(all)

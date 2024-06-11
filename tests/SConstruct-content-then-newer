@@ -3,7 +3,7 @@ env = pystatacons.init_env()
 
 
 env.StataBuild(
-    target=['outputs/auto-modified.dta'],
+    target=['output space/auto-modified.dta'],
     source='code/dataprep.do',
     depends=['inputs/simple-input.txt']
 )

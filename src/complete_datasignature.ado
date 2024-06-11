@@ -1,11 +1,15 @@
-*! version 3.0.2  February 22 2024  statacons team
-* Copyright 2024. This work is licensed under a CC BY 4.0 license.
+*! version 3.0.1  Apr 13 2023  statacons team
+* Copyright 2023. This work is licensed under a CC BY 4.0 license.
 version 16.1
 
 // markdown source for help file is embedded below code
 // .sthlp compiled using markdown
 
 program complete_datasignature, rclass
+* sometimes due to weird shell issues we have loc 0 as (even when we don't quote the filename: 
+* , "dta_file(file name with space)"
+loc 0 : subinstr local 0 `", "dta"' ", dta"
+loc 0 : subinstr local 0 `")""' ")"
 syntax, [dta_file(string) fname(string) nometa fast labels_formats_only]
 if "`dta_file'"!="" qui use "`dta_file'"
 //datasignature set, saving("`fname'", replace) //sig file has weird format with other stuff
@@ -82,7 +86,7 @@ end
 
 /***
 
-_version 3.0.2_
+_version 3.0.0_
 
 complete_datasignature
 ======
