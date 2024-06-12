@@ -1,4 +1,4 @@
-_version 3.0.1_
+_version 3.0.2_
 
 statacons
 ======
