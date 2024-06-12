@@ -1,4 +1,4 @@
-_version 3.0.2_
+_version 3.0.3_
 
 complete_datasignature
 ======
