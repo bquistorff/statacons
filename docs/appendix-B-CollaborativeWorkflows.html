@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>B. Collaborative Workflows &#8212; statacons 3.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=3f474186"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="C. Compiling a PDF from the Introductory Example" href="appendix-C-CompilingPDF.html" />
@@ -19,8 +18,9 @@
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -33,9 +33,9 @@
           <div class="body" role="main">
             
   <section id="b-collaborative-workflows">
-<h1>B. Collaborative Workflows<a class="headerlink" href="#b-collaborative-workflows" title="Permalink to this heading">¶</a></h1>
+<h1>B. Collaborative Workflows<a class="headerlink" href="#b-collaborative-workflows" title="Link to this heading">¶</a></h1>
 <section id="the-problem">
-<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">¶</a></h2>
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Link to this heading">¶</a></h2>
 <p>In this Appendix, we discuss a few models for collaborative workflows.
 The main difficulty with collaboration is that, as we mention in the
 Limitations section (6.3), SCons only understands builds it has done
@@ -69,7 +69,7 @@ limitations.</p>
 collaborative project using the SCons cache along with GitHub: <a class="reference external" href="https://github.com/bquistorff/statacons/wiki/Collaboration-using-GitHub-and-the-SCons-cache">https://github.com/bquistorff/statacons/wiki/Collaboration-using-GitHub-and-the-SCons-cache</a>.</p>
 </section>
 <section id="scons-cache">
-<h2>SCons Cache<a class="headerlink" href="#scons-cache" title="Permalink to this heading">¶</a></h2>
+<h2>SCons Cache<a class="headerlink" href="#scons-cache" title="Link to this heading">¶</a></h2>
 <p>Our preferred approach is to use the SCons <em>cache</em> to share derived
 files. See <strong>Listing B1</strong> for an example SConstruct.</p>
 <p><strong>Listing B1: SConstruct for Introductory Example Using SCons Cache</strong></p>
@@ -179,11 +179,11 @@ it. With the <code class="docutils literal notranslate"><span class="pre">cache_
 </div></blockquote>
 </section>
 <section id="other-options">
-<h2>Other Options<a class="headerlink" href="#other-options" title="Permalink to this heading">¶</a></h2>
+<h2>Other Options<a class="headerlink" href="#other-options" title="Link to this heading">¶</a></h2>
 <p>Here are a few alternatives, along with what we see as their main
 drawbacks.</p>
 <section id="shared-sconsign-dblite-database">
-<h3>Shared <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> database<a class="headerlink" href="#shared-sconsign-dblite-database" title="Permalink to this heading">¶</a></h3>
+<h3>Shared <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> database<a class="headerlink" href="#shared-sconsign-dblite-database" title="Link to this heading">¶</a></h3>
 <p>Since SCons uses the <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> database to decide which targets
 need to be rebuilt, it is tempting to use a shared database, whether
 through a file-synchronization service like Dropbox or version-control
@@ -200,7 +200,7 @@ this is not possible if one is using more full-featured source code and
 collaboration management solutions such as git.</p>
 </section>
 <section id="marking-files-as-built">
-<h3>Marking files as built<a class="headerlink" href="#marking-files-as-built" title="Permalink to this heading">¶</a></h3>
+<h3>Marking files as built<a class="headerlink" href="#marking-files-as-built" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">assume_built</span></code>/<code class="docutils literal notranslate"><span class="pre">assume_done</span></code> options we have added for <code class="docutils literal notranslate"><span class="pre">statacons</span></code>
 can help in one-off cases. See Section 3.2 of the main paper for their
 description. In the example above, User B could update to User A's
@@ -220,9 +220,9 @@ change.</p>
 </section>
 </section>
 <section id="additional-comments-on-collaborative-workflows">
-<h2>Additional Comments on Collaborative Workflows<a class="headerlink" href="#additional-comments-on-collaborative-workflows" title="Permalink to this heading">¶</a></h2>
+<h2>Additional Comments on Collaborative Workflows<a class="headerlink" href="#additional-comments-on-collaborative-workflows" title="Link to this heading">¶</a></h2>
 <section id="version-control">
-<h3>Version Control<a class="headerlink" href="#version-control" title="Permalink to this heading">¶</a></h3>
+<h3>Version Control<a class="headerlink" href="#version-control" title="Link to this heading">¶</a></h3>
 <p>If you are using a version control system like Git or SVN, we recommend
 that you do <em>not</em> keep <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code> or <code class="docutils literal notranslate"><span class="pre">.sconsign.dblite</span></code> under
 version control. In the case of <code class="docutils literal notranslate"><span class="pre">config_local.ini</span></code>, this is simply
@@ -252,7 +252,7 @@ this practice is that you will need to maintain separate copies of the
 same programs for each project.</p>
 </section>
 <section id="shared-scons-cache">
-<h3>Shared SCons cache<a class="headerlink" href="#shared-scons-cache" title="Permalink to this heading">¶</a></h3>
+<h3>Shared SCons cache<a class="headerlink" href="#shared-scons-cache" title="Link to this heading">¶</a></h3>
 <p>If you are using Dropbox or a similar service to share your SCons cache,
 make sure that you have offline access to the folder containing the
 cache.<a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> Using the &quot;Smart Sync&quot; or &quot;Streaming Access&quot; options that
@@ -269,20 +269,20 @@ and prevent it from successfully retrieving that file from the cache. We
 have not found this to occur with Dropbox.</p>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id4" role="note">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>As of SCons 4.3.0 (December 2021), this is Section 22, &quot;Caching
 Built Files.&quot; See especially the first footnote in that section,
 which describes the information SCons stores and uses to determine
 whether a target is up to date.</p>
 </aside>
-<aside class="footnote brackets" id="id5" role="note">
+<aside class="footnote brackets" id="id5" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>Rebuilding the cache does not require rebuilding the project, just
 erasing the cache and then calling SCons with the option
 <code class="docutils literal notranslate"><span class="pre">cache_force</span></code>.</p>
 </aside>
-<aside class="footnote brackets" id="id6" role="note">
+<aside class="footnote brackets" id="id6" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
 <p>As of April 2022: in Dropbox, either turn off &quot;Smart Sync&quot; to make
 all of your Dropbox content available offline, or use &quot;Selective
@@ -398,11 +398,11 @@ folders available offline.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, Statacons team.
+      &#169;2022, Statacons team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.2.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="_sources/appendix-B-CollaborativeWorkflows.md.txt"

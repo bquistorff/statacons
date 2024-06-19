@@ -1,7 +1,7 @@
 {smcl}
 
 {p 4 4 2}
-{it:version 3.0.2}
+{it:version 3.0.3}
 
 
 {title:complete_datasignature}
