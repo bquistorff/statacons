@@ -74,12 +74,15 @@ You can confirm in the terminal that these are successfully installed as follows
         pip show pystatacons
         pip show pywin32
 
+Make note of the location of these modules and compare to the path(s) listed by `python query` in Stata. If one of the paths are not listed, add it using `python set userpath` in Stata. 
 
 To check that SCons and pystatacons are recognized by Stata, open Stata
 and enter
 
         python which SCons // case-sensitive
         python which pystatacons
+
+If this fails, double-check that the correct path to the module appears in "Python Settings" or "library path" given by `python query` in Stata.
 
 # Step 2: statacons installation and setup
 
