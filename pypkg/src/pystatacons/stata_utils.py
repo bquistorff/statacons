@@ -53,10 +53,14 @@ def _find(pathname, paths=None):
 def find_highest_vs_dir_win(env_root_dir='ProgramFiles'):
     import glob
     dirs = glob.glob(os.path.join(os.environ[env_root_dir], "Stata*") + os.path.sep)
-    pattern = ".*[aA]([0-9]+).$"
-    vs = [int(re.match(pattern, dir)[1]) for dir in dirs if re.match(pattern, dir) is not None]
+    vs_pattern = ".*statan?o?w?([0-9]+).$"
+    vs = [int(re.match(vs_pattern, dir, flags=re.IGNORECASE)[1]) for dir in dirs if re.match(vs_pattern, dir, flags=re.IGNORECASE) is not None]
+    base_pattern = ".*(statan?o?w?)[0-9]+.$"
+    bases = [re.match(base_pattern, dir, flags=re.IGNORECASE)[1] for dir in dirs if re.match(base_pattern, dir, flags=re.IGNORECASE) is not None]
     if len(vs) > 0:
-        return([os.path.join(os.environ['ProgramFiles'], "Stata" + str(max(vs)))])
+        v = max(vs)
+        b = bases[vs.index(v)]
+        return([os.path.join(os.environ[env_root_dir], b + str(v))])
     return []
 
 
