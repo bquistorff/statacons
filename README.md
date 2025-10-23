@@ -50,7 +50,9 @@ To update the pystatacons Python package to the latest version, enter the follow
     pip install --upgrade pystatacons
 ~~~~
 
+### Manual installation
 
+If you are working from behind a firewall or on an otherwise restricted machine, you may not be able to use `net install`. To install `statacons` manually, see https://github.com/bquistorff/statacons/wiki/Manual-installation.
 
 ## Project components:
 
