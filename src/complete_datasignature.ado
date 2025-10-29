@@ -1,4 +1,4 @@
-*! version 3.0.3  June 12 2024  statacons team
+*! version 3.0.4  October 2025  statacons team
 * Copyright 2023. This work is licensed under a CC BY 4.0 license.
 version 16.1
 
