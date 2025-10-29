@@ -23,10 +23,11 @@ if "`meta'"!="nometa" {
     tempname meta_handle
     qui file open `meta_handle' using "`meta_fname'", write text replace
 
+    unab vlist : *
     //value labels. Do seprately from vars as some might not be attached to variables and some might be attached to multiple
     qui label dir
     loc val_labels `r(names)'
-    foreach vl_name in `val_labels' {
+    foreach vl_name in `: list sort val_labels' {
         file write `meta_handle' "`vl_name'" _newline
         loc vl_len : label `vl_name' maxlength
         file write `meta_handle' "`vl_len'" _newline
@@ -36,7 +37,7 @@ if "`meta'"!="nometa" {
     }
 
     //variable formats, labels, and value label attachments
-    foreach v of varlist * {
+    foreach v in `: list sort vlist' {
         file write `meta_handle' "`v'" _newline
         file write `meta_handle' "`: format `v''" _newline
         file write `meta_handle' `"`: variable label `v''"' _newline
@@ -49,9 +50,8 @@ if "`meta'"!="nometa" {
 
         //chars: includes notes
         //can't use -char dir- as it only prints to screen
-        unab vlist : *
         loc evlist _dta `vlist'
-        foreach ev in `evlist' {
+        foreach ev in `: list sort evlist' {
             file write `meta_handle' "`ev'" _newline
             loc c_list : char `ev'[]
             foreach c in `: list sort c_list' {
