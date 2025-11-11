@@ -30,7 +30,7 @@ def hash_file_signature_new(fname, chunksize=65536, hash_format=None):
                 print('Computed ' + fname_ext[1:] + '-signature: ' + fname)
             return sig
         except Exception as e:
-            print('Error when computing ' + fname_ext[1:] + '-signature: ' + fname)
+            print('Error when computing ' + fname_ext[1:] + '-signature: ' + fname + ": " + str(e))
             raise e
 
     return SCons.Util.hash_file_signature(fname, chunksize, hash_format)

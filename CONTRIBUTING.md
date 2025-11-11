@@ -67,7 +67,7 @@ Check Python code with `flake8` and `mypy`.
 Versions are kept the same across both type packages.
 1. Pass tests?
 2. In `src/`: Bump version + date in `statacons.pkg` and `statacons.ado` (both) and `stataconsign.ado` (both).
-3. In `pypkg/`: Bump versions in `setup.cfg`, `src/pystatacons/__init__.py` and `docsrc/conf.py`.
+3. In `pypkg/`: Bump versions in `setup.cfg`, `src/pystatacons/__init__.py` and `../docsrc/conf.py`.
 4. Update `CHANGELOG.md`
 5. Build docs
 6. Make release in in GitHub

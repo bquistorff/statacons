@@ -7,7 +7,7 @@ Rem To run in cmd just type the filename
 Rem Test dta_sig works (is found) and so second build doesn't do anything
 scons -c
 scons
-del outputs\auto-modified.dta
+del "output space\auto-modified.dta"
 scons
 Rem MANUAL check that the last command built the first but not the second
 
@@ -16,8 +16,8 @@ Rem Test assume-done works (parsing)
 scons -f SConstruct-timestamp -c
 scons -f SConstruct-timestamp
 Rem This is how you touch! (https://superuser.com/a/764721)
-copy /b inputs\auto-original.dta +,, inputs\auto-original.dta
-scons -f SConstruct-timestamp --assume-done="code/dataprep.do"
+copy /b "output space\auto-modified.dta" +,, "output space\auto-modified.dta"
+scons -f SConstruct-timestamp --assume-done="code/analysis.do"
 scons -f SConstruct-timestamp
 Rem MANUAL: Make sure last two didn't build anything
 

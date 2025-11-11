@@ -1,5 +1,5 @@
-*! version 3.0.2  February 22 2024  statacons team
-* Copyright 2024. This work is licensed under a CC BY 4.0 license.
+*! version 3.0.4  November 11 2025  statacons team
+* Copyright 2025. This work is licensed under a CC BY 4.0 license.
 
 program statacons, rclass
 	* Try to capture some simple mistakes in STata-syntax
