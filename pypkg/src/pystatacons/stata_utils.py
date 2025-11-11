@@ -196,6 +196,26 @@ def try_hidden_desktop(cmd_line, cwd=None, disp_str=""):
     return ret_code
 
 
+def run_stata_cmd(cmd_line, args_split, cwd, try_hidden=False, disp_str=""):
+    '''Just the execution. No log checking. 
+    cmd_line: A single string for running with subprocess.run()
+    args_split: A list for use with try_hidden_desktop()
+    disp_str: '' means no display; None means to autogen a string; if a string, omit the final '\n'.'''
+    ret_code = None
+    if try_hidden:
+        if disp_str is None:
+            disp_str = "pywin32: " + cmd_line
+        ret_code = try_hidden_desktop(cmd_line, cwd, disp_str)
+    if ret_code is None:
+        if disp_str is None:
+            disp_str = "subprocess: " + str(args_split)
+        if disp_str!="":
+            print_during_build(disp_str + "\n")
+        cproc = subprocess.run(args_split, cwd=cwd)
+        ret_code = cproc.returncode
+    return ret_code
+
+
 # Handles log file (better than Clean() as we typically want them removed right away
 # (there may be a lot and this is easier))
 def stata_run(target, source, env, params="", file_cmd="do", full_cmd=None):
@@ -258,6 +278,11 @@ def stata_run(target, source, env, params="", file_cmd="do", full_cmd=None):
     with tempfile.TemporaryDirectory() as tmpdirname:
         # if GetOption("debug")!=[]: print_during_build("Executing in temporary directory: " + tmpdirname+"\n")
         recipe_fname = os.path.join(tmpdirname, recipe_basename + ".do")
+        # win32's CreateProcess just takes a string, so see if need to wrap terms in quotes
+        if " " not in recipe_fname:
+            cmd_line = env['STATABATCHCOM'] + " do " + recipe_fname
+        else:
+            cmd_line = env['STATABATCHCOM'] + ' do "' + recipe_fname + '"'
         with open(recipe_fname, "w") as recipe:
             recipe.write(full_cmd + '\n')
 
@@ -265,19 +290,8 @@ def stata_run(target, source, env, params="", file_cmd="do", full_cmd=None):
         digest_str = "" if 'fname' in locals() and file_cmd == "do" and params == "" else ". log=" + log_basename
 
         no_hidden = query_config(env, 'Programs', 'win_stata_hidden', default='True') == 'False'
-        ret_code = None
         disp_str = "Running: " + env['STATABATCHCOM'] + " " + full_cmd + digest_str
-        if has_pywin32 and not no_hidden:
-            # win32's CreateProcess just takes a string, so see if need to wrap terms in quotes
-            if " " not in recipe_fname:
-                cmd_line = env['STATABATCHCOM'] + " do " + recipe_fname
-            else:
-                cmd_line = env['STATABATCHCOM'] + ' do "' + recipe_fname + '"'
-            ret_code = try_hidden_desktop(cmd_line, cwd, disp_str)
-        if ret_code is None:
-            print_during_build(disp_str + "\n")
-            cproc = subprocess.run(args_split, cwd=cwd)
-            ret_code = cproc.returncode
+        ret_code = run_stata_cmd(cmd_line, args_split, cwd, try_hidden=has_pywin32 and not no_hidden, disp_str=disp_str)
 
     if ret_code != 0:  # In case the Stata executable has a real issue
         return ret_code
