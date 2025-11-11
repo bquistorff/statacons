@@ -16,8 +16,8 @@ Rem Test assume-done works (parsing)
 scons -f SConstruct-timestamp -c
 scons -f SConstruct-timestamp
 Rem This is how you touch! (https://superuser.com/a/764721)
-copy /b inputs\auto-original.dta +,, inputs\auto-original.dta
-scons -f SConstruct-timestamp --assume-done="code/dataprep.do"
+copy /b "output space\auto-modified.dta" +,, "output space\auto-modified.dta"
+scons -f SConstruct-timestamp --assume-done="code/analysis.do"
 scons -f SConstruct-timestamp
 Rem MANUAL: Make sure last two didn't build anything
 
