@@ -7,7 +7,7 @@ Rem To run in cmd just type the filename
 Rem Test dta_sig works (is found) and so second build doesn't do anything
 scons -c
 scons
-del outputs\auto-modified.dta
+del "output space\auto-modified.dta"
 scons
 Rem MANUAL check that the last command built the first but not the second
 
