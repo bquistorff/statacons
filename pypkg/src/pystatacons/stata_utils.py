@@ -43,6 +43,11 @@ def get_basic_hash(data, max_digest_len = 8):
     return hashlib.md5(data.encode('utf-8')).hexdigest()[:max_digest_len]
 
 
+def silentremove(filename):
+    import contextlib
+    with contextlib.suppress(FileNotFoundError):
+        os.remove(filename)
+
 ##############################################
 #           Stata tool (find it)             #
 ##############################################
@@ -432,33 +437,38 @@ def get_datasign(fname):
     fast_arg_split = [] if slow else ["fast"]
     fname_abs = os.path.abspath(fname)
 
-    # Run in temp-dir as in parallel mode we don't want to processes to try writing to the same stata.log
-    import tempfile
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        sig_fname = "sig.txt"
-        args_split = ([int_env['STATABATCHEXE'], int_env['STATABATCHFLAG'], 'complete_datasignature,',
-                      'dta_file(' + fname_abs + ')', 'fname(' + sig_fname + ')'] + meta_arg_split
-                      + fast_arg_split + vv_only_arg_split)
+    sig_fname = "sig-" + get_basic_hash(fname_abs) + ".txt"
+    st_cmd_split = (['complete_datasignature,', 'dta_file(' + fname_abs + ')', 'fname(' + sig_fname + ')'] + meta_arg_split
+                    + fast_arg_split + vv_only_arg_split)
+    st_cmd = ' '.join(st_cmd_split)
 
-        no_hidden = query_config(int_env, 'Programs', 'win_stata_hidden', default='True') == 'False'
-        ret_code = None
-        if has_pywin32 and not no_hidden:
-            meta_arg = "" if meta else " nometa"
-            fast_arg = "" if slow else " fast"
-            vv_only_arg = " labels_formats_only" if vv_only else ""
-            cmd_line = (int_env['STATABATCHCOM'] + ' complete_datasignature, dta_file(' + fname_abs + ') fname('
-                        + sig_fname + ')' + meta_arg + fast_arg + vv_only_arg)
-            # print_during_build("pywin32: " + cmd_line+'\n')
-            ret_code = try_hidden_desktop(cmd_line, tmpdirname)
-        if ret_code is None:
-            # print_during_build("subprocess: " + str(args_split) + "\n")
-            cproc = subprocess.run(args_split, cwd=tmpdirname)
-            ret_code = cproc.returncode
-        if ret_code != 0:  # In case the Stata executable has a real issue
-            raise Exception("Couldn't get the file data-signature. Stata error=" + str(ret_code))
-        # Don't need to check log error, because lack of sig_fname will just raise exception
-        with open(os.path.join(tmpdirname, sig_fname), "r") as f:
-            sig = f.readline()
+    no_hidden = query_config(int_env, 'Programs', 'win_stata_hidden', default='True') == 'False'
+    
+    # Run from main cwd so can pick-up profile.do. Therefore need unique log. Therefore can't straight use command (as log="stata.log"), so must use do-file.
+    recipe_basename = "stata-" + get_basic_hash(st_cmd)
+    recipe_fname = recipe_basename + ".do"
+    log_name = recipe_basename + ".log"
+    with open(recipe_fname, "w") as recipe:
+        recipe.write(st_cmd + '\n')
+    args_split = [int_env['STATABATCHEXE'], int_env['STATABATCHFLAG'], "do", recipe_fname]
+    cmd_line = int_env['STATABATCHCOM'] + " do " + recipe_fname
+    ret_code = run_stata_cmd(cmd_line, args_split, None, has_pywin32 and not no_hidden)
+    silentremove(recipe_fname)
+    if ret_code != 0:  # In case the Stata executable has a real issue
+        silentremove(sig_fname)
+        silentremove(log_name)
+        raise Exception("Couldn't get the file data-signature. Stata error=" + str(ret_code))
+    if not os.path.exists(sig_fname):
+        err_msg = "Couldn't get the file data-signature. Stata log:\n"
+        with open(log_name, 'r') as f:
+            err_msg  += f.read()
+        silentremove(log_name)
+        raise Exception(err_msg)
+    with open(sig_fname, "r") as f:
+        sig = f.readline()
+    
+    silentremove(sig_fname)
+    silentremove(log_name)
 
     if in_stata:
         sfi.SFIToolkit.pollnow()
