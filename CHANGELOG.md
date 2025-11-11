@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 3.0.4
 ### Fixed
 - pystatacons: fixed finding StataNow versions
-- pystatacons: Fixed using user's Stata `profile.do` when calculating signature. 
-- pystatacons: Make signature calculation stable across different list orderings returned by Stata
+- pystatacons: Fixed using user's Stata `profile.do` when calculating dta-signature. 
+- statacons: Make `complete_datasignature.ado` calculation stable across different list orderings returned by Stata
 - Improved installation docs.
 
 ## 3.0.3
