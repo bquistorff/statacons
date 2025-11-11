@@ -37,6 +37,12 @@ def print_during_build(msg):
             sfi.SFIToolkit.pollnow()
 
 
+def get_basic_hash(data, max_digest_len = 8):
+    # basic hash that can be used in filenames
+    import hashlib
+    return hashlib.md5(data.encode('utf-8')).hexdigest()[:max_digest_len]
+
+
 ##############################################
 #           Stata tool (find it)             #
 ##############################################
@@ -231,10 +237,7 @@ def stata_run(target, source, env, params="", file_cmd="do", full_cmd=None):
         if params != "":
             full_cmd = full_cmd + ' ' + params
 
-    # Get hash of command to avoid collisions
-    import hashlib
-    max_digest_len = 8
-    cmd_digest = hashlib.md5(full_cmd.encode('utf-8')).hexdigest()[:max_digest_len]
+    cmd_digest = get_basic_hash(full_cmd) # Get hash of command to avoid collisions
 
     if 'fname' in locals():
         recipe_basename = os.path.splitext(os.path.basename(fname))[0]
