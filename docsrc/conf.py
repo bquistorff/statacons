@@ -18,11 +18,11 @@ sys.path.insert(0, os.path.abspath('../src/'))
 # -- Project information -----------------------------------------------------
 
 project = 'statacons'
-copyright = '2022, Statacons team'
+copyright = '2025, Statacons team'
 author = 'Statacons team'
 
 # The full version, including alpha/beta/rc tags
-release = '3.0.2'
+release = '3.0.4'
 
 
 # -- General configuration ---------------------------------------------------
