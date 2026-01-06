@@ -26,7 +26,39 @@ The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <ht
 
 ## Installation:
 
-### Initial Install:
+### Quick installation links:
+
+This assumes you have installed Python and configured Stata to work with Python. See [here](https://bquistorff.github.io/statacons/installation.html#step-1-python-setup) for links to instructions.
+
+You then need to install the `pystatacons` Python package, as well as the required dependencies (`scons` and, on Windows, `pywin32`). If using pip, enter
+
+~~~
+pip install scons
+pip install pystatacons
+~~~
+and, if on Windows,
+~~~
+pip install pywin32
+~~~
+
+at the appropriate command line prompt.
+
+To install the `statacons` Stata package, enter the following in Stata:
+
+~~~~
+net install statacons, from(https://raw.github.com/bquistorff/statacons/main/) force replace
+~~~~
+
+You may also want the ancillary project files, which include templates for an `SConstruct` and the configuration `.ini` files. These are in `project_files.zip`, which you can download by entering
+~~~
+net get statacons, from(https://raw.github.com/bquistorff/statacons/main/)
+~~~
+in Stata. 
+
+For more details on installation, see below.
+
+
+### Details on Initial Installation:
 
 See the [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
 
