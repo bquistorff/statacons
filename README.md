@@ -11,7 +11,7 @@ Citation: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, 
 
 The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <https://bquistorff.github.io/statacons/index.html> hosts or links to all `statacons` resources, including
 
- - The final pre-publication version of the paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. [PDF](https://osf.io/preprints/metaarxiv/qesx6/download)
+ - The final pre-publication version of the paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. [PDF](https://drive.google.com/file/d/1aROuCtGS5CL3k7VYrkKE5_NBjIrSgG-z/view).
  - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
  - The [Online Appendices](https://bquistorff.github.io/statacons/appendices.html):
     - [Online Appendix A: Other Advanced Features](https://bquistorff.github.io/statacons/appendix-A-OtherAdvanced.html)
