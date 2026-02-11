@@ -303,12 +303,18 @@ def stata_run(target, source, env, params="", file_cmd="do", full_cmd=None):
 
     # check if script had an error
     retcode = 0
-    with open(log_name, 'r') as f:
-        lines = f.readlines()  # if logs are really big, iterate until end to not store whole thing
-        # Thanks to Kyle https://gist.github.com/pschumm/b967dfc7f723507ac4be#gistcomment-2657900
-        match = re.search(r'^r\(([0-9]+)\);$', lines[-1])  # pytask looks in any of last 10 lines
-        if match is not None:
-            retcode = int(match[1])
+    lines=[""]
+    # if logs are really big, should iterate until end to not store whole thing
+    try:
+        with open(log_name, 'r') as f:  # try platform-default encoding
+            lines = f.readlines()
+    except UnicodeDecodeError:
+        with open(log_name, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+    # Thanks to Kyle https://gist.github.com/pschumm/b967dfc7f723507ac4be#gistcomment-2657900
+    match = re.search(r'^r\(([0-9]+)\);$', lines[-1])  # pytask looks in any of last 10 lines
+    if match is not None:
+        retcode = int(match[1])
     if retcode != 0:
         os.replace(log_name, os.path.join(".", recipe_basename + ".log"))
         return retcode
@@ -460,8 +466,12 @@ def get_datasign(fname):
         raise Exception("Couldn't get the file data-signature. Stata error=" + str(ret_code))
     if not os.path.exists(sig_fname):
         err_msg = "Couldn't get the file data-signature. Stata log:\n"
-        with open(log_name, 'r') as f:
-            err_msg  += f.read()
+        try:
+            with open(log_name, 'r') as f:  # try platform-default encoding
+                err_msg  += f.read()
+        except UnicodeDecodeError:
+            with open(log_name, 'r', encoding='utf-8') as f:
+                err_msg  += f.read()
         silentremove(log_name)
         raise Exception(err_msg)
     with open(sig_fname, "r") as f:
