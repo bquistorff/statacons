@@ -20,7 +20,7 @@ Citation: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, 
      - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
      - Documentation for `statacons`, `stataconsign`, and `pystatacons`
  - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) contains additional advanced features, a troubleshooting guide, ideas for future improvements, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
-     - A Python-based scanner and Claude-style skill to assist in creating SConstructs: [Project scanner and Claude-style skill](https://github.com/bquistorff/statacons/wiki/Project-scanner-and-Claude%E2%80%90style-skill). These are preliminar and outputs should be reviewed carefully. We welcome comments and improvements.
+     - A Python-based scanner and Claude-style skill to assist in creating SConstructs: [Project scanner and Claude-style skill](https://github.com/bquistorff/statacons/wiki/Project-scanner-and-Claude%E2%80%90style-skill). These are preliminary and outputs should be reviewed carefully. We welcome comments and improvements.
  - The [MetaArXiV site](https://osf.io/preprints/metaarxiv/qesx6/) archives all pre-publication drafts of the paper: <https://osf.io/preprints/metaarxiv/qesx6/>.
  - The [OSF site](https://osf.io/gbh4m/) archives all pre-publication versions of the software and replication code and data: <https://osf.io/gbh4m/>
 
