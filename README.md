@@ -9,17 +9,17 @@ Citation: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, 
 
 ## Resources:
 
-The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <https://bquistorff.github.io/statacons/index.html> hosts or links to all `statacons` resources, including
+- The [Project Web Page](https://bquistorff.github.io/statacons/index.html) at <https://bquistorff.github.io/statacons/index.html> hosts or links many `statacons` resources, including
 
- - The final pre-publication version of the paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. [PDF](https://drive.google.com/file/d/1aROuCtGS5CL3k7VYrkKE5_NBjIrSgG-z/view).
- - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
- - The [Online Appendices](https://bquistorff.github.io/statacons/appendices.html):
+    - The final pre-publication version of the paper: Guiteras, Raymond, Ahnjeong Kim, Brian Quistorff and Clayson Shumway, "statacons: An SCons-based build tool for Stata," CEnREP Working Paper 22-001, May 2022, https://go.ncsu.edu/cenrep-wp-22-001. [PDF](https://drive.google.com/file/d/1aROuCtGS5CL3k7VYrkKE5_NBjIrSgG-z/view).
+     - The [Installation Guide](https://bquistorff.github.io/statacons/installation.html): <https://bquistorff.github.io/statacons/installation.html>.
     - [Online Appendix A: Other Advanced Features](https://bquistorff.github.io/statacons/appendix-A-OtherAdvanced.html)
         - A.1 SConscripts and Hierarchical Builds
         - A.2 Parallel Builds
     - [Online Appendix B: Compiling a PDF](https://bquistorff.github.io/statacons/appendix-C-CompilingPDF.html)
- - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
- - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) with additional advanced features, a troubleshooting guide, ideas for future improvements, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
+     - A [web tutorial](https://bquistorff.github.io/statacons/swc.html) based on Software Carpentry's `make` lesson: <https://bquistorff.github.io/statacons/swc.html>
+ - The project [Wiki Page](https://github.com/bquistorff/statacons/wiki) contains additional advanced features, a troubleshooting guide, ideas for future improvements, and fixes for common errors (user contributions welcome): https://github.com/bquistorff/statacons/wiki
+     - A Python-based scanner and Claude-style skill to assist in creating SConstructs: [Project scanner and Claude-style skill](https://github.com/bquistorff/statacons/wiki/Project-scanner-and-Claude%E2%80%90style-skill). These are preliminar and outputs should be reviewed carefully. We welcome comments and improvements.
  - Documentation for `statacons`, `stataconsign`, and `pystatacons`
  - The [MetaArXiV site](https://osf.io/preprints/metaarxiv/qesx6/) archiving all pre-publication drafts of the paper: <https://osf.io/preprints/metaarxiv/qesx6/>.
  - The [OSF site](https://osf.io/gbh4m/) archiving all versions of the software and replication code and data: <https://osf.io/gbh4m/>
