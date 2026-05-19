@@ -17,6 +17,7 @@ from SCons.Environment import Environment
 
 from .configuration import configuration, query_config, print_config
 from .special_sigs import monkey_patch_scons, special_sig_fns
+from .dev_helpers import dev_adopath_prefix
 
 has_pywin32 = False
 if platform.system() == "Windows":
@@ -430,7 +431,7 @@ def stata_run_params_factory(self: Environment, target: Union[list, str], source
 int_env = None
 
 
-def get_datasign(fname):
+def get_datasign(fname, file_arg='dta_file'):
     if 'STATABATCHEXE' not in int_env:
         raise LookupError("Can't find Stata")
     m_str = int_env['CONFIG']['SCons']['use_custom_datasignature']
@@ -444,7 +445,7 @@ def get_datasign(fname):
     fname_abs = os.path.abspath(fname)
 
     sig_fname = "sig-" + get_basic_hash(fname_abs) + ".txt"
-    st_cmd_split = (['complete_datasignature,', 'dta_file(' + fname_abs + ')', 'fname(' + sig_fname + ')'] + meta_arg_split
+    st_cmd_split = (['complete_datasignature,', file_arg + '(' + fname_abs + ')', 'fname(' + sig_fname + ')'] + meta_arg_split
                     + fast_arg_split + vv_only_arg_split)
     st_cmd = ' '.join(st_cmd_split)
 
@@ -455,6 +456,7 @@ def get_datasign(fname):
     recipe_fname = recipe_basename + ".do"
     log_name = recipe_basename + ".log"
     with open(recipe_fname, "w") as recipe:
+        recipe.write(dev_adopath_prefix())
         recipe.write(st_cmd + '\n')
     args_split = [int_env['STATABATCHEXE'], int_env['STATABATCHFLAG'], "do", recipe_fname]
     cmd_line = int_env['STATABATCHCOM'] + " do " + recipe_fname
@@ -483,6 +485,15 @@ def get_datasign(fname):
     if in_stata:
         sfi.SFIToolkit.pollnow()
     return sig
+
+
+def get_dtas_sign(fname):
+    """Timestamp-independent signature for a .dtas frameset.
+    Delegates to get_datasign with file_arg='frameset_file' so all config
+    plumbing (custom metadata mode, fast/slow, cache_dir) is shared.
+    """
+    return get_datasign(fname, file_arg='frameset_file')
+
 
 # Used to use packaging.version.parse from pkg_resources's packaging, but that's now deprecated.
 # Could have used the packaging package directly, but didn't want to add another dependency for a rare case.
@@ -524,7 +535,7 @@ def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: boo
         List of tools to initialize the returned environment with.
     patch_scons_sig_fns :
         Whether to patch the SCons file signature functions to support special signature functions by file extensions.
-        Default support is provided for .dta files.
+        Default support is provided for .dta and .dtas (frameset) files.
     skip_scons_vs_check:
         If false, will not output a warning when using a version of SCons that has not been tested.
     """
@@ -585,6 +596,7 @@ def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: boo
         if m_str != "False":
             monkey_patch_scons()
             special_sig_fns[".dta"] = get_datasign
+            special_sig_fns[".dtas"] = get_dtas_sign
 
             if not GetOption('silent'):
                 if m_str != "DataOnly" and m_str != "Datasignature" and m_str != "LabelsFormatsOnly":
