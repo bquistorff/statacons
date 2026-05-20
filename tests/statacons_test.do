@@ -16,31 +16,6 @@ if substr(`"$S_ADO"',3,6)!="../src" {
 	adopath ++ "`c(pwd)'/../src"
 }
 
-cap program drop store_modts
-program store_modts
-	syntax anything, local(string)
-	
-	filesys `c(pwd)'/`anything', attr
-	c_local `local' "`r(modifiednum)'"
-end
-
-cap program drop write_txt
-program write_txt
-	syntax anything, fname(string)
-	
-	file open hand using "`fname'", write text replace
-	file write hand "`anything'"
-	file close hand
-end
-
-cap program drop touch_dta
-program touch_dta
-	syntax anything
-	
-	preserve
-	use `anything', clear
-	save `anything', replace
-end
 
 *************************** Test output ***************************
 sysuse auto, clear
