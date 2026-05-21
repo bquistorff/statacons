@@ -1,0 +1,9 @@
+clear all
+frame create life0
+frame create life1
+frame create life2
+frame life0: sysuse lifeexp, clear
+frame life1: sysuse uslifeexp, clear
+frame life2: sysuse uslifeexp2, clear
+frames save "outputs/life_blog.dtas", frames(life0 life1 life2) replace
+

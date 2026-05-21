@@ -1,0 +1,10 @@
+logs/*.smcl
+outputs/
+*.stswp
+.sconsign.dblite
+sig-*.txt
+stata-*.do
+stata-*.log
+repro_datasig.do
+repro_datasig.log
+

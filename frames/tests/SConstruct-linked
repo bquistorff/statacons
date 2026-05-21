@@ -1,0 +1,16 @@
+import pystatacons
+
+env = pystatacons.init_env()
+
+env.StataBuild(
+    target=['outputs/linked_project.dtas'],
+    source='code/dtas_linked_producer.do',
+    depends=['../datasets/persons.dta', '../datasets/txcounty.dta']
+)
+
+env.StataBuild(
+    target=['outputs/person_ratio_from_dtas.dta'],
+    source='code/dtas_linked_consumer.do',
+    depends=['outputs/linked_project.dtas']
+)
+
