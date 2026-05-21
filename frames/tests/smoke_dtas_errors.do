@@ -1,5 +1,16 @@
 // ============================================================
 // Hard-error tests for malformed .dtas inputs.
+//
+// What this file tests:
+// - non-zip junk with a .dtas suffix
+// - missing .frameinfo manifest
+// - missing embedded .dta members
+// - malformed .frameinfo contents
+//
+// Every case below should fail loudly. A failure of this test file
+// means complete_datasignature accepted a broken frameset that should
+// have been rejected instead of silently hashed.
+//
 // Run from frames/tests with: StataMP-64.exe -e do smoke_dtas_errors.do
 // ============================================================
 
@@ -9,6 +20,8 @@ frames_tests_setup
 frames_tests_require_python
 
 // Build one valid source frameset from official Stata datasets.
+// The Python helper mutates this known-good file into several broken
+// variants, so if the helper step fails we never created the fixtures.
 frame create life0
 frame create life1
 frame life0: sysuse lifeexp, clear
@@ -22,6 +35,9 @@ local out_dir "`c(pwd)'/outputs"
 ! "`c(python_exec)'" "`py_script'" "`valid_src'" "`out_dir'"
 _assert _rc == 0, msg("failed to create malformed .dtas fixtures")
 
+// Each assertion below checks "must error", not "must return a
+// particular rc". The important contract is hard failure, not the
+// exact code path used to reject the bad archive.
 cap noi complete_datasignature, frameset_file("outputs/not_a_zip.dtas")
 local rc_not_zip = _rc
 _assert `rc_not_zip' != 0, msg("plain-text .dtas unexpectedly signed successfully")
@@ -47,4 +63,3 @@ cap erase "outputs/missing_member.dtas"
 cap erase "outputs/bad_frameinfo.dtas"
 
 di _newline as result "ALL malformed .dtas smoke tests passed"
-

@@ -1,6 +1,20 @@
 // ============================================================
 // Focused regression tests for .dtas support using official
 // Stata frames workflows and shipped or vendored datasets.
+//
+// What this file tests:
+// - compression-only changes should not affect a .dtas signature
+// - adding or dropping frames should affect the aggregate signature
+// - mutating one frame should only change that frame's signature slot
+// - linked and alias-heavy workflows should be stable across
+//   identical rebuilds
+// - frame save order is recorded as a diagnostic, because whether it
+//   should affect the signature is an implementation choice
+//
+// In general, a failure means either statacons is missing a real
+// content change, or it is treating irrelevant container changes as
+// meaningful data changes.
+//
 // Run from frames/tests with: StataMP-64.exe -e do smoke_dtas_blog.do
 // ============================================================
 
@@ -11,6 +25,8 @@ frames_tests_setup
 // ============================================================
 // 1. Compression invariance using the 2023 blog frameset flow.
 //    Same frame content, different zip compression -> same sig.
+//    A failure here means we are hashing zip/container details rather
+//    than just the frame contents that statacons should track.
 // ============================================================
 clear all
 frame create life0
@@ -38,6 +54,8 @@ di as result "PASS: compression-only changes do not affect .dtas signatures"
 // ============================================================
 // 2. Frameset topology changes are visible.
 //    Adding or dropping a frame must change the signature.
+//    A failure here means the aggregate signature is not sensitive to
+//    frame membership, so statacons could miss true dependency changes.
 // ============================================================
 clear all
 frame create life0
@@ -67,6 +85,9 @@ di as result "PASS: frame add/drop operations change the aggregate signature"
 // ============================================================
 // 3. Per-frame isolation with 3 frames.
 //    Mutating only life1 should change only the middle slot.
+//    A failure in slot 1 or slot 3 means unrelated frames are being
+//    dirtied. A failure in slot 2 means the changed frame was not
+//    reflected in the signature at all.
 // ============================================================
 clear all
 frame create life0
@@ -104,6 +125,9 @@ di as result "PASS: only the mutated frame slot changes"
 
 // ============================================================
 // 4. Linked-save stability using the 2023 linked frameset flow.
+//    This checks that reconstructing the same linked workflow twice
+//    yields the same .dtas signature. A failure means volatile linked
+//    metadata is leaking into the signature.
 // ============================================================
 clear all
 use "../datasets/persons.dta", clear
@@ -130,6 +154,8 @@ di as result "PASS: linked framesets stay stable across identical relink and re-
 
 // ============================================================
 // 5. Alias-variable workflow stability from the 2023 blog post.
+//    This is the alias-heavy analogue of test 4. A failure means
+//    alias mechanics are introducing instability into the signature.
 // ============================================================
 clear all
 use "../datasets/persons.dta", clear
@@ -161,6 +187,8 @@ di as result "PASS: alias-variable workflow is stable across identical re-save"
 // ============================================================
 // 6. Diagnostic: same frames, different save order.
 //    This does not fail the suite; it documents current behavior.
+//    Unlike the SCons smoke test, this is the place where we ask
+//    whether frame order changes the signature.
 // ============================================================
 clear all
 frame create life0
@@ -199,4 +227,3 @@ cap erase "outputs/_life_order_a.dtas"
 cap erase "outputs/_life_order_b.dtas"
 
 di _newline as result "ALL .dtas blog-style smoke tests passed"
-

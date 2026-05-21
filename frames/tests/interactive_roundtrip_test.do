@@ -4,6 +4,12 @@
 //
 // What passes: all _assert lines succeed and the final message is
 // displayed. This targets c(mode)=="interactive" state restoration.
+//
+// What failures mean:
+// - Test 1 failures mean signature computation did not fully restore
+//   the user's linked/alias session state after loading the frameset.
+// - Test 2 failures mean temporary frame-name collisions during
+//   signing clobbered pre-existing interactive frames.
 // ============================================================
 
 clear all
@@ -17,7 +23,9 @@ if "`c(mode)'" == "batch" {
 
 cap mkdir outputs
 
-// Build target framesets used by the interactive checks.
+// Build target framesets used by the interactive checks. These are
+// just fixtures; the real tests are about what happens to the user's
+// live interactive session after complete_datasignature runs.
 frame create life0
 frame create life1
 frame create life2
@@ -35,6 +43,8 @@ frames save "outputs/_rt_linked.dtas", frames(default) linked replace
 
 // ============================================================
 // Test 1. Linked + alias user state is restored after signing.
+// If this block fails, the interactive-mode preservation logic is not
+// putting the user's original working state back correctly.
 // ============================================================
 clear all
 use "../datasets/persons.dta", clear
@@ -66,6 +76,8 @@ di as result "PASS: interactive linked + alias state restores correctly"
 
 // ============================================================
 // Test 2. Name collisions with life* frames do not clobber the user.
+// If this fails, temporary frames created while reading the .dtas file
+// are overwriting or failing to restore user frames of the same names.
 // ============================================================
 clear all
 frame create life1
@@ -101,4 +113,3 @@ cap erase "outputs/_rt_life.dtas"
 cap erase "outputs/_rt_linked.dtas"
 
 di _newline as result "ALL frames/tests interactive checks passed"
-
