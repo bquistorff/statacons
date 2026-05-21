@@ -1,0 +1,13 @@
+import pystatacons
+env = pystatacons.init_env()
+
+# Legacy/simple .dtas frameset pipeline migrated from tests\SConstruct.
+env.StataBuild(
+    target=['outputs/legacy_myset.dtas'],
+    source='code/dtas_legacy_producer.do'
+)
+env.StataBuild(
+    target=['outputs/legacy_foreign_from_dtas.dta'],
+    source='code/dtas_legacy_consumer.do',
+    depends=['outputs/legacy_myset.dtas']
+)

@@ -18,10 +18,13 @@ There are four main ideas:
 | File | What it does | How it fits |
 |---|---|---|
 | `run_all.do` | Runs the batch smoke tests in sequence. | This is the simplest entry point for the batch test suite. |
+| `smoke_dtas_legacy.do` | Keeps the older small-data `.dtas` signature checks that originally lived under `tests\`. | This is the migrated legacy/simple signature smoke test. |
 | `smoke_dtas_blog.do` | Checks core `.dtas` signature behavior using blog-style frames workflows and shipped/vendored datasets. | This is the main "does signing behave sensibly?" test. |
 | `smoke_dtas_errors.do` | Checks that malformed `.dtas` files are rejected with errors. | This is the main "fail loudly on bad input" test. |
+| `smoke_scons_dtas_legacy.do` | Keeps the older small producer -> `.dtas` -> consumer SCons pipeline that originally lived under `tests\`. | This is the migrated legacy/simple end-to-end pipeline test. |
 | `smoke_scons_dtas_blog.do` | Checks that `statacons` can build `.dtas` targets in SCons and does not rebuild them unnecessarily on an identical rerun. | This is the main end-to-end pipeline test. |
 | `interactive_roundtrip_test.do` | Manually checks that interactive Stata state is restored after signing a `.dtas` file. | This covers the special interactive-mode behavior that batch tests cannot fully check. |
+| `interactive_roundtrip_legacy.do` | Keeps the older interactive round-trip checks that originally lived under `tests\`. | This is the migrated legacy/simple interactive test file. |
 | `testlib.do` | Defines small helper programs used by the other test files. | This is shared setup code, not a test by itself. |
 
 ## What each main test is looking for
@@ -39,6 +42,18 @@ It asks questions like:
 - If I save the same frames in a different order, does the signature change or not?
 
 Why this matters: a good signature should react to **real data changes**, not to unimportant packaging differences.
+
+### 1a. `smoke_dtas_legacy.do`
+
+This is the older, smaller version of the signature smoke test.
+
+It keeps three simple checks together:
+
+- repeated save with the same content gives the same signature
+- changing one frame changes the aggregate signature
+- `frlink_*` metadata does not create false changes
+
+Why keep it: it is a compact legacy regression file, and moving it here keeps the top-level `tests\` tree from carrying a separate branch-only `.dtas` smoke script.
 
 ### 2. `smoke_dtas_errors.do`
 
@@ -70,6 +85,19 @@ For each pipeline, it checks that:
 
 That last check is important. It compares file modification times before and after the rerun. If those times change, the test concludes that `statacons` rebuilt something it should have left alone.
 
+### 3a. `smoke_scons_dtas_legacy.do`
+
+This is the older, simpler SCons pipeline check.
+
+It uses a very small frameset:
+
+- producer builds `legacy_myset.dtas`
+- consumer reopens that frameset and writes `legacy_foreign_from_dtas.dta`
+
+It then reruns the same build and checks that neither output was rewritten.
+
+Why keep it: this is the smallest end-to-end `.dtas` pipeline in the harness, so it is still useful as a simple regression test.
+
 ### 4. `interactive_roundtrip_test.do`
 
 This is a **manual** test for interactive Stata.
@@ -81,6 +109,19 @@ It checks two tricky cases:
 
 Why this matters: interactive mode is harder than batch mode because the user's current session state has to be preserved and restored correctly.
 
+### 4a. `interactive_roundtrip_legacy.do`
+
+This is the older interactive round-trip file that was originally created under `tests\`.
+
+It keeps four smaller checks:
+
+- basic round-trip
+- empty default frame restoration
+- frame-count preservation
+- repeated-call signature stability
+
+Why keep it: the newer interactive file is more blog-oriented, while this one is still a useful compact set of session-restoration regressions.
+
 ## The small do-files in `code/`
 
 These are tiny fixture scripts used by the SCons smoke test.
@@ -89,6 +130,8 @@ These are tiny fixture scripts used by the SCons smoke test.
 |---|---|---|
 | `code/dtas_blog_life_producer.do` | Builds `outputs/life_blog.dtas` from three official Stata example datasets. | Upstream producer for the life-expectancy SCons pipeline. |
 | `code/dtas_blog_life_consumer.do` | Opens `outputs/life_blog.dtas` and saves a smaller `.dta` derived from one frame. | Downstream consumer for the life-expectancy SCons pipeline. |
+| `code/dtas_legacy_producer.do` | Builds `outputs/legacy_myset.dtas` from a small split of `sysuse auto`. | Upstream producer for the migrated legacy/simple SCons pipeline. |
+| `code/dtas_legacy_consumer.do` | Opens `outputs/legacy_myset.dtas` and saves a derived `.dta` from the foreign-cars frame. | Downstream consumer for the migrated legacy/simple SCons pipeline. |
 | `code/dtas_linked_producer.do` | Builds `outputs/linked_project.dtas` from linked `persons` and `txcounty` data. | Upstream producer for the linked-frames SCons pipeline. |
 | `code/dtas_linked_consumer.do` | Opens `outputs/linked_project.dtas`, computes an income ratio, and saves a regular `.dta`. | Downstream consumer for the linked-frames SCons pipeline. |
 
@@ -100,6 +143,7 @@ These are not do-files, but they help the tests run:
 |---|---|
 | `SConstruct-life` | SCons recipe for the life-expectancy pipeline. |
 | `SConstruct-linked` | SCons recipe for the linked-frames pipeline. |
+| `SConstruct-legacy` | SCons recipe for the migrated legacy/simple `.dtas` pipeline. |
 | `SConstruct` | Older combined SCons fixture kept in the folder. |
 | `make_malformed_dtas.py` | Creates broken `.dtas` files for the error tests. |
 | `logs/` | Stores SMCL logs written by the SCons smoke test. |
@@ -110,20 +154,25 @@ These are not do-files, but they help the tests run:
 If you want the shortest mental model, think of the test harness like this:
 
 - `smoke_dtas_blog.do` asks: **Are the signatures themselves sensible?**
+- `smoke_dtas_legacy.do` asks: **Do the old small-data signature regressions still pass?**
 - `smoke_dtas_errors.do` asks: **Do broken framesets fail clearly?**
+- `smoke_scons_dtas_legacy.do` asks: **Does the old simple `.dtas` pipeline still work and stay a no-op on rerun?**
 - `smoke_scons_dtas_blog.do` asks: **Does the build pipeline behave correctly?**
 - `interactive_roundtrip_test.do` asks: **Does this still behave correctly in a live interactive session?**
+- `interactive_roundtrip_legacy.do` asks: **Do the older interactive restoration checks still pass?**
 
-And `run_all.do` is simply the batch runner that ties the first three together.
+And `run_all.do` is simply the batch runner that ties the non-interactive smoke tests together.
 
 ## Practical reading order
 
 If you are new to this folder, a good order is:
 
 1. `README-tests.md` -- this overview
-2. `smoke_dtas_blog.do` -- the core signature ideas
-3. `smoke_dtas_errors.do` -- the bad-input checks
-4. `smoke_scons_dtas_blog.do` -- the end-to-end build check
-5. `interactive_roundtrip_test.do` -- the interactive-only edge cases
+2. `smoke_dtas_legacy.do` -- the smallest legacy signature checks
+3. `smoke_dtas_blog.do` -- the richer signature ideas
+4. `smoke_dtas_errors.do` -- the bad-input checks
+5. `smoke_scons_dtas_legacy.do` -- the smallest SCons pipeline
+6. `smoke_scons_dtas_blog.do` -- the richer end-to-end build check
+7. `interactive_roundtrip_legacy.do` and `interactive_roundtrip_test.do` -- the interactive-only edge cases
 
 That order goes from the simplest ideas to the trickiest ones.
