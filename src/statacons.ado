@@ -1,4 +1,4 @@
-*! version 3.1.0-alpha1  22 May 2026  statacons team
+*! version 3.1.0-alpha2  22 May 2026  statacons team
 * Copyright 2025. This work is licensed under a CC BY 4.0 license.
 
 program statacons, rclass
@@ -54,7 +54,7 @@ end
 /***
 
 
-_version 3.1.0-alpha1_
+_version 3.1.0-alpha2_
 
 statacons
 ======

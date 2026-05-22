@@ -1,4 +1,4 @@
-*! version 3.1.0-alpha1  22 May 2026  statacons team
+*! version 3.1.0-alpha2  22 May 2026  statacons team
 * Copyright 2023. This work is licensed under a CC BY 4.0 license.
 version 16.1
 
@@ -13,6 +13,10 @@ loc 0 : subinstr local 0 `")""' ")"
 syntax, [dta_file(string) frameset_file(string) fname(string) nometa fast labels_formats_only skip_char(string)]
 
 if "`frameset_file'" != "" {
+    if `c(stata_version)' < 18 {
+        di as error "STATACONS_REQUIRES_STATA18: frameset_file() requires Stata 18 or newer (detected Stata `=int(`c(stata_version)')')"
+        exit 198
+    }
     // frameset (.dtas) path: sign each frame in the archive and concatenate.
     // In interactive mode, round-trip the user's frames via a temp .dtas so memory
     // is restored on exit. In batch mode, skip the round-trip for speed.
@@ -142,7 +146,7 @@ end
 
 /***
 
-_version 3.1.0-alpha1_
+_version 3.1.0-alpha2_
 
 complete_datasignature
 ======

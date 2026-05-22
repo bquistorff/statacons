@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.1.0-alpha2
+### Added
+- pystatacons: New `frameset_signing` config option (`auto` / `enabled` / `disabled`) in
+  `config_project.ini` to control `.dtas` signing behaviour on Stata < 18.
+  Default `auto` falls back to standard MD5 checksums on Stata 16/17 (with a one-time
+  warning); `disabled` always uses MD5 for `.dtas` without running a Stata batch;
+  `enabled` raises a hard error if Stata < 18 is detected (useful to enforce Stata 18+
+  across a team). `.dta` signing is unaffected in all modes.
+  Note: switching between frameset-aware and MD5 signatures for `.dtas` nodes causes a
+  one-time full rebuild (`.sconsign.dblite` entries are incompatible between the two
+  formats).
+- complete_datasignature: Version guard in `frameset_file()` branch raises a clear error
+  (`STATACONS_REQUIRES_STATA18`) on Stata < 18, enabling the Python-side MD5 fallback.
+### Fixed
+- pystatacons: Stata log content now included in exception message when Stata returns a
+  non-zero exit code, improving debuggability of batch errors.
+
 ## 3.1.0-alpha1
 ### Added
 - complete_datasignature: New `frameset_file("file.dtas")` option to sign Stata frameset

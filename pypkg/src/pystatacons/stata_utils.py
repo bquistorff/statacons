@@ -429,6 +429,7 @@ def stata_run_params_factory(self: Environment, target: Union[list, str], source
 ##############################################
 # how to get a Stata-style datasignature
 int_env = None
+_dtas_stata_version_ok = None  # None=unknown, True=Stata 18+, False=Stata <18
 
 
 def get_datasign(fname, file_arg='dta_file'):
@@ -462,10 +463,19 @@ def get_datasign(fname, file_arg='dta_file'):
     cmd_line = int_env['STATABATCHCOM'] + " do " + recipe_fname
     ret_code = run_stata_cmd(cmd_line, args_split, None, has_pywin32 and not no_hidden)
     silentremove(recipe_fname)
-    if ret_code != 0:  # In case the Stata executable has a real issue
+    if ret_code != 0:
         silentremove(sig_fname)
+        err_msg = "Couldn't get the file data-signature. Stata error=" + str(ret_code) + "\nStata log:\n"
+        try:
+            with open(log_name, 'r') as f:
+                err_msg += f.read()
+        except UnicodeDecodeError:
+            with open(log_name, 'r', encoding='utf-8') as f:
+                err_msg += f.read()
+        except Exception:
+            err_msg += "(log not available)"
         silentremove(log_name)
-        raise Exception("Couldn't get the file data-signature. Stata error=" + str(ret_code))
+        raise Exception(err_msg)
     if not os.path.exists(sig_fname):
         err_msg = "Couldn't get the file data-signature. Stata log:\n"
         try:
@@ -489,10 +499,45 @@ def get_datasign(fname, file_arg='dta_file'):
 
 def get_dtas_sign(fname):
     """Timestamp-independent signature for a .dtas frameset.
-    Delegates to get_datasign with file_arg='frameset_file' so all config
+    On Stata 18+, delegates to get_datasign (frameset_file option) so all config
     plumbing (custom metadata mode, fast/slow, cache_dir) is shared.
+    On Stata < 18, behaviour is controlled by the frameset_signing config option:
+      auto    (default) -- fall back to standard MD5, warn once per scons run
+      enabled           -- raise an error (enforces Stata 18+ across the team)
+      disabled          -- .dtas not registered; standard MD5 used without a batch call
     """
-    return get_datasign(fname, file_arg='frameset_file')
+    global _dtas_stata_version_ok
+    fs_str = int_env['CONFIG']['SCons'].get('frameset_signing', 'auto')
+
+    if _dtas_stata_version_ok is False:
+        if fs_str == 'auto':
+            import SCons.Util
+            return SCons.Util.hash_file_signature(fname)
+        # enabled: we already know Stata <18; raise immediately without another batch
+        raise Exception(
+            "frameset_file() requires Stata 18 or newer. "
+            "Set frameset_signing = auto in config_project.ini to fall back to MD5."
+        )
+
+    try:
+        sig = get_datasign(fname, file_arg='frameset_file')
+        _dtas_stata_version_ok = True
+        return sig
+    except Exception as e:
+        if 'STATACONS_REQUIRES_STATA18' in str(e):
+            _dtas_stata_version_ok = False
+            if fs_str == 'enabled':
+                raise Exception(
+                    "frameset_file() requires Stata 18 or newer. "
+                    "Set frameset_signing = auto in config_project.ini to fall back to MD5."
+                ) from e
+            # auto mode: warn once and fall back to MD5
+            print("WARNING: Stata < 18 detected. .dtas files will use standard MD5 checksums.")
+            print("         Frameset-aware signing requires Stata 18 or newer.")
+            print("         Set frameset_signing = disabled in config_project.ini to suppress this warning.")
+            import SCons.Util
+            return SCons.Util.hash_file_signature(fname)
+        raise
 
 
 # Used to use packaging.version.parse from pkg_resources's packaging, but that's now deprecated.
@@ -551,7 +596,8 @@ def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: boo
     int_env = env
 
     config = configparser.ConfigParser()
-    config['SCons'] = {'success_batch_log_dir': '', 'use_custom_datasignature': 'Strict', 'stata_chdir': ''}
+    config['SCons'] = {'success_batch_log_dir': '', 'use_custom_datasignature': 'Strict',
+                       'stata_chdir': '', 'frameset_signing': 'auto'}
     strip_quote_keys = [('Programs', 'stata_exe'), ('SCons', 'success_batch_log_dir'), ('Project', 'cache_dir')]
     if GetOption("config_files") is not None:
         config = configuration(config_files=GetOption("config_files").split(':'), config=config,
@@ -593,10 +639,12 @@ def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: boo
 
     if not GetOption("clean") and patch_scons_sig_fns:
         m_str = config['SCons']['use_custom_datasignature']
+        fs_str = config['SCons'].get('frameset_signing', 'auto')
         if m_str != "False":
             monkey_patch_scons()
             special_sig_fns[".dta"] = get_datasign
-            special_sig_fns[".dtas"] = get_dtas_sign
+            if fs_str != "disabled":
+                special_sig_fns[".dtas"] = get_dtas_sign
 
             if not GetOption('silent'):
                 if m_str != "DataOnly" and m_str != "Datasignature" and m_str != "LabelsFormatsOnly":
@@ -617,6 +665,10 @@ def init_env(env: Environment = None, tools: list = [], patch_scons_sig_fns: boo
                     print("  not including metadata.")
                     print("Edit use_custom_datasignature in config_project.ini to change.")
                     print("  (other options are Strict, LabelsFormatsOnly, False)")
+                if fs_str == "disabled":
+                    print("frameset_signing = disabled: .dtas files will use standard MD5 checksums.")
+                elif fs_str == "enabled":
+                    print("frameset_signing = enabled: .dtas signing requires Stata 18 or newer.")
         elif not GetOption('silent'):
             print("Using default timestamp-dependent checksums of dataset,")
             print("Edit use_custom_datasignature in config_project.ini to change (Strict, DataOnly, LabelsFormatsOnly)")
