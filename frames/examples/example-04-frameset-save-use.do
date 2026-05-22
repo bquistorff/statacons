@@ -3,11 +3,14 @@
 //
 // Replicates the frames save/use/modify examples from the help files.
 // Datasets required: ../datasets/hsng.dta  (plus sysuse auto, sysuse census)
+// All paths are relative to the assumed working directory: frames/examples/
+// Run from frames/examples/ with:
+//   do example-04-frameset-save-use.do              (interactive)
+//   StataMP-64.exe -e do example-04-frameset-save-use.do  (batch)
 // ----------------------------------------------------------------
 
 clear all
 
-cd "C:/Users/rpguiter/Work/statacons/frames/examples"
 local datasets "../datasets"
 
 // ---- 1. Build two frames ----

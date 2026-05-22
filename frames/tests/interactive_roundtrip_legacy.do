@@ -2,8 +2,10 @@
 // Legacy interactive round-trip checks migrated from
 // tests\interactive_roundtrip_test.do.
 //
-// Run by opening Stata interactively, then doing this file from
-// frames/tests. These checks cover small but still useful interactive
+// MANUAL INTERACTIVE TEST -- must not be run in batch mode.
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do interactive_roundtrip_legacy.do         (interactive only) These checks cover small but still useful interactive
 // restoration cases that are separate from the newer blog-style script.
 // ============================================================
 

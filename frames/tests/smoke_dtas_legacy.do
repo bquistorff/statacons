@@ -4,6 +4,11 @@
 // This keeps the older small-data checks in frames/tests so the
 // top-level tests tree no longer carries a separate branch-only
 // standalone .dtas script.
+//
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do smoke_dtas_legacy.do                    (interactive)
+//   StataMP-64.exe -e do smoke_dtas_legacy.do  (batch)
 // ============================================================
 
 clear all

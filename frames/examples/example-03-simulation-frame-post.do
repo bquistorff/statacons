@@ -6,6 +6,10 @@
 // in a simple OLS regression actually covers the true value 95% of the time.
 //
 // Datasets required: none
+// All paths are relative to the assumed working directory: frames/examples/
+// Run from frames/examples/ with:
+//   do example-03-simulation-frame-post.do              (interactive)
+//   StataMP-64.exe -e do example-03-simulation-frame-post.do  (batch)
 // ----------------------------------------------------------------
 
 clear all

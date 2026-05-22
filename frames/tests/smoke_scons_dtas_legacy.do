@@ -5,6 +5,11 @@
 // This preserves the original small producer -> .dtas -> consumer
 // pipeline in frames/tests, alongside the richer blog-style SCons
 // checks.
+//
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do smoke_scons_dtas_legacy.do                   (interactive)
+//   StataMP-64.exe -e do smoke_scons_dtas_legacy.do (batch)
 // ============================================================
 
 clear all

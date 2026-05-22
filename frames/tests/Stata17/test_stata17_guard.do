@@ -1,4 +1,5 @@
 // Test: complete_datasignature frameset_file() should return rc=198 on Stata <18.
+// All paths are relative to the assumed working directory: frames/tests/Stata17/
 // Run from frames/tests/Stata17/ with:
 //   Start-Process "C:\Program Files\Stata17\StataMP-64.exe" -ArgumentList "/e do test_stata17_guard.do" -Wait
 adopath ++ "../../../src"

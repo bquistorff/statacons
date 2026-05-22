@@ -7,11 +7,14 @@
 //   discharge1: patientid, age, sex, billed, ...     (1980 obs)
 //   discharge2: patientid, age, sex, billed, ...     (1980 obs, same structure)
 //   family:     pid, pid_m, pid_f, x1-x5            (639 obs)
+// All paths are relative to the assumed working directory: frames/examples/
+// Run from frames/examples/ with:
+//   do example-02-frlink-frget.do              (interactive)
+//   StataMP-64.exe -e do example-02-frlink-frget.do  (batch)
 // ----------------------------------------------------------------
 
 clear all
 
-cd "C:/Users/rpguiter/Work/statacons/frames/examples"
 local datasets "../datasets"
 
 // ---- 1. m:1 linkage: persons linked to Texas counties ----

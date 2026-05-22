@@ -15,7 +15,10 @@
 // content change, or it is treating irrelevant container changes as
 // meaningful data changes.
 //
-// Run from frames/tests with: StataMP-64.exe -e do smoke_dtas_blog.do
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do smoke_dtas_blog.do                      (interactive)
+//   StataMP-64.exe -e do smoke_dtas_blog.do    (batch)
 // ============================================================
 
 clear all

@@ -11,7 +11,10 @@
 // means complete_datasignature accepted a broken frameset that should
 // have been rejected instead of silently hashed.
 //
-// Run from frames/tests with: StataMP-64.exe -e do smoke_dtas_errors.do
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do smoke_dtas_errors.do                    (interactive)
+//   StataMP-64.exe -e do smoke_dtas_errors.do  (batch)
 // ============================================================
 
 clear all

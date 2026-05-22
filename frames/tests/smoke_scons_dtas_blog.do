@@ -16,7 +16,10 @@
 // - the final timestamp-comparison failure means an identical
 //   rerun rebuilt at least one output when it should not have.
 //
-// Run from frames/tests with: StataMP-64.exe -e do smoke_scons_dtas_blog.do
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do smoke_scons_dtas_blog.do                     (interactive)
+//   StataMP-64.exe -e do smoke_scons_dtas_blog.do   (batch)
 // ============================================================
 
 clear all

@@ -1,6 +1,8 @@
 // ============================================================
-// MANUAL INTERACTIVE TEST -- run by opening Stata interactively,
-// then do this file from frames/tests.
+// MANUAL INTERACTIVE TEST -- must not be run in batch mode.
+// All paths are relative to the assumed working directory: frames/tests/
+// Run from frames/tests/ with:
+//   do interactive_roundtrip_test.do           (interactive only)
 //
 // What passes: all _assert lines succeed and the final message is
 // displayed. This targets c(mode)=="interactive" state restoration.

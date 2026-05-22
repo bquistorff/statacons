@@ -1,4 +1,8 @@
 * This tests statacons from inside Stata. Tests that require looking at the output are marked with MANUAL
+* All paths are relative to the assumed working directory: tests/
+* Run from tests/ with:
+*   do statacons_test.do                        (interactive)
+*   StataMP-64.exe -e do statacons_test.do      (batch)
 
 * To do:
 * - How to get stata_exe config?

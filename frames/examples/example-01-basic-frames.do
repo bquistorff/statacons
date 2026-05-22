@@ -3,6 +3,10 @@
 //               frames dir, frame prefix, frame drop, frames reset
 //
 // Datasets required: none (uses sysuse auto, sysuse census)
+// All paths are relative to the assumed working directory: frames/examples/
+// Run from frames/examples/ with:
+//   do example-01-basic-frames.do              (interactive)
+//   StataMP-64.exe -e do example-01-basic-frames.do  (batch)
 // ----------------------------------------------------------------
 
 clear all
