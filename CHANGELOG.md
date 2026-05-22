@@ -4,7 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 3.1.0-alpha1
+### Added
+- complete_datasignature: New `frameset_file("file.dtas")` option to sign Stata frameset
+  (`.dtas`) files as first-class build artifacts. Generates a concatenated per-frame
+  signature in the form `frameA=sigA|frameB=sigB|...`.
+- complete_datasignature: New `skip_char(globlist)` option to exclude characteristics
+  matching any pattern in a space-separated globlist (used to drop time-tainted metadata
+  such as `frlink_*` characteristics).
+- pystatacons: `.dtas` framesets registered with SCons as signed nodes via `get_dtas_sign`,
+  giving them timestamp-independent signatures alongside `.dta` files.
+- pystatacons: New `dev_helpers.py` module with `dev_adopath_prefix()` to support
+  editable-install development workflows via the `STATACONS_DEV_SRC` environment variable.
+### Changed
+- complete_datasignature: In interactive mode, in-memory frames are preserved across
+  frameset signing via a temporary `.dtas` round-trip; batch mode skips the round-trip.
+- complete_datasignature: Metadata collection now handles empty datasets (frames with no
+  variables) without error.
 ### Fixed
 - pystatacons: Fixed error with opening log files, #25.
 
