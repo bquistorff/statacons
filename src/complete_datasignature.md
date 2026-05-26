@@ -37,7 +37,7 @@ When __frameset_file__ is set, the program:
 2. Loads the target __.dtas__ via __frames use, clear__.
 3. For each frame in alphabetical order, computes a per-frame signature using the same metadata options (__nometa__, __fast__, __labels_formats_only__) plus __skip_char("frlink_*")__.
 4. Assembles "frameA=sigA|frameB=sigB|...".
-5. In interactive mode, restores the user's frames from the temporary __.dtas__.
+5. In interactive mode, restores the user's frames from the temporary __.dtas__, including the previously-active frame.
 
 Example(s)
 ----------

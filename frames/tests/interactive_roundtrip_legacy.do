@@ -126,6 +126,23 @@ _assert "`sig_call1'" == "`sig_call2'", ///
     msg("Legacy test 4: signature changed across repeated calls")
 di as result "PASS: legacy interactive repeated-call stability"
 
+// ============================================================
+// Test 5. Active frame is restored after call from non-default frame.
+// ============================================================
+clear all
+sysuse auto, clear
+frame create alt
+frame alt: sysuse census, clear
+frame change alt
+
+local before_frame "`c(frame)'"
+
+complete_datasignature, frameset_file("outputs/_rt_target_legacy.dtas")
+
+_assert "`c(frame)'" == "`before_frame'", ///
+    msg("Legacy test 5: active frame was not restored")
+di as result "PASS: legacy interactive non-default active frame restoration"
+
 cap erase "outputs/_rt_target_legacy.dtas"
 
 di _newline as result "ALL legacy interactive round-trip tests passed"

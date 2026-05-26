@@ -26,6 +26,7 @@ if "`frameset_file'" != "" {
     loc tempdtas "`tempdtas_base'.dtas"
 
     if !`is_batch' {
+        loc saved_frame "`c(frame)'"
         qui frames save "`tempdtas'", frames(_all) replace emptyok
         loc need_restore = 1
     }
@@ -50,6 +51,7 @@ if "`frameset_file'" != "" {
     if `need_restore' {
         qui frames use "`tempdtas'", clear
         cap erase "`tempdtas'"
+        frame change `saved_frame'
     }
 
     if "`fname'" != "" {
@@ -185,7 +187,7 @@ When __frameset_file__ is set, the program:
 2. Loads the target __.dtas__ via __frames use, clear__.
 3. For each frame in alphabetical order, computes a per-frame signature using the same metadata options (__nometa__, __fast__, __labels_formats_only__) plus __skip_char("frlink_*")__.
 4. Assembles "frameA=sigA|frameB=sigB|...".
-5. In interactive mode, restores the user's frames from the temporary __.dtas__.
+5. In interactive mode, restores the user's frames from the temporary __.dtas__, including the previously-active frame.
 
 Example(s)
 ----------
