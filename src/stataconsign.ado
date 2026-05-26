@@ -1,4 +1,4 @@
-*! version 3.1.0-alpha2  22 May 2026  statacons team
+*! version 3.1.0-alpha3  26 May 2026  statacons team
 * Copyright 2025. This work is licensed under a CC BY 4.0 license.
 
 * Anaconda env's script dir is added to path when you switch environments, but not added to PYTHONPATH/sys.path,
@@ -18,7 +18,7 @@ end
 
 /***
 
-_version 3.1.0-alpha2_
+_version 3.1.0-alpha3_
 
 stataconsign
 ======

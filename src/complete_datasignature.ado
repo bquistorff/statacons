@@ -1,4 +1,4 @@
-*! version 3.1.0-alpha2  22 May 2026  statacons team
+*! version 3.1.0-alpha3  26 May 2026  statacons team
 * Copyright 2023. This work is licensed under a CC BY 4.0 license.
 version 16.1
 
@@ -148,7 +148,7 @@ end
 
 /***
 
-_version 3.1.0-alpha2_
+_version 3.1.0-alpha3_
 
 complete_datasignature
 ======
