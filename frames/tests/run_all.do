@@ -17,4 +17,10 @@ do smoke_dtas_errors.do
 do smoke_scons_dtas_legacy.do
 do smoke_scons_dtas_blog.do
 
+do smoke_dtas_frame_order.do
+do smoke_dtas_volatile_chars.do
+do smoke_dtas_fralias.do
+do smoke_dtas_degenerate.do
+do smoke_stata17_fallback.do
+
 di _newline as result "ALL frames/tests batch checks passed"
