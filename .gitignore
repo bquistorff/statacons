@@ -8,3 +8,7 @@ local/
 .vscode/
 docs/.buildinfo
 *.stswp
+CLAUDE.md
+notes/
+frames/session-notes.md
+statacons.code-workspace

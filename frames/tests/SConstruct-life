@@ -1,0 +1,15 @@
+import pystatacons
+
+env = pystatacons.init_env()
+
+env.StataBuild(
+    target=['outputs/life_blog.dtas'],
+    source='code/dtas_blog_life_producer.do'
+)
+
+env.StataBuild(
+    target=['outputs/life_blog_subset.dta'],
+    source='code/dtas_blog_life_consumer.do',
+    depends=['outputs/life_blog.dtas']
+)
+

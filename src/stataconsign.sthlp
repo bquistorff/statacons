@@ -1,7 +1,7 @@
 {smcl}
 
 {p 4 4 2}
-{it:version 3.0.2}
+{it:version 3.1.0-alpha2}
 
 
 {title:stataconsign}

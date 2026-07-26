@@ -1,0 +1,18 @@
+# Minimal SCons test for Stata <18 .dtas signing fallback.
+# Run from frames/tests/Stata17/ with:
+#   python -m SCons --sconstruct=SConstruct-stata17test --config-files=test_stata17_config.ini -n
+#   python -m SCons --sconstruct=SConstruct-stata17test --config-files=test_disabled_config.ini -n
+import os
+import pystatacons
+
+os.environ.setdefault('STATACONS_DEV_SRC',
+    os.path.normpath(os.path.join(os.getcwd(), '../../../src')))
+
+env = pystatacons.init_env()
+
+consumer = env.StataBuild(
+    target=['../outputs/legacy_foreign_from_dtas_s17.dta'],
+    source='../code/dtas_legacy_consumer.do',
+    depends=['../outputs/legacy_myset.dtas']
+)
+Default(consumer)

@@ -45,6 +45,18 @@ env.StataBuild(
     params='saving("outputs/auto-modified-escape.dta")'
 )
 
+# .dtas frameset pipeline (producer/consumer)
+env.StataBuild(
+    target=['outputs/myset.dtas'],
+    source='code/dtas_producer.do',
+    depends=['inputs/auto-original.dta']
+)
+env.StataBuild(
+    target=['outputs/foreign_from_dtas.dta'],
+    source='code/dtas_consumer.do',
+    depends=['outputs/myset.dtas']
+)
+
 # Python builder
 env.Append(BUILDERS={'PyBuilder': Builder(action='python $SOURCE > out.log')})
 env.PyBuilder(target="outputs/py.txt", source="code/test.py")
