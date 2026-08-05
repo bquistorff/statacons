@@ -1,7 +1,7 @@
 {smcl}
 
 {p 4 4 2}
-{it:version 3.1.0-alpha2}
+{it:version 3.1.0}
 
 
 {title:complete_datasignature}
@@ -44,7 +44,7 @@ When {bf:frameset_file} is set, the program:
 {break}    2. Loads the target {bf:.dtas} via {bf:frames use, clear}.
 {break}    3. For each frame in alphabetical order, computes a per-frame signature using the same metadata options ({it:_nometa}, {bf:fast}, {bf:labels_formats_only_}) plus {bf:skip_char("frlink_*")}.
 {break}    4. Assembles "frameA=sigA|frameB=sigB|...".
-{break}    5. In interactive mode, restores the user{c 39}s frames from the temporary {bf:.dtas}.
+{break}    5. In interactive mode, restores the user{c 39}s frames from the temporary {bf:.dtas}, including the previously-active frame.
 
 
 {title:Example(s)}

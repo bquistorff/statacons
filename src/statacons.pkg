@@ -2,9 +2,9 @@ d 'statacons': statacons
 d
 d   Enables using SCons with Stata
 d
-d Version 3.1.0-alpha
+d Version 3.1.0
 d
-d Distribution-Date: 20260522
+d Distribution-Date: 20260805
 d Requires: Python and SCons package
 d
 d KW: build system, dependency

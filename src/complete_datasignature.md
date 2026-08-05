@@ -1,4 +1,4 @@
-_version 3.1.0-alpha3_
+_version 3.1.0_
 
 complete_datasignature
 ======

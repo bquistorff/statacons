@@ -4,8 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.1.0-alpha2
+## 3.1.0
 ### Added
+- complete_datasignature: New `frameset_file("file.dtas")` option to sign Stata frameset
+  (`.dtas`) files as first-class build artifacts. Generates a concatenated per-frame
+  signature in the form `frameA=sigA|frameB=sigB|...`.
+- complete_datasignature: New `skip_char(globlist)` option to exclude characteristics
+  matching any pattern in a space-separated globlist (used to drop time-tainted metadata
+  such as `frlink_*` characteristics).
+- pystatacons: `.dtas` framesets registered with SCons as signed nodes via `get_dtas_sign`,
+  giving them timestamp-independent signatures alongside `.dta` files.
 - pystatacons: New `frameset_signing` config option (`auto` / `enabled` / `disabled`) in
   `config_project.ini` to control `.dtas` signing behaviour on Stata < 18.
   Default `auto` falls back to standard MD5 checksums on Stata 16/17 (with a one-time
@@ -17,29 +25,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   formats).
 - complete_datasignature: Version guard in `frameset_file()` branch raises a clear error
   (`STATACONS_REQUIRES_STATA18`) on Stata < 18, enabling the Python-side MD5 fallback.
-### Fixed
-- pystatacons: Stata log content now included in exception message when Stata returns a
-  non-zero exit code, improving debuggability of batch errors.
-
-## 3.1.0-alpha1
-### Added
-- complete_datasignature: New `frameset_file("file.dtas")` option to sign Stata frameset
-  (`.dtas`) files as first-class build artifacts. Generates a concatenated per-frame
-  signature in the form `frameA=sigA|frameB=sigB|...`.
-- complete_datasignature: New `skip_char(globlist)` option to exclude characteristics
-  matching any pattern in a space-separated globlist (used to drop time-tainted metadata
-  such as `frlink_*` characteristics).
-- pystatacons: `.dtas` framesets registered with SCons as signed nodes via `get_dtas_sign`,
-  giving them timestamp-independent signatures alongside `.dta` files.
 - pystatacons: New `dev_helpers.py` module with `dev_adopath_prefix()` to support
   editable-install development workflows via the `STATACONS_DEV_SRC` environment variable.
+- New `frames/` directory with annotated frameset example do-files, sample datasets, format
+  documentation, and a `.dtas` smoke-test suite (`frames/tests/`). This is repository-only
+  material and is not distributed by `net install` or `net get`.
 ### Changed
 - complete_datasignature: In interactive mode, in-memory frames are preserved across
   frameset signing via a temporary `.dtas` round-trip; batch mode skips the round-trip.
 - complete_datasignature: Metadata collection now handles empty datasets (frames with no
   variables) without error.
 ### Fixed
+- complete_datasignature: The frame that was active before the call is now restored after
+  frameset signing in interactive mode.
 - pystatacons: Fixed error with opening log files, #25.
+- pystatacons: Stata log content now included in exception message when Stata returns a
+  non-zero exit code, improving debuggability of batch errors.
+- statacons: Regenerated `project_files.zip`, which had not been rebuilt since 2022, so
+  `net get statacons` now ships the current `config_project.ini` (including the new
+  `frameset_signing` key) and the current `utils/` templates.
+- statacons: The root `statacons.pkg` manifest read by
+  `net install statacons, from(https://raw.github.com/bquistorff/statacons/main/)` now
+  reports the current version and date; it had been stuck at 3.0.2 / 20240222.
+- tests: Restored `tests/code/dtas_producer.do` and `tests/code/dtas_consumer.do`, which
+  had been removed while `tests/SConstruct` and `tests/statacons_test.do` still referenced
+  them, breaking the integrated test suite.
 
 ## 3.0.4
 ### Fixed
