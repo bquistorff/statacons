@@ -480,15 +480,15 @@ def get_datasign(fname, file_arg='dta_file'):
         err_msg = "Couldn't get the file data-signature. Stata log:\n"
         try:
             with open(log_name, 'r') as f:  # try platform-default encoding
-                err_msg  += f.read()
+                err_msg += f.read()
         except UnicodeDecodeError:
             with open(log_name, 'r', encoding='utf-8') as f:
-                err_msg  += f.read()
+                err_msg += f.read()
         silentremove(log_name)
         raise Exception(err_msg)
     with open(sig_fname, "r") as f:
         sig = f.readline()
-    
+
     silentremove(sig_fname)
     silentremove(log_name)
 
