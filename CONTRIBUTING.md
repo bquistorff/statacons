@@ -66,12 +66,29 @@ Check Python code with `flake8` and `mypy`.
 # Releasing (both)
 Versions are kept the same across both type packages.
 1. Pass tests?
-2. In `src/`: Bump version + date in `statacons.pkg` and `statacons.ado` (both) and `stataconsign.ado` (both).
+2. Bump version + date in the Stata package. Each `.ado` carries the version *twice*: the
+   `*! version ...` banner on line 1 and the `_version X.Y.Z_` marker inside the trailing
+   `/***` markdown block (which is what generates the `.sthlp`). Both must be updated in:
+   `src/statacons.ado`, `src/stataconsign.ado`, `src/complete_datasignature.ado`.
+   (`src/set_python_exec_env.ado` has no version strings -- skip it.)
+   Also bump `Version` + `Distribution-Date` in **both** `.pkg` manifests:
+   - `statacons.pkg` in the repo root -- this is the one `net install ... from(.../main/)`
+     actually reads, via the root `stata.toc`. It is easy to forget; it sat at 3.0.2 for
+     two releases.
+   - `src/statacons.pkg`.
 3. In `pypkg/`: Bump versions in `setup.cfg`, `src/pystatacons/__init__.py` and `../docsrc/conf.py`.
-4. Update `CHANGELOG.md`
-5. Build docs
-6. Make release in in GitHub
-7. Distrubute Python Package
+4. Rebuild `src/project_files.zip` if anything under `src/SConstruct`, `src/config_project.ini`,
+   or `src/utils/` changed since the last release (see "Building" at the top of this file).
+   This is the ancillary archive `net get statacons` delivers.
+5. Regenerate the help files: in `src/`, in Stata, `do buildHelpFiles.do`. This rewrites
+   `*.sthlp` *and* `*.md` from the `.ado` markdown blocks, so it must run *after* step 2.
+   Then copy `src/statacons.md`, `src/stataconsign.md` and `src/complete_datasignature.md`
+   over the copies in `docsrc/`.
+6. Update `CHANGELOG.md`
+7. Build docs (see "Docs" above). Note `sphinx-build` must be able to `import pystatacons`,
+   or `api.html` is generated empty.
+8. Make release in in GitHub
+9. Distrubute Python Package
 
 
 # To track if new scons versions break our package
