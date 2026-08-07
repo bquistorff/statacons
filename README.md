@@ -86,6 +86,20 @@ To update the pystatacons Python package to the latest version, enter the follow
     pip install --upgrade pystatacons
 ~~~~
 
+If you prefer to update `pystatacons` directly from this repository, enter the following at the appropriate python prompt:
+
+~~~~
+    pip install --upgrade "git+https://github.com/bquistorff/statacons.git#subdirectory=pypkg"
+~~~~
+
+You can check which version is installed with:
+
+~~~~
+    python -c "import pystatacons; print(pystatacons.__version__)"
+~~~~
+
+If you have different Python environments for different projects, take care that you have upgraded `pystatacons` in each environment.
+
 ### Manual installation
 
 If you are working from behind a firewall or on an otherwise restricted machine, you may not be able to use `net install`. To install `statacons` manually, see https://github.com/bquistorff/statacons/wiki/Manual-installation.
