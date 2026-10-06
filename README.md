@@ -1,3 +1,7 @@
+**Note (6 Oct 2026):** `scons` 4.11.0 introduced some changes that are, for the moment, incompatible with `statacons`.
+
+For the time being, `statacons` users should use `scons` 4.10.1 or earlier. We are working on a fix.
+
 # statacons
 
 `statacons` is a set of tools for the [SCons](https://scons.org/) build-system to allow running [Stata](https://stata.com) projects. It does not require changes to existing code, is [correct](https://doi.ieeecomputersociety.org/10.1109/MS.2018.111095025) (no unnecessary rebuilds), extensible via Python, and git-friendly.
